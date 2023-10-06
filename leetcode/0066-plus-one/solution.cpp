@@ -1,25 +1,19 @@
 class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
-        vector<int>ans;
-        int carry=1;    
-        for(int i=digits.size()-1;i>=0;i--){
-            int ele = digits[i];
-            ele+=carry;
-            carry=0;
-            if(ele>9){
-                ele=0;
-                carry=1;
+        int carry=1;
+        for(int i=digits.size()-1;i>=0||carry>0;i--){
+            if(carry==0) break;
+            int x=i>=0?digits[i]:0;
+            int sum=x+carry;
+            carry=sum/10;
+            if(i>=0){
+                digits[i]=sum%10;
             }
-            ans.push_back(ele);
+            else{
+                digits.emplace(digits.begin(),sum%10);
+            }
         }
-
-        if(carry){
-            ans.push_back(carry);
-        }
-
-        reverse(ans.begin(),ans.end());
-
-        return ans;
+        return digits;
     }
 };
