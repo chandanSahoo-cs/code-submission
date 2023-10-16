@@ -1,46 +1,30 @@
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        int n = matrix.size(), m = matrix[0].size();
-
-        int l = 0, r = m-1, u = 0, d = n-1;
-
-        vector<int>ans;
-        int k = 0;
-
-        while(k<n*m){
-
-            for(int j=l;j<=r && k<n*m;j++){
-                ans.push_back(matrix[u][j]);
-                k++;
+        vector<int>output;
+        int rowBegin=0,rowEnd=matrix.size()-1,columnBegin=0,columnEnd=matrix[0].size()-1;
+        while(rowBegin<=rowEnd and columnBegin<=columnEnd){
+            for(int i=columnBegin;i<=columnEnd;i++){
+                output.push_back(matrix[rowBegin][i]);
             }
-            if(k>=n*m) break;
-            u++;
-
-            for(int i=u;i<=d && k<n*m;i++){
-                ans.push_back(matrix[i][r]);
-                k++;
+            rowBegin++;
+            for(int i=rowBegin;i<=rowEnd;i++){
+                output.push_back(matrix[i][columnEnd]);
             }
-            if(k>=n*m) break;
-            r--;
-
-            for(int j=r;j>=l && k<n*m;j--){
-                ans.push_back(matrix[d][j]);
-                k++;
+            columnEnd--;
+            if(rowBegin<=rowEnd){
+                for(int i=columnEnd;i>=columnBegin;i-- ){
+                    output.push_back(matrix[rowEnd][i]);
+                }
+                rowEnd--;
             }
-            if(k>=n*m) break;
-            d--;
-
-            for(int i=d;i>=u && k<n*m;i--){
-                ans.push_back(matrix[i][l]);
-                k++;
+            if(columnBegin<=columnEnd){
+                for(int i=rowEnd;i>=rowBegin;i--){
+                    output.push_back(matrix[i][columnBegin]);
+                }
+                columnBegin++;
             }
-            if(k>=n*m) break;
-            l++;
         }
-
-        // while(ans.size()>n*m) ans.pop_back();
-
-        return ans;
+        return output;
     }
 };
