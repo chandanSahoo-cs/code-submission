@@ -1,48 +1,34 @@
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix) {
-        int n = matrix.size();
-        int m = matrix[0].size();
-
-
-        bool row=false,col=false;
-
-
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-
-
-                if(matrix[i][j]==0){
-                    if(j==0){
-                        row=true;
-                    }
-                    if(i==0){
-                        col=true;
-                    }
-                    matrix[0][j]=0;
-                    matrix[i][0]=0;
+        vector<int> storei;
+        vector<int> storej;
+        
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] == 0) {
+                    storei.push_back(i);
+                    storej.push_back(j);
                 }
             }
         }
-
-        for(int i=1;i<n;i++){
-            for(int j=1;j<m;j++){
-                if(matrix[i][0]==0 || matrix[0][j]==0){
-                    matrix[i][j]=0;
-                }
+        
+        // Set rows to zero
+        for (int i = 0; i < storei.size(); i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[storei[i]][j] = 0;
             }
         }
-
-        if(row){
-            for(int i=0;i<n;i++){
-                matrix[i][0]=0;
-            }
-        }
-
-        if(col){
-            for(int j=0;j<m;j++){
-                matrix[0][j]=0;
+        
+        // Set columns to zero
+        for (int i = 0; i < storej.size(); i++) {
+            for (int j = 0; j < rows; j++) {
+                matrix[j][storej[i]] = 0;
             }
         }
     }
-}; 
+};
+
