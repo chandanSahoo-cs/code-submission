@@ -1,34 +1,53 @@
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix) {
-        vector<int> storei;
-        vector<int> storej;
-        
-        int rows = matrix.size();
-        int cols = matrix[0].size();
-        
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (matrix[i][j] == 0) {
-                    storei.push_back(i);
-                    storej.push_back(j);
+        int row =matrix.size();
+        int col=matrix[0].size();
+        bool setFirstRow=false;
+        bool setFirstCol=false;
+        for(int i=0;i<row;i++){
+            if(matrix[i][0]==0){
+                setFirstCol=true;
+            }
+        }
+        for(int j=0;j<col;j++){
+            if(matrix[0][j]==0){
+                setFirstRow=true;
+            }
+        }
+        for(int i=1;i<row;i++){
+            for(int j=1;j<col;j++){
+                if(matrix[i][j]==0){
+                    matrix[0][j]=0;
+                    matrix[i][0]=0;
                 }
             }
         }
-        
-        // Set rows to zero
-        for (int i = 0; i < storei.size(); i++) {
-            for (int j = 0; j < cols; j++) {
-                matrix[storei[i]][j] = 0;
+        for(int i=1;i<col;i++){
+            if(matrix[0][i]==0){
+                for(int j=0;j<row;j++){
+                    matrix[j][i]=0;
+                }
             }
         }
-        
-        // Set columns to zero
-        for (int i = 0; i < storej.size(); i++) {
-            for (int j = 0; j < rows; j++) {
-                matrix[j][storej[i]] = 0;
+        for(int i=1;i<row;i++){
+            if(matrix[i][0]==0){
+                for(int j=0;j<col;j++){
+                    matrix[i][j]=0;
+                }
             }
         }
-    }
+        if(setFirstRow){
+            for(int j=0;j<col;j++){
+                matrix[0][j]=0;
+            }
+        }
+        if(setFirstCol){
+            for(int i=0;i<row;i++){
+                matrix[i][0]=0;
+            }
+        }
+ 
+        return;
+    }
 };
-
