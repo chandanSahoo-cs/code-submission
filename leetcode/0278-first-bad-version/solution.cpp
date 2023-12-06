@@ -4,15 +4,13 @@
 class Solution {
 public:
     int firstBadVersion(int n) {
-        int s=1,e=n,store;
-        while(s<=e){
-            int m=s+(e-s)/2;
-            if(isBadVersion(m)){
-                store=m;
-                e=m-1;
-            }
-            else if(!isBadVersion(m)) s=m+1;
+        if(n==0 or n==1) return n;
+        int start=1, end=n, mid=-1;
+        while(start<=end){
+            mid=start+(end-start)/2;
+            if(!isBadVersion(mid))start=mid+1;
+            else if(isBadVersion(mid))end=mid-1;
         }
-        return store;
+        return start;
     }
 };
