@@ -1,0 +1,11 @@
+# [A. Distinct Buttons](https://codeforces.com/contest/1909/problem/A)
+
+---
+Deemo - Entrance⠀You are located at the point (0,0) of an infinite Cartesian plane. You have a controller with 4 buttons which can perform one of the following operations:  U: move from (x,y) to (x,y+1);  R: move from (x,y) to (x+1,y);  D: move from (x,y) to (x,y−1);  L: move from (x,y) to (x−1,y). Unfortunately, the controller is broken. If you press all the 4 buttons (in any order), the controller stops working. It means that, during the whole trip, you can only press at most 3 distinct buttons (any number of times, in any order).There are n special points in the plane, with integer coordinates (xi,yi).Can you visit all the special points (in any order) without breaking the controller?
+
+### Input
+InputEach test contains multiple test cases. The first line contains the number of test cases t (1≤t≤1000). The description of the test cases follows.The first line of each test case contains a single integer n (1≤n≤100) — the number of special points.Each of the next n lines contains two integers xi, yi (−100≤xi,yi≤100), which represent the special point (xi,yi).Note that there are no constraints on the sum of n over all test cases.
+
+### Output
+OutputFor each test case, output "YES" (without quotes), if you can reach all the special points without breaking the controller, and "NO" (without quotes) otherwise.You may output each letter in any case (for example, "YES", "Yes", "yes", "yEs" will all be recognized as positive answer).
+NoteIn the first test case, you can move as follows:   you start from (0,0);  you visit the special point (x2,y2)=(0,0);  you press R, and you move from (0,0) to (1,0);  you press D, and you move from (1,0) to (1,−1);  you visit the special point (x1,y1)=(1,−1);  you visit the special point (x3,y3)=(1,−1). Therefore, you can visit all the special points using only the buttons R, D, so the controller does not break.Note that the special points may coincide.In the second test case, you can show that you can visit all the special points using only the buttons U, D, L.In the third test case, you can show that you must press all the buttons (U, R, D, L) to visit all the points, so the controller would break.
