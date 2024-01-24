@@ -1,13 +1,17 @@
 class Solution {
+    #define ll long
 public:
     bool isPerfectSquare(int num) {
-        long long start=1,end=num,mid=-1;
-        while(start<=end){
-            mid=start+(end-start)/2;
-            if(mid*mid>num) end=mid-1;
-            else if(mid*mid<num) start=mid+1;
-            else return true;
+        ll s=0, e=num; bool flag=false;
+        while(s<=e){
+            ll m=s+(e-s)/2;
+            if(m*m==num){
+                flag=true;
+                break;
+            }
+            else if (m*m>num) e=m-1;
+            else s=m+1;
         }
-        return false;
+        return flag;
     }
 };
