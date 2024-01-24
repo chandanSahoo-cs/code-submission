@@ -8,14 +8,16 @@
  */
 
 class Solution {
+#define ll long long
 public:
     int guessNumber(int n) {
-        if(n==1 or n==0) return n;
-        int start=1,end=n,mid=-1;
-        while(start<=end){
-            mid=start+(end-start)/2;
-            if(guess(mid)==-1) end=mid-1;
-            else if(guess(mid)==1) start=mid+1;
+        ll s=1;
+        ll e=n;
+        ll mid;
+        while(s<=e){
+            mid=s+(e-s)/2;
+            if(guess(mid)==-1) e=mid-1;
+            else if(guess(mid)==1) s=mid+1;
             else break;
         }
         return mid;
