@@ -1,12 +1,19 @@
 class Solution {
+    #define ll long long
 public:
     char nextGreatestLetter(vector<char>& letters, char target) {
-        int n = letters.size();
-
-        for(int i=0;i<n;i++){
-            if(letters[i]>target) return letters[i];
+        ll s=0,e=letters.size()-1; bool flag=false;
+        while(s<=e){
+            ll m=s+(e-s)/2;
+            if(letters[m]>target) {
+                flag=true;
+                e=m-1;
+            }
+            else{
+                s=m+1;
+            }
         }
-
-        return letters[0];
+        if(flag) return letters[s];
+        else return letters[0];
     }
 };
