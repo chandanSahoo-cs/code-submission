@@ -1,13 +1,18 @@
 class Solution {
+    #define ll long long
 public:
     int findKthPositive(vector<int>& arr, int k) {
-        int s=0,e=arr.size()-1;
+        if(k<arr[0]) return k;
+        if(arr[arr.size()-1]==arr.size()) return k+arr.size();
+        ll s=0,e=arr.size()-1,store;
         while(s<=e){
-            int mid=s+(e-s)/2;
-            int missing=arr[mid]-(mid+1);
-            if(missing<k) s=mid+1;
-            else e=mid-1;
+            ll m=s+(e-s)/2;
+            if(arr[m]-(m+1)<k){
+                store=m;
+                s=m+1;
+            }
+            else e=m-1;
         }
-        return s+k;
+        return arr[store]+(k-(arr[store]-(store+1)));
     }
 };
