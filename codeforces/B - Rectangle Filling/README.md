@@ -1,0 +1,11 @@
+# [B. Rectangle Filling](https://codeforces.com/contest/1966/problem/B)
+
+---
+There is an n×mn×m grid of white and black squares. In one operation, you can select any two squares of the same color, and color all squares in the subrectangle between them that color.Formally, if you select positions (x1,y1)(x1,y1) and (x2,y2)(x2,y2), both of which are currently the same color cc, set the color of all (x,y)(x,y) where min(x1,x2)≤x≤max(x1,x2)min(x1,x2)≤x≤max(x1,x2) and min(y1,y2)≤y≤max(y1,y2)min(y1,y2)≤y≤max(y1,y2) to cc.This diagram shows a sequence of two possible operations on a grid:  Is it possible for all squares in the grid to be the same color, after performing any number of operations (possibly zero)?
+
+### Input
+InputThe first line of the input contains a single integer tt (1≤t≤1041≤t≤104) — the number of test cases. The description of the test cases follows.The first line of each test case contains two integers nn and mm (1≤n,m≤5001≤n,m≤500) — the number of rows and columns in the grid, respectively.Each of the next nn lines contains mm characters 'W' and 'B' — the initial colors of the squares of the grid. It is guaranteed that the sum of n⋅mn⋅m over all test cases does not exceed 3⋅1053⋅105.
+
+### Output
+OutputFor each test case, print "YES" if it is possible to make all squares in the grid the same color, and "NO" otherwise.You can output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "Yes", and "YES" will be recognized as positive responses.
+NoteIn the first example, it is impossible to ever change the color of any square with an operation, so we output NO.The second example is the case pictured above. As shown in that diagram, it is possible for all squares to be white after two operations, so we output YES.In the third and fourth examples, all squares are already the same color, so we output YES.In the fifth example we can do everything in two operations. First, select positions (2,1)(2,1) and (1,4)(1,4) and color all squares with 1≤x≤21≤x≤2 and 1≤y≤41≤y≤4 to white. Then, select positions (2,1)(2,1) and (3,4)(3,4) and color all squares with 2≤x≤32≤x≤3 and 1≤y≤41≤y≤4 to white. After these two operations all squares are white.
