@@ -1,0 +1,10 @@
+# [C. Sofia and the Lost Operations](https://codeforces.com/contest/1980/problem/C)
+
+---
+Sofia had an array of n integers a1,a2,…,an. One day she got bored with it, so she decided to sequentially apply m modification operations to it.Each modification operation is described by a pair of numbers ⟨cj,dj⟩ and means that the element of the array with index cj should be assigned the value dj, i.e., perform the assignment acj=dj. After applying all modification operations sequentially, Sofia discarded the resulting array.Recently, you found an array of n integers b1,b2,…,bn. You are interested in whether this array is Sofia's array. You know the values of the original array, as well as the values d1,d2,…,dm. The values c1,c2,…,cm turned out to be lost.Is there a sequence c1,c2,…,cm such that the sequential application of modification operations ⟨c1,d1,⟩,⟨c2,d2,⟩,…,⟨cm,dm⟩ to the array a1,a2,…,an transforms it into the array b1,b2,…,bn?
+
+### Input
+InputThe first line contains an integer t (1≤t≤104) — the number of test cases.Then follow the descriptions of the test cases.The first line of each test case contains an integer n (1≤n≤2⋅105) — the size of the array.The second line of each test case contains n integers a1,a2,…,an (1≤ai≤109) — the elements of the original array.The third line of each test case contains n integers b1,b2,…,bn (1≤bi≤109) — the elements of the found array.The fourth line contains an integer m (1≤m≤2⋅105) — the number of modification operations.The fifth line contains m integers d1,d2,…,dm (1≤dj≤109) — the preserved value for each modification operation.It is guaranteed that the sum of the values of n for all test cases does not exceed 2⋅105, similarly the sum of the values of m for all test cases does not exceed 2⋅105.
+
+### Output
+OutputOutput t lines, each of which is the answer to the corresponding test case. As an answer, output "YES" if there exists a suitable sequence c1,c2,…,cm, and "NO" otherwise.You can output the answer in any case (for example, the strings "yEs", "yes", "Yes" and "YES" will be recognized as a positive answer).
