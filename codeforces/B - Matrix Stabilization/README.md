@@ -1,0 +1,11 @@
+# [B. Matrix Stabilization](https://codeforces.com/contest/1986/problem/B)
+
+---
+You are given a matrix of size n×mn×m, where the rows are numbered from 11 to nn from top to bottom, and the columns are numbered from 11 to mm from left to right. The element at the intersection of the ii-th row and the jj-th column is denoted by aijaij.Consider the algorithm for stabilizing matrix aa: Find the cell (i,j)(i,j) such that its value is strictly greater than the values of all its neighboring cells. If there is no such cell, terminate the algorithm. If there are multiple such cells, choose the cell with the smallest value of ii, and if there are still multiple cells, choose the one with the smallest value of jj. Set aij=aij−1aij=aij−1.  Go to step 11. In this problem, cells (a,b)(a,b) and (c,d)(c,d) are considered neighbors if they share a common side, i.e., |a−c|+|b−d|=1|a−c|+|b−d|=1.Your task is to output the matrix aa after the stabilization algorithm has been executed. It can be shown that this algorithm cannot run for an infinite number of iterations.
+
+### Input
+InputEach test consists of multiple sets of input data. The first line contains a single integer tt (1≤t≤1041≤t≤104) — the number of sets of input data. This is followed by their description.The first line of each set of input data contains two integers nn and mm (1≤n,m≤100,n⋅m>11≤n,m≤100,n⋅m>1) — the number of rows and columns of matrix aa. The next nn lines describe the corresponding rows of the matrix. The ii-th line contains mm integers ai1,ai2,…,aimai1,ai2,…,aim (1≤aij≤1091≤aij≤109).It is guaranteed that the sum of n⋅mn⋅m over all sets of input data does not exceed 2⋅1052⋅105.
+
+### Output
+OutputFor each set of input data, output nn lines with mm numbers in each line — the values of the cells of matrix aa after the stabilization algorithm.
+NoteIn the first set of input data, the algorithm will select the cell (1,1)(1,1) twice in a row and then terminate.   In the second set of input data, there is no cell whose value is strictly greater than the values of all neighboring cells.In the third set of input data, the algorithm will select the cell (2,2)(2,2) and then terminate.   In the fourth set of input data, the algorithm will select the cell (1,1)(1,1) three times and then the cell (2,3)(2,3) twice.
