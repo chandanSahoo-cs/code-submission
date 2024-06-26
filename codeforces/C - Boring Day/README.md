@@ -1,0 +1,11 @@
+# [C. Boring Day](https://codeforces.com/contest/1982/problem/C)
+
+---
+On another boring day, Egor got bored and decided to do something. But since he has no friends, he came up with a game to play.Egor has a deck of n cards, the i-th card from the top has a number ai written on it. Egor wants to play a certain number of rounds until the cards run out. In each round, he takes a non-zero number of cards from the top of the deck and finishes the round. If the sum of the numbers on the cards collected during the round is between l and r, inclusive, the round is won; otherwise, it is lost. Egor knows by heart the order of the cards. Help Egor determine the maximum number of rounds he can win in such a game. Note that Egor is not required to win rounds consecutively.
+
+### Input
+InputEach test consists of several test cases. The first line contains an integer t (1≤t≤104) — the number of test cases. This is followed by a description of the test cases.The first line of each test case contains three integers n, l, and r (1≤n≤105, 1≤l≤r≤109).The second line of each test case contains n integers a1,a2,…,an (1≤ai≤109) — the numbers on the cards from top to bottom.It is guaranteed that the sum of n for all test cases does not exceed 2⋅105.
+
+### Output
+OutputFor each test case, output a single number — the maximum number of rounds Egor can win.
+NoteIn the first test case, Egor can win 3 rounds:  In the first round, take the top 2 cards with values 2 and 1 and win, as their sum is 3. After this, the deck will look like this: [11,3,7].  In the second round, take the top card and lose, as its value 11 is greater than r=10. After this, the deck will look like this: [3,7].  In the third round, take the top card with value 3 and win. After this, the deck will look like this: [7].  After this, in the fourth round, Egor only has to take the last card in the deck with value 7 and win again. In the second test case, Egor cannot win any rounds, no matter how hard he tries.In the third test case, you can take one card in each round, then the first and third rounds will be losing, and the second round will be winning.In the fourth test case, you can take two cards in each round and always win.
