@@ -1,0 +1,11 @@
+# [B. Card Game](https://codeforces.com/contest/1999/problem/B)
+
+---
+Suneet and Slavic play a card game. The rules of the game are as follows:  Each card has an integer value between 11 and 1010.  Each player receives 22 cards which are face-down (so a player doesn't know their cards).  The game is turn-based and consists exactly of two turns. In a round, both players pick a random unflipped card and flip it. The player who flipped a card with a strictly greater number wins the round. In case of equality, no one wins the round.  A player wins a game if he wins the most number of rounds (i.e. strictly greater than the other player). In case of equality, no one wins the game. Since Suneet and Slavic aren't best friends, you need to calculate the number of ways the game could happen that Suneet would end up as the winner.For a better understanding, please check the notes section.
+
+### Input
+InputThe first line contains an integer tt (1≤t≤1041≤t≤104) — the number of test cases.The first and only line of each test case contains 44 integers a1a1, a2a2, b1b1, b2b2 (1≤a1,a2,b1,b2≤101≤a1,a2,b1,b2≤10) where a1a1 and a2a2 represent the cards Suneet has, and b1b1 and b2b2 represent the cards Slavic has, respectively.
+
+### Output
+OutputFor each test case, output a single integer — the number of games Suneet would win considering all possible games.
+NoteConsider the first test case when Slavic starts with the cards that have the values 22 and 66, and Suneet starts with cards that have the values 33 and 88. The game could happen in 44 different ways:  Suneet flips 33 and Slavic flips 22. Suneet wins the first round. Then, Suneet flips 88 and Slavic flips 66. Suneet wins the second round as well. Since Suneet won 22 rounds, he wins the game.  Suneet flips 33 and Slavic flips 66. Slavic wins the first round. Then, Suneet flips 88 and Slavic flips 22. Suneet wins the second round. Nobody wins since both players won an equal amount of rounds.  Suneet flips 88 and Slavic flips 66. Suneet wins the first round. Then, Suneet flips 33 and Slavic flips 22. Suneet wins the second round as well. Since Suneet won 22 rounds, he wins the game.  Suneet flips 88 and Slavic flips 22. Suneet wins the first round. Then, Suneet flips 33 and Slavic flips 66. Slavic wins the round. Nobody wins since both players won an equal amount of rounds.
