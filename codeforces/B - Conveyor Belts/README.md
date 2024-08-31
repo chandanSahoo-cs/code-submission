@@ -1,0 +1,10 @@
+# [B. Conveyor Belts](https://codeforces.com/contest/1811/problem/B)
+
+---
+Conveyor matrix mnmn is matrix of size n×nn×n, where nn is an even number. The matrix consists of concentric ribbons moving clockwise.In other words, the conveyor matrix for n=2n=2 is simply a matrix 2×22×2, whose cells form a cycle of length 44 clockwise. For any natural k≥2k≥2, the matrix m2km2k is obtained by adding to the matrix m2k−2m2k−2 an outer layer forming a clockwise cycle.  The conveyor matrix 8×88×8.   You are standing in a cell with coordinates x1,y1x1,y1 and you want to get into a cell with coordinates x2,y2x2,y2. A cell has coordinates x,yx,y if it is located at the intersection of the xxth row and the yyth column.Standing on some cell, every second you will move to the cell next in the direction of movement of the tape on which you are. You can also move to a neighboring cell by spending one unit of energy. Movements happen instantly and you can make an unlimited number of them at any time.Your task is to find the minimum amount of energy that will have to be spent to get from the cell with coordinates x1,y1x1,y1 to the cell with coordinates x2,y2x2,y2.For example, n=8n=8 initially you are in a cell with coordinates 1,31,3 and you want to get into a cell with coordinates 6,46,4. You can immediately make 22 movements, once you are in a cell with coordinates 3,33,3, and then after 88 seconds you will be in the right cell.
+
+### Input
+InputThe first line contains an integer tt (1≤t≤2⋅1051≤t≤2⋅105) — the number of test cases.The descriptions of the test cases follow.The description of each test case consists of one string containing five integers nn, x1x1, y1y1, x2x2 and y2y2 (1≤x1,y1,x2,y2≤n≤1091≤x1,y1,x2,y2≤n≤109) — matrix size and the coordinates of the start and end cells. It is guaranteed that the number nn is even.
+
+### Output
+OutputFor each test case, print one integer in a separate line — the minimum amount of energy that will have to be spent to get from the cell with coordinates x1,y1x1,y1 to the cell with coordinates x2,y2x2,y2.
