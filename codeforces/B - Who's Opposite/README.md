@@ -1,0 +1,11 @@
+# [B. Who's Opposite?](https://codeforces.com/contest/1560/problem/B)
+
+---
+Some number of people (this number is even) have stood in a circle. The people stand in the circle evenly. They are numbered clockwise starting from a person with the number 11. Each person is looking through the circle's center at the opposite person.  A sample of a circle of 66 persons. The orange arrows indicate who is looking at whom. You don't know the exact number of people standing in the circle (but this number is even, no doubt). It is known that the person with the number aa is looking at the person with the number bb (and vice versa, of course). What is the number associated with a person being looked at by the person with the number cc? If, for the specified aa, bb, and cc, no such circle exists, output -1.
+
+### Input
+InputThe first line contains one integer tt (1≤t≤1041≤t≤104) — the number of test cases. Then tt test cases follow.Each test case consists of one line containing three distinct integers aa, bb, cc (1≤a,b,c≤1081≤a,b,c≤108).
+
+### Output
+OutputFor each test case output in a separate line a single integer dd — the number of the person being looked at by the person with the number cc in a circle such that the person with the number aa is looking at the person with the number bb. If there are multiple solutions, print any of them. Output −1−1 if there's no circle meeting the given conditions.
+NoteIn the first test case, there's a desired circle of 88 people. The person with the number 66 will look at the person with the number 22 and the person with the number 88 will look at the person with the number 44.In the second test case, there's no circle meeting the conditions. If the person with the number 22 is looking at the person with the number 33, the circle consists of 22 people because these persons are neighbors. But, in this case, they must have the numbers 11 and 22, but it doesn't meet the problem's conditions.In the third test case, the only circle with the persons with the numbers 22 and 44 looking at each other consists of 44 people. Therefore, the person with the number 1010 doesn't occur in the circle.
