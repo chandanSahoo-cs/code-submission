@@ -1,0 +1,10 @@
+# [C. Number Game](https://codeforces.com/contest/1749/problem/C)
+
+---
+Alice and Bob are playing a game. They have an array of positive integers a of size n.Before starting the game, Alice chooses an integer k≥0. The game lasts for k stages, the stages are numbered from 1 to k. During the i-th stage, Alice must remove an element from the array that is less than or equal to k−i+1. After that, if the array is not empty, Bob must add k−i+1 to an arbitrary element of the array. Note that both Alice's move and Bob's move are two parts of the same stage of the game. If Alice can't delete an element during some stage, she loses. If the k-th stage ends and Alice hasn't lost yet, she wins.Your task is to determine the maximum value of k such that Alice can win if both players play optimally. Bob plays against Alice, so he tries to make her lose the game, if it's possible.
+
+### Input
+InputThe first line contains a single integer t (1≤t≤100) — the number of test cases.The first line of each test case contains a single integer n (1≤n≤100) — the size of the array a.The second line contains n integers a1,a2,…,an (1≤ai≤n).
+
+### Output
+OutputFor each test case, print one integer — the maximum value of k such that Alice can win if both players play optimally.
