@@ -1,16 +1,28 @@
+#define ll long long
+
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
-        int n = strs.size();
+        ll n = strs.size();
         string cmp = strs[0];
-
-        for(int i=1;i<n;i++){
-            int l=0;
-            while(l<cmp.size() && l<strs[i].size() && cmp[l]==strs[i][l]) l++;
-
-            cmp.resize(l);
-
-            if(cmp.size()==0) break;
+        string temp = "";
+        for(ll i=1;i<n;i++){
+            if(!strs[i].size()) return "";
+            ll m = min(strs[i].size(),cmp.size());
+            for(ll j=0;j<m;j++){
+                if(strs[i][j]==cmp[j]){
+                    temp+=cmp[j];
+                }
+                else{
+                    cmp = temp;
+                    temp = "";
+                    break;
+                }
+                if(j==m-1){
+                    cmp = temp;
+                    temp = "";
+                }
+            }
         }
 
         return cmp;
