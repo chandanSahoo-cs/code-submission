@@ -2,10 +2,9 @@ class Solution {
 public:
     bool rotateString(string s, string goal) {
         int n = s.size();
-        if(s.size()!=goal.size()) return false;
-
-        string p = s+s;
-
-        return p.find(goal)!=string::npos;
+        int m  = goal.size();
+        if(n!=m) return false;
+        s+=s;
+        return s.find(goal) != string::npos;
     }
 };
