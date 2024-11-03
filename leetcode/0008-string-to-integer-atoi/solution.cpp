@@ -1,42 +1,45 @@
+#define ll long long int
 class Solution {
 public:
     int myAtoi(string s) {
-        int n = s.size();
-        bool digit = false;
+        ll n = s.size();
+        bool num = false;
+        bool actNum = false;
         bool sign = true;
+        bool toggle = false;
+        ll ans = 0;
+        ll pwr = pow(2,31);
 
-        long long num = 0;
-        long long place = 1;
-
-        for(int i=0;i<n;i++){
-            if(!isdigit(s[i])){
-                if(digit) break;
-                else if(s[i]=='+' || s[i]=='-'){
-                    sign = s[i]=='+';
-                    digit = true;
-                }else if(s[i]==' ') continue;
+        for(ll i=0;i<n;i++){
+            if(!num){
+                if(s[i]==' ' && !toggle) continue;
+                else if(s[i]=='-' && !toggle) sign=false,toggle = true;
+                else if(s[i]=='+' && !toggle) sign=true,toggle = true;
+                else if(isdigit(s[i])){
+                    ans+=s[i]-'0';
+                    num=true;
+                }
                 else break;
-            }else{
-                digit=true;
-                num*=10;
-
-                num+=s[i]-'0';
-
             }
-
-            if(num>=1e11) break;
+            else{
+                if(isdigit(s[i])){
+                    if(s[i]=='0' && ans==0 ) continue;
+                    ans*=10;
+                    ans+=s[i]-'0';
+                    if(ans>=pwr) break;
+                }
+                else break;
+            }
         }
-
-        num = sign?num:-num;
-
-        if(num>(1LL<<31)-1){
-            num = (1LL<<31)-1;
+        if(!sign){
+            ans = -ans;
         }
-        if(num<-(1LL<<31)){
-            num = (1LL<<31);
+        if(ans>pwr-1){
+            ans = pwr-1;
         }
-
-        return num;
-
+        else if(ans<-pwr){
+            ans = -pwr;
+        }
+        return ans;
     }
 };
