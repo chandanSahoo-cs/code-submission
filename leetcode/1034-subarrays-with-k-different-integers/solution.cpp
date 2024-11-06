@@ -1,31 +1,43 @@
+#define ll long long
 class Solution {
 public:
-    int compute(vector<int>&nums, int k){
-        int n = nums.size();
+    int substrCntAtMostK(vector<int>& s, int k) {
+        unordered_map<ll, ll> mp;
+        ll n = s.size();
+        ll cnt = 0;
+        ll p1 = 0, p2 = 0;
+        ll sub = 0, prevSize = 0;
 
-        unordered_map<int,int>mp;
+        while (p1 <= p2 && p2 < n) {
+            mp[s[p2]]++;
 
-        int l = 0, r = 0;
-        int ans = 0;
+            if ((ll)mp.size() > k) {
+                ll m = p2 - p1;
+                ll d = prevSize - sub;
+                cnt += ((ll)m * (m + 1)) / 2 - ((ll)d * (d + 1)) / 2;
+                prevSize = m;
+                sub = 0;
 
-        while(r<n){
-            mp[nums[r]]++;
-
-            while(mp.size()>k){
-                mp[nums[l]]--;
-                if(mp[nums[l]]==0) mp.erase(nums[l]);
-
-                l++;
+                while ((ll)mp.size() > k) {
+                    mp[s[p1]] -= 1;
+                    if (mp[s[p1]] == 0) mp.erase(s[p1]);
+                    p1++;
+                    sub++;
+                }
             }
-            ans+=r-l+1;
-            r++;
+            p2++;
         }
 
-        return ans;
+        if ((ll)mp.size() <= k) {
+            ll m = p2 - p1;
+            ll d = prevSize - sub;
+            cnt += ((ll)m * (m + 1)) / 2 - ((ll)d * (d + 1)) / 2;
+        }
+
+        return cnt; 
     }
-
-    int subarraysWithKDistinct(vector<int>& nums, int k) {
-
-        return compute(nums,k)-compute(nums,k-1);
+    int subarraysWithKDistinct(vector<int>& s, int k){
+        return (int)substrCntAtMostK(s, k) - (int)substrCntAtMostK(s, k - 1);
     }
 };
+
