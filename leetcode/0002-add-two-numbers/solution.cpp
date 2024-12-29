@@ -10,35 +10,49 @@
  */
 class Solution {
 public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        int carry=0;
 
-        ListNode* curr1 = l1;
-        ListNode* curr2 = l2;
+    ListNode* reverseLL(ListNode* head){
+        ListNode* temp = head;
+        ListNode* prev = NULL;
 
-        ListNode* dummy = new ListNode();
-        ListNode* tail = dummy;
-
-        while(curr1 || curr2 || carry){
-            int val = 0;
-            if(curr1){
-                val+=curr1->val;
-                curr1=curr1->next;
-            }
-
-            if(curr2){
-                val+=curr2->val;
-                curr2=curr2->next;
-            }
-
-            if(carry){
-                val+=carry;
-            }
-            carry=val/10;
-            tail->next = new ListNode(val%10);
-            tail=tail->next;
+        while(temp){
+            ListNode* next = temp->next;
+            temp->next=prev;
+            prev = temp;
+            temp=next;
         }
 
-        return dummy->next;
+        return prev;
+    }
+
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* l1Prev = l1;
+        ListNode* l2Prev = l2;
+
+        ListNode* result=NULL;
+        ListNode* head;
+        ListNode*temp = NULL;
+        int carry=0;
+
+        while(l1Prev || l2Prev || carry){
+            int tot = 0;
+            if(l1Prev) tot+=l1Prev->val,l1Prev = l1Prev->next;
+            if(l2Prev) tot+=l2Prev->val,l2Prev = l2Prev->next;
+
+            int rem = (tot+carry+10)%10;
+            carry = (tot+carry)/10;
+
+            temp = new ListNode(rem);
+
+            if(!result) result = temp,head=result;
+            else{
+                result->next=temp;
+                result=result->next;
+            }
+
+        }
+
+        return head;
+
     }
 };
