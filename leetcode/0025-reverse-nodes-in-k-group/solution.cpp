@@ -9,58 +9,63 @@
  * };
  */
 class Solution {
-public:
-    void reverseLL(ListNode* head, int k){
-        ListNode* curr = head;
-        ListNode* prev = nullptr;
 
-        while(k){
-            ListNode* next = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = next;
-            k--;
+public:
+    vector<ListNode*> reverseLL(ListNode* head){
+        ListNode* temp = head;
+        ListNode* prev = NULL;
+        ListNode* tail = temp;
+        while(temp){
+            ListNode* next = temp->next;
+            temp->next = prev;
+            prev = temp;
+            temp = next;
         }
+
+        return {prev,head};
     }
 
-
     ListNode* reverseKGroup(ListNode* head, int k) {
-
-        ListNode* curr = head;
-        ListNode* root = head;
-
-        ListNode* strt = head;
-        ListNode* prev = nullptr;
-
-        bool flag=true;
         int cnt=0;
+        ListNode* ans = NULL;
+        ListNode* temp = head;
+        ListNode* strt = head;
+        ListNode* prev = NULL;
 
-        while(curr){
-            ListNode* next = curr->next;
+
+        while(temp){
+            ListNode* next = temp->next;
+
+            if(cnt==0){
+                strt = temp;
+            }
             cnt++;
 
             if(cnt==k){
+                temp->next = NULL;
+
+                if(ans==NULL){
+                    ans = temp;
+                }
+
+                vector<ListNode*>con = reverseLL(strt);
+
+                con[1]->next = next;
+                // cout<<con->val<<" ";
+                // con->next = next;
+
+                if(prev==NULL) prev = con[1];
+                else{
+                    prev->next = con[0];
+                    prev = con[1];
+                }
+                // temp->next = next;
                 cnt=0;
-                reverseLL(strt,k);
-                if(prev){
-                    prev->next = curr;
-                }
-
-                prev = strt;
-                strt = next;
-
-                if(flag){
-                    root = curr;
-                    flag=false;
-                }
-
             }
-
-            curr=next;
+            temp = next;
         }
 
-        prev->next = strt;
-
-        return root;    
+        return ans; 
     }
+
 };
