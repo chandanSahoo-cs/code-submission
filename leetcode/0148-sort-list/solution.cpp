@@ -34,12 +34,10 @@ public:
         
 
         while(arr1P && arr2P){
-            // cout<<arr1P->val<<" "<<arr2P->val<<"\n";
             if(arr1P->val<=arr2P->val){
                 if(arr1P->next==NULL) break;
                 prev = arr1P;
                 arr1P=arr1P->next;
-                continue;
             }
             else{
                 ListNode*next = arr2P->next;
@@ -53,10 +51,6 @@ public:
                     arr2P->next=arr1P;
                     prev = arr2P;
                 }
-
-                // if(prev) prev->next = arr2P;
-                // arr2P->next=arr1P;
-                // prev = arr2P;
                 arr2P=next;
             }
         }
@@ -67,34 +61,6 @@ public:
             arr2P=arr2P->next;
         }
         return arr1;
-
-        // ListNode* head = new ListNode;
-        // ListNode* temp  = head;
-        // while(arr1 && arr2){
-        //     if(arr1->val<arr2->val){
-        //         temp->next=arr1;
-        //         arr1=arr1->next;
-        //     }
-        //     else{
-        //         temp->next=arr2;
-        //         arr2=arr2->next;
-        //     }
-        //     temp=temp->next;
-        // }
-
-        // while(arr1){
-        //     temp->next=arr1;
-        //     arr1=arr1->next;
-        //     temp=temp->next;
-        // }
-
-        // while(arr2){
-        //     temp->next=arr2;
-        //     arr2=arr2->next;
-        //     temp=temp->next;
-        // }
-
-        // return head->next;
     }
 
     ListNode* mergeSort(ListNode* arr) {
