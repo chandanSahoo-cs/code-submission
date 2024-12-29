@@ -10,14 +10,14 @@ class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
         
-        ListNode* tempA = headA;
-        ListNode* tempB = headB;
+        ListNode* A = headA;
+        ListNode* B = headB;
 
-        while(tempA!=tempB){
-            tempA = tempA?tempA->next:headB;
-            tempB = tempB?tempB->next:headA;
+        while(A!=B){
+            A = A?A->next:headB;
+            B = B?B->next:headA;
         }
 
-        return tempA;
+        return A;
     }
 };
