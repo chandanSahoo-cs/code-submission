@@ -1,45 +1,44 @@
-#define ll long long int
+#define ll long long
+
 class Solution {
 public:
-    int myAtoi(string s) {
-        ll n = s.size();
-        bool num = false;
-        bool actNum = false;
-        bool sign = true;
-        bool toggle = false;
-        ll ans = 0;
-        ll pwr = pow(2,31);
 
-        for(ll i=0;i<n;i++){
-            if(!num){
-                if(s[i]==' ' && !toggle) continue;
-                else if(s[i]=='-' && !toggle) sign=false,toggle = true;
-                else if(s[i]=='+' && !toggle) sign=true,toggle = true;
-                else if(isdigit(s[i])){
-                    ans+=s[i]-'0';
-                    num=true;
-                }
-                else break;
+    ll num(string &s, ll i, ll sign , bool digit, ll ans, ll signF, ll mx,ll mn){
+        if(i==s.size()) return ans*sign;
+        if(!digit && !signF){
+            if(!isdigit(s[i]) && s[i]!='-' && s[i]!='+' && s[i]!=' ') return ans*sign;
+        }
+        else{
+            if(!isdigit(s[i])) return ans*sign;
+        }
+
+        if(!isdigit(s[i])){
+            if(s[i]=='-'){
+                sign = -1;
+                signF = true;
             }
-            else{
-                if(isdigit(s[i])){
-                    if(s[i]=='0' && ans==0 ) continue;
-                    ans*=10;
-                    ans+=s[i]-'0';
-                    if(ans>=pwr) break;
-                }
-                else break;
+            else if(s[i]=='+'){
+                signF=true;
             }
         }
-        if(!sign){
-            ans = -ans;
+        else{
+            digit = true;
+            ans*=10;
+            ans+=s[i]-'0';
         }
-        if(ans>pwr-1){
-            ans = pwr-1;
-        }
-        else if(ans<-pwr){
-            ans = -pwr;
-        }
+
+        if(ans*sign>mx) return mx;
+        else if(ans*sign<mn) return mn;
+
+        return num(s,++i,sign,digit,ans,signF,mx,mn);
+    }
+
+    int  myAtoi(string s) {
+        string s1 = s;
+        ll mx = pow(2,31);
+        ll mn = -mx;
+        mx-=1;
+        ll ans = num(s1,0,1,false,0,false,mx,mn);
         return ans;
     }
 };
