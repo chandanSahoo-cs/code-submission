@@ -1,0 +1,11 @@
+# [C. Palindromic Subsequences](https://codeforces.com/contest/2056/problem/C)
+
+---
+For an integer sequence a=[a1,a2,…,an], we define f(a) as the length of the longest subsequence∗ of a that is a palindrome†. Let g(a) represent the number of subsequences of length f(a) that are palindromes. In other words, g(a) counts the number of palindromic subsequences in a that have the maximum length.Given an integer n, your task is to find any sequence a of n integers that satisfies the following conditions:  1≤ai≤n for all 1≤i≤n.  g(a)>n It can be proven that such a sequence always exists under the given constraints.∗A sequence x is a subsequence of a sequence y if x can be obtained from y by the deletion of several (possibly, zero or all) element from arbitrary positions. †A palindrome is a sequence that reads the same from left to right as from right to left. For example, [1,2,1,3,1,2,1], [5,5,5,5], and [4,3,3,4] are palindromes, while [1,2] and [2,3,3,3,3] are not.
+
+### Input
+InputEach test contains multiple test cases. The first line contains the number of test cases t (1≤t≤100). The description of the test cases follows. The first line of each test case contains a single integer n (6≤n≤100) — the length of the sequence.Note that there are no constraints on the sum of n over all test cases.
+
+### Output
+OutputFor each test case, output n integers a1,a2,…,an, representing an array that satisfies the conditions.If there are multiple solutions, you may output any of them.
+NoteIn the first example, one possible solution is a=[1,1,2,3,1,2]. In this case, f(a)=3 as the longest palindromic subsequence has length 3. There are 7 ways to choose a subsequence of length 3 that is a palindrome, as shown below:  [a1,a2,a5]=[1,1,1]  [a1,a3,a5]=[1,2,1]  [a1,a4,a5]=[1,3,1]  [a2,a3,a5]=[1,2,1]  [a2,a4,a5]=[1,3,1]  [a3,a4,a6]=[2,3,2]  [a3,a5,a6]=[2,1,2] Therefore, g(a)=7, which is greater than n=6. Hence, a=[1,1,2,3,1,2] is a valid solution.In the second example, one possible solution is a=[7,3,3,7,5,3,7,7,3]. In this case, f(a)=5. There are 24 ways to choose a subsequence of length 5 that is a palindrome. Some examples are [a2,a4,a5,a8,a9]=[3,7,5,7,3] and [a1,a4,a6,a7,a8]=[7,7,3,7,7]. Therefore, g(a)=24, which is greater than n=9. Hence, a=[7,3,3,7,5,3,7,7,3] is a valid solution.In the third example, f(a)=7 and g(a)=190, which is greater than n=15.
