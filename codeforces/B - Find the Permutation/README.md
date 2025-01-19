@@ -1,0 +1,11 @@
+# [B. Find the Permutation](https://codeforces.com/contest/2056/problem/B)
+
+---
+You are given an undirected graph with nn vertices, labeled from 11 to nn. This graph encodes a hidden permutation∗∗ pp of size nn. The graph is constructed as follows:  For every pair of integers 1≤i<j≤n1≤i<j≤n, an undirected edge is added between vertex pipi and vertex pjpj if and only if pi<pjpi<pj. Note that the edge is not added between vertices ii and jj, but between the vertices of their respective elements. Refer to the notes section for better understanding. Your task is to reconstruct and output the permutation pp. It can be proven that permutation pp can be uniquely determined.∗∗A permutation of length nn is an array consisting of nn distinct integers from 11 to nn in arbitrary order. For example, [2,3,1,5,4][2,3,1,5,4] is a permutation, but [1,2,2][1,2,2] is not a permutation (22 appears twice in the array), and [1,3,4][1,3,4] is also not a permutation (n=3n=3 but there is 44 in the array).
+
+### Input
+InputEach test contains multiple test cases. The first line contains the number of test cases tt (1≤t≤5001≤t≤500). The description of the test cases follows. The first line of each test case contains a single integer nn (1≤n≤10001≤n≤1000).The ii-th of the next nn lines contains a string of nn characters gi,1gi,2…gi,ngi,1gi,2…gi,n (gi,j=0gi,j=0 or gi,j=1) — the adjacency matrix. gi,j=1 if and only if there is an edge between vertex i and vertex j.It is guaranteed that there exists a permutation p which generates the given graph. It is also guaranteed that the graph is undirected and has no self-loops, meaning gi,j=gj,i and gi,i=0.It is guaranteed that the sum of n over all test cases does not exceed 1000.
+
+### Output
+OutputFor each test case, output n integers p1,p2,…,pn representing the reconstructed permutation.
+NoteIn the first case p=[1]. Since there are no pairs 1≤i<j≤n, there are no edges in the graph.The graph in the second case is shown below. For example, when we choose i=3 and j=4, we add an edge between vertices pi=1 and pj=3, because pi<pj. However, when we choose i=2 and j=3, pi=2 and pj=1, so pi<pj doesn't hold. Therefore, we don't add an edge between 2 and 1.In the third case, there are no edges in the graph, so there are no pairs of integers 1≤i<j≤n such that pi<pj. Therefore, p=[6,5,4,3,2,1].
