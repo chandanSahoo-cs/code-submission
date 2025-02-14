@@ -2,26 +2,22 @@ class Solution {
 public:
     vector<vector<int>>ans;
 
-    void rec(vector<int>&nums, int i, vector<int>&temp){
-        int n = nums.size();
-        if(i==n){
-            ans.push_back(temp);
+    void giveAns(vector<int> &nums, vector<int>&s, int indx){
+        if(indx==nums.size()){
+            ans.push_back(s);
             return;
         }
-
-        rec(nums,i+1,temp);
-        temp.push_back(nums[i]);
-        rec(nums,i+1,temp);
-        temp.pop_back();
+        s.push_back(nums[indx]);
+        giveAns(nums,s,indx+1);
+        s.pop_back();
+        giveAns(nums,s,indx+1);
 
         return;
     }
 
-
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<int>temp;
-        rec(nums,0,temp);
-
-        return ans;    
+        vector<int>s;
+        giveAns(nums,s,0);
+        return ans;
     }
 };
