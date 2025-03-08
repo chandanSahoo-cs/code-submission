@@ -1,49 +1,34 @@
 class Solution {
 public:
     vector<vector<string>>ans;
-    vector<int>col;
-    vector<int>di1;
-    vector<int>di2;
 
-    void toggle(int n, int i, int j){
-        col[j]=!col[j];
-        di1[i+j]=!di1[i+j];
-        di2[n-i+j]=!di2[n-i+j];
-
-        return ;
-    }
-
-    void rec(int n, vector<string> &board, int i ){
+    void rec(int n, int i, int j, vector<int>&r, vector<int>&c, vector<int>&di1,vector<int>&di2,vector<string>&s){
         if(i==n){
-            ans.push_back(board);
+            ans.push_back(s);
+            return;
+        }
+        if(j==n){
             return;
         }
 
-        for(int j=0;j<n;j++){
-            if(!col[j] && !di1[i+j] && !di2[n-i+j]){
-                toggle(n,i,j);
-                board[i][j]='Q';
-                rec(n,board,i+1);
-                board[i][j]='.';
-                toggle(n,i,j);
-            }
+        if(!r[i] && !c[j] && !di1[i+j] && !di2[n-i+j]){
+            s[i][j]='Q';
+            r[i]=c[j]=di1[i+j]=di2[n-i+j]=1;
+            rec(n,i+1,0,r,c,di1,di2,s);
+            s[i][j]='.';
+            r[i]=c[j]=di1[i+j]=di2[n-i+j]=0;
         }
+
+        rec(n,i,j+1,r,c,di1,di2,s);
+
+        return;
     }
 
+
     vector<vector<string>> solveNQueens(int n) {
-        col.resize(n);
-        di1.resize(2*n);
-        di2.resize(2*n);
-
-        vector<string>board;
-
-        for(int i=0;i<n;i++){
-            string s(n,'.');
-            board.push_back(s);
-        }
-
-        rec(n,board,0);
-
+        vector<int>r(n),c(n),di1(2*n),di2(2*n);
+        vector<string>s(n,string(n,'.'));
+        rec(n,0,0,r,c,di1,di2,s);
         return ans;
     }
 };
