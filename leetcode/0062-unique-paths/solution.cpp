@@ -1,17 +1,32 @@
+#define ll long long
+
 class Solution {
 public:
 
     int uniquePaths(int m, int n) {
-        vector<vector<int>>dp(n+1,vector<int>(m+1));
-        dp[n-1][m-1] = 1;
+        int mx = max(m-1,n-1);
+        int mn = min(m-1,n-1);
 
-        for(int i=n-1;i>=0;i--){
-            for(int j=m-1;j>=0;j--){
-                if(i==n-1 && j==m-1) continue;
-                dp[i][j] = dp[i+1][j]+dp[i][j+1];
+        ll num = 1;
+        ll denom = 1;
+
+        vector<int>mark(mn+1,1);
+
+        for(int i = (mx+mn);i>=mx+1;i--){
+            int carr = i;
+            for(int j=mn;j>=1;j--){
+                if(mark[j] && carr%j==0){
+                    carr/=j;
+                    mark[j]=0;
+                }
             }
+            num*=carr;
         }
 
-        return dp[0][0];
+        for(int i=1;i<=mn;i++){
+            if(mark[i]) denom*=i;
+        }
+
+        return num/denom;
     }
 };
