@@ -1,0 +1,11 @@
+# [C. Two Colors](https://codeforces.com/contest/2075/problem/C)
+
+---
+Monocarp has installed a new fence at his summer house. The fence consists of n planks of the same size arranged in a row.Monocarp decided that he would paint his fence according to the following rules:  each plank of the fence will be painted in exactly one color;  the number of different colors that the planks will be painted in is exactly two;  the planks of the fence that are painted in the same color must form a continuous sequence, meaning that for all pairs of planks painted in the same color, there will be no planks painted in a different color between them. Monocarp has m different paints, and the paint of the i-th color is sufficient to paint no more than ai planks of the fence. Monocarp will not buy any additional paints.Your task is to determine the number of different ways to paint the fence that satisfy all of Monocarp's described wishes. Two ways to paint are considered different if there exists a plank that is painted in different colors in these two ways.
+
+### Input
+InputThe first line contains a single integer t (1≤t≤104) — the number of test cases.The first line of each test case contains two integers n and m (2≤n,m≤2⋅105) — the number of planks in the fence and the number of different colors of paint that Monocarp has.The second line contains m integers a1,a2,…,am (1≤ai≤n), where ai is the maximum number of planks that can be painted with the paint of color i. The sum of n over all test cases does not exceed 2⋅105. The sum of m over all test cases does not exceed 2⋅105.
+
+### Output
+OutputFor each test case, output the number of different ways to paint the fence that satisfy all of Monocarp's described wishes.
+NoteIn the first test case, there are 4 different ways to paint the fence (the sequences of color numbers in which the planks can be painted from left to right are listed below):  [1,2,2,2,2];  [1,1,2,2,2];  [2,2,2,1,1];  [2,2,2,2,1]. In the second test case, there are 6 different ways to paint the fence (the sequences of color numbers in which the planks can be painted from left to right are listed below):  [1,2,2,2,2];  [1,1,2,2,2];  [1,1,1,2,2];  [2,2,1,1,1];  [2,2,2,1,1];  [2,2,2,2,1].
