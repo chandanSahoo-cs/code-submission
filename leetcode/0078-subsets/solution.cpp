@@ -1,23 +1,21 @@
 class Solution {
 public:
-    vector<vector<int>>ans;
-
-    void giveAns(vector<int> &nums, vector<int>&s, int indx){
-        if(indx==nums.size()){
-            ans.push_back(s);
-            return;
-        }
-        s.push_back(nums[indx]);
-        giveAns(nums,s,indx+1);
-        s.pop_back();
-        giveAns(nums,s,indx+1);
-
-        return;
-    }
-
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<int>s;
-        giveAns(nums,s,0);
+        int m = pow(2,nums.size());
+        vector<vector<int>>ans;
+
+        for(int i=0;i<m;i++){
+            int j = i;
+            vector<int>temp;
+            int k=0;
+            while(j){
+                if(j&1) temp.push_back(nums[k]);
+                j>>=1;
+                k++;
+            }
+            ans.push_back(temp);
+        }
+
         return ans;
     }
 };
