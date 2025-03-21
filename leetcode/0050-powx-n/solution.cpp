@@ -1,28 +1,20 @@
-#define ll long long
-
 class Solution {
 public:
-
-    double Pow(double x, ll n, map<ll,double> &store){
-        // cout<<n<<"\n";
+    double ans(double x, int n){
         if(n==0) return 1;
         if(n==1) return x;
-        if(store.find(n)!=store.end()) return store[n];
-        double p = Pow(x,n/2,store);
-        if(n%2!=0){
-            return store[n] = x*p*p;
+        double p = ans(x,n/2);
+        if(n%2==0){
+            return p*p;
         }
-        else{
-            return store[n] = p*p;
-        }
+        else return x*p*p;
+
+        return 1.00;
     }
 
     double myPow(double x, int n) {
-        ll n1 = n;
-        map<ll,double>store;
-        if(n1<0){
-            return 1/Pow(x,abs(n1),store);
-        }
-        else return Pow(x,n1,store);
+        map<long long,double>mp;
+        if(n<0) return 1/ans(x,n);
+        else return ans(x,n);
     }
 };
