@@ -1,36 +1,29 @@
 class Solution {
 public:
-
-    int freq(vector<int>&alpha){
-        int mx = 0;
-        for(auto ele:alpha){
-            mx = max(mx,ele);
-        }
-
-        return mx;
+    int give(vector<int>&a){
+        return accumulate(a.begin(),a.end(),0)-(*max_element(a.begin(),a.end()));
     }
 
     int characterReplacement(string s, int k) {
         int n = s.size();
 
-        vector<int>alpha(26);
+        int l=0,r=0;
+        int ans=0;
+        vector<int>ch(26,0);
 
-        int l = 0, r = 0;
-        int mxFreq = 0;
+        int mx=0;
 
-        int ans = 0;
-
+        // ch[s[0]-'A']++;
         while(r<n){
-            alpha[s[r]-'A']++;
-            mxFreq = freq(alpha);
-
-            while(r-l+1-mxFreq>k){
-                alpha[s[l]-'A']--;
-                l++;
-                mxFreq = freq(alpha);
+            ch[s[r]-'A']++;
+            mx =  max(mx,ch[s[r]-'A']);
+            if((r-l+1)-mx<=k){
+                ans = max(ans,r-l+1);
             }
-
-            ans = max(r-l+1,ans);
+            else{
+                ch[s[l]-'A']--;
+                l++;
+            }
             r++;
         }
 
