@@ -1,64 +1,32 @@
 class Solution {
 public:
-
-    // bool cmp(unordered_map<char,int>&ref, unordered_map<char,int>&curr){
-
-    //     for(char c='a';c<='z';c++){
-    //         if(!ref.count(c)) continue;
-
-    //         if(!curr.count(c)) return false;
-    //         if(ref[c]>curr[c]) return false;
-    //     }
-
-
-    //     for(char c='A';c<='Z';c++){
-    //         if(!ref.count(c)) continue;
-
-    //         if(!curr.count(c)) return false;
-    //         if(ref[c]>curr[c]) return false;
-    //     }
-
-    //     return true;
-    // }
-
-
     string minWindow(string s, string t) {
-        int n = s.size(), m = t.size();
+        int n = s.size(),m = t.size();
+        int l=0,r=0,mnl=0,mnr=-1,mnsz=INT_MAX;
 
-        unordered_map<char,int>curr,ref;
+        vector<int>v(256,0);
+        int cnt=0;
 
-        for(auto c:t){
-            ref[c]++;
+        for(auto ele:t){
+            v[ele]++;
         }
-
-        int l = 0, r = 0;
-
-        int al=0,ar=n+1;
-
-        int cnt = 0;
 
         while(r<n){
-            curr[s[r]]++;
-
-            if(curr[s[r]]<=ref[s[r]]) cnt++;
-            
+            if(v[s[r]]>0) cnt++;
+            v[s[r]]--;
             while(cnt==m){
-                if(ar-al+1>r-l+1){
-                    ar = r;
-                    al = l;
+                if(mnsz>r-l+1){
+                    mnsz = r-l+1;
+                    mnl=l;
+                    mnr=r;
                 }
-
-                curr[s[l]]--;
-
-                if(curr[s[l]]<ref[s[l]]) cnt--; 
+                v[s[l]]++;
+                if(v[s[l]]>0) cnt--;
                 l++;
             }
-
             r++;
         }
-            
 
-        if(ar==n+1) return "";
-        return s.substr(al,ar-al+1);
+        return s.substr(mnl,mnr-mnl+1);
     }
 };
