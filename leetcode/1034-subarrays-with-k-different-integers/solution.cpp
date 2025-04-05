@@ -1,43 +1,31 @@
-#define ll long long
 class Solution {
 public:
-    int substrCntAtMostK(vector<int>& s, int k) {
-        unordered_map<ll, ll> mp;
-        ll n = s.size();
-        ll cnt = 0;
-        ll p1 = 0, p2 = 0;
-        ll sub = 0, prevSize = 0;
+    int give(int n, vector<int>&nums, int k){
+        if(k<0) return 0;
+        unordered_map<int,int>mp;
+        int l=0,r=0,ans=0;
+        while(r<n){
+            // if(mp.find(nums[r])==mp.end()){
+            // }
+            mp[nums[r]]++;
+            // else mp[nums[r]]++;
 
-        while (p1 <= p2 && p2 < n) {
-            mp[s[p2]]++;
-
-            if ((ll)mp.size() > k) {
-                ll m = p2 - p1;
-                ll d = prevSize - sub;
-                cnt += ((ll)m * (m + 1)) / 2 - ((ll)d * (d + 1)) / 2;
-                prevSize = m;
-                sub = 0;
-
-                while ((ll)mp.size() > k) {
-                    mp[s[p1]] -= 1;
-                    if (mp[s[p1]] == 0) mp.erase(s[p1]);
-                    p1++;
-                    sub++;
+            while(mp.size()>k){
+                mp[nums[l]]--;
+                if(!mp[nums[l]]){
+                    mp.erase(nums[l]);
                 }
+                l++;
             }
-            p2++;
+            ans+=r-l+1;
+            cout<<ans<<" ";
+            r++;
         }
 
-        if ((ll)mp.size() <= k) {
-            ll m = p2 - p1;
-            ll d = prevSize - sub;
-            cnt += ((ll)m * (m + 1)) / 2 - ((ll)d * (d + 1)) / 2;
-        }
-
-        return cnt; 
+        return ans;
     }
-    int subarraysWithKDistinct(vector<int>& s, int k){
-        return (int)substrCntAtMostK(s, k) - (int)substrCntAtMostK(s, k - 1);
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        int n = nums.size();
+        return give(n,nums,k)-give(n,nums,k-1);
     }
 };
-
