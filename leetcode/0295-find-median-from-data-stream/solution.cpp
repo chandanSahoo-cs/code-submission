@@ -1,27 +1,38 @@
 class MedianFinder {
 public:
-    priority_queue<int>pq1;
-    priority_queue<int,vector<int>,greater<int>>pq2;
-    MedianFinder() {}
+    priority_queue<int>mxhp;
+    priority_queue<int, vector<int>, greater<int>>mnhp;
+    int cnt=0;
+
+    MedianFinder() {
+        
+    }
     
     void addNum(int num) {
-        pq1.push(num);
-        pq2.push(pq1.top());
-        pq1.pop();
-
-        if(pq1.size()<pq2.size()){
-            pq1.push(pq2.top());
-            pq2.pop();
+        mxhp.push(num);
+        cnt++;
+        if(!(cnt&1)){
+            mnhp.push(mxhp.top());
+            mxhp.pop();
+        }
+        if(!mnhp.empty() && !mxhp.empty() && mnhp.top()<mxhp.top()) {
+            int x = mnhp.top();
+            mnhp.pop();
+            int y = mxhp.top();
+            mxhp.pop();
+            mxhp.push(x);
+            mnhp.push(y);
         }
     }
     
     double findMedian() {
-        if((pq1.size()+pq2.size())%2){
-            return pq1.top();
+        if(!(cnt&1)){
+            return ((double)mxhp.top()+mnhp.top())/2;
         }
-        
-        return double(pq1.top()+pq2.top())/2;
+        else return (double)mxhp.top();
     }
+
+
 };
 
 /**
