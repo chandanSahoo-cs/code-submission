@@ -1,0 +1,11 @@
+# [B. Gardener and the Array](https://codeforces.com/contest/1775/problem/B)
+
+---
+The gardener Kazimir Kazimirovich has an array of nn integers c1,c2,…,cnc1,c2,…,cn.He wants to check if there are two different subsequences aa and bb of the original array, for which f(a)=f(b)f(a)=f(b), where f(x)f(x) is the bitwise OR of all of the numbers in the sequence xx.A sequence qq is a subsequence of pp if qq can be obtained from pp by deleting several (possibly none or all) elements.Two subsequences are considered different if the sets of indexes of their elements in the original sequence are different, that is, the values of the elements are not considered when comparing the subsequences.
+
+### Input
+InputEach test contains multiple test cases. The first line contains the number of test cases tt (1≤t≤1051≤t≤105). The description of the test cases follows.The first line of each test case contains one integer nn (1≤n≤1051≤n≤105) — the size of the array cc.The description of the array cc in this problem is given implicitly to speed up input.The (i+1)(i+1)-st of the following nn lines of the test case begins with an integer kiki (1≤ki≤1051≤ki≤105) — the number of set bits in the number cici. Next follow kiki distinct integers pi,1,pi,2,…,pi,kipi,1,pi,2,…,pi,ki (1≤pi≤2⋅1051≤pi≤2⋅105) —the numbers of bits that are set to one in number cici. In other words, ci=2pi,1+2pi,2+…+2pi,kici=2pi,1+2pi,2+…+2pi,ki.It is guaranteed that the total sum of kiki in all tests does not exceed 105105.
+
+### Output
+OutputFor each set of input, print "Yes" if there exist two different subsequences for which f(a)=f(b)f(a)=f(b), and "No" otherwise.You can output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "Yes", and "YES" will be recognized as positive responses.
+NoteIt can be proven that in the first test case there are no two different subsequences aa and bb for which f(a)=f(b)f(a)=f(b).In the second test case, one of the possible answers are following subsequences: the subsequence aa formed by the element at position 11, and the subsequence bb formed by the elements at positions 11 and 22.In the third test case, one of the possible answers are following subsequences: the subsequence aa formed by elements at positions 11, 22, 33 and 44, and the subsequence bb formed by elements at positions 22, 33 and 44.
