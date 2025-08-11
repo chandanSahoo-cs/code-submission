@@ -9,34 +9,40 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+ //Iterative Way
 class Solution {
 public:
-    vector<int> inorderTraversal(TreeNode* root) {
-        TreeNode* curr = root;
 
-        vector<int>ans;
+    void iterativeInorder(stack<TreeNode*>&st, vector<int>&ans){
+        if(st.empty()) return;
 
-        while(curr!=nullptr){
-            if(curr->left==nullptr){
-                ans.push_back(curr->val);
-                curr = curr->right;
-            }else{
-                TreeNode* temp = curr->left;
+        while(!st.empty()){
+            if(st.top()->left!=nullptr) {
+                TreeNode* temp = st.top()->left;
+                st.top()->left=nullptr;
+                st.push(temp);
+            }
+            else{
+                TreeNode* temp = st.top();
+                st.pop();
+                ans.push_back(temp->val);
 
-                while(temp->right && temp->right!=curr){
-                    temp = temp->right;
-                }
-
-                if(temp->right==nullptr){
-                    temp->right = curr;
-                    curr = curr->left;
-                }else{
-                    temp->right = nullptr;
-                    ans.push_back(curr->val);
-                    curr = curr->right;
+                if(temp->right!=nullptr){
+                    st.push(temp->right);
                 }
             }
         }
+    }
+
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int>ans;
+        stack<TreeNode*>st;
+
+        if(root!=nullptr){
+            st.push(root);
+        }
+
+        iterativeInorder(st,ans);
 
         return ans;
     }
