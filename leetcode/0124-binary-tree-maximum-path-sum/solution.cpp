@@ -9,24 +9,23 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 public:
-    int mx = INT_MIN;
+    int traverse(TreeNode* node, int &sum){
+        if(node==nullptr) return 0;
 
-    int rec(TreeNode* root){
-        if(!root) return 0;
+        int left = traverse(node->left,sum);
+        int right = traverse(node->right,sum);
+        sum = max({sum,left+right+node->val,left+node->val,right+node->val,node->val});
 
-        int left = rec(root->left);
-        int right = rec(root->right);
-
-        mx = max(mx,left+root->val+right);
-
-        return max(0,root->val+max(left,right));
+        int currSum = max(left,right);
+        return max(node->val,currSum+node->val);
     }
 
     int maxPathSum(TreeNode* root) {
-        rec(root);
-
-        return mx;
+        int sum=-1e5;
+        traverse(root,sum);
+        return sum;
     }
 };
