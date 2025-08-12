@@ -11,25 +11,19 @@
  */
 class Solution {
 public:
-    int maxDepth(TreeNode* root) {
-        queue<TreeNode*>q;
-        if(root) q.push(root);
-        int level = 0;
-
-        while(!q.empty()){
-            int sz = q.size();
-
-            for(int k=0;k<sz;k++){
-                TreeNode* curr = q.front();
-                q.pop();
-
-                if(curr->left) q.push(curr->left);
-                if(curr->right) q.push(curr->right);
-            }
-
-            level++;
+    void traverse(TreeNode* node, int &mx,int cnt){
+        if(node==nullptr){
+            mx=max(mx,cnt);
+            return;
         }
+        cnt++;
+        traverse(node->left,mx,cnt);
+        traverse(node->right,mx,cnt);
+    }
+    int maxDepth(TreeNode* root) {
+        int mx=0; 
+        traverse(root,mx,0);
 
-        return level;
+        return mx;
     }
 };
