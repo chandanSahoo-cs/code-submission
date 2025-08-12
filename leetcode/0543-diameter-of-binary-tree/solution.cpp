@@ -11,23 +11,21 @@
  */
 class Solution {
 public:
-    int mx = 0;
+    int traverse(TreeNode* root, int &dt){
+        if(root==nullptr) return 0;
 
-    int diameter(TreeNode* root){
+        int left = traverse(root->left,dt);
+        int right = traverse(root->right,dt);
         
-        int left = 0, right = 0;
+        dt = max(dt,left+right);
+        int height = max(left,right);
 
-        if(root->left) left = diameter(root->left);
-        if(root->right) right = diameter(root->right);
-
-        mx = max(mx,left+right);
-
-        return 1+max(left,right);
+        return height+1;
     }
-
     int diameterOfBinaryTree(TreeNode* root) {
-        diameter(root);
+        int dt=0;
+        traverse(root,dt);
 
-        return mx;
+        return dt;
     }
 };
