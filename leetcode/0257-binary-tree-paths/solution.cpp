@@ -11,36 +11,55 @@
  */
 class Solution {
 public:
-    vector<string>ans;
-    void rec(TreeNode* root, string &s){
-        int cnt=0;
-        if(s.size()>0){
-            s+="->";
-            cnt+=2;
-        }
-        string t = to_string(root->val);
-        cnt+=t.size();
-        s+=t;
-
-        if(!root->left && !root->right){
-            ans.push_back(s);
+    void addString(string &s,int val){
+        string numS = to_string(val);
+        if(s!=""){
+            s+='-';
+            s+='>';
         }
 
-        if(root->left) rec(root->left,s);
-        if(root->right) rec(root->right,s);
+        for(auto ele:numS){
+            s.push_back(ele);
+        }
+    }
 
-        while(cnt--){
+    void removeString(string &s, int val){
+        string numS = to_string(val);
+        while(!numS.empty()){
+            if(numS.back()==s.back()){
+                numS.pop_back();
+                s.pop_back();
+            }
+        }
+
+        if(s!=""){
+            s.pop_back();
             s.pop_back();
         }
-
-        return ;
     }
 
 
+    void traverse(TreeNode* node, string &s, vector<string>&ans){
+        if(node->left==nullptr && node->right==nullptr){
+            addString(s,node->val);
+            ans.push_back(s);
+            removeString(s,node->val);
+            return;
+        }
+
+        addString(s,node->val);
+
+        if(node->left!=nullptr) traverse(node->left,s,ans);
+        if(node->right!=nullptr) traverse(node->right,s,ans);
+
+        removeString(s,node->val);
+
+    }
+    
     vector<string> binaryTreePaths(TreeNode* root) {
         string s = "";
-        rec(root,s);
-
+        vector<string>ans;
+        traverse(root,s,ans);
         return ans;
     }
 };
