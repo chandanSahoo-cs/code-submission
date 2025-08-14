@@ -9,24 +9,35 @@
  */
 class Solution {
 public:
-    TreeNode* ans = nullptr;
-    int lca(TreeNode* root, TreeNode* p, TreeNode* q){
-        if(root==nullptr) return 0;
+    // TreeNode* lowestCommonAncestor(TreeNode* node, TreeNode* p, TreeNode*q){
+    //     if(!node) return nullptr;
+    //     if(node->val==p->val) return p;
+    //     if(node->val==q->val) return q;
 
-        int l = lca(root->left,p,q);
-        int r = lca(root->right,p,q);
+    //     TreeNode * left = lowestCommonAncestor(node->left,p,q);
+    //     TreeNode* right = lowestCommonAncestor(node->right,p,q);
 
-        int tot = (root==p || root==q)+l+r;
+    //     if(left==nullptr && right==nullptr) return nullptr ;
+    //     else if(left!=nullptr && right!=nullptr) return node;
+    //     else if(left!=nullptr) return left;
+    //     else if(right!=nullptr) return right;
+        
+    //     return nullptr;
+    // }
 
-        if(tot==2 && ans==nullptr){
-            ans = root;
-        }
+    TreeNode* lowestCommonAncestor(TreeNode* node, TreeNode* p, TreeNode* q) {
+        if(!node) return nullptr;
+        if(node->val==p->val) return p;
+        if(node->val==q->val) return q;
 
-        return tot;
-    }
+        TreeNode * left = lowestCommonAncestor(node->left,p,q);
+        TreeNode* right = lowestCommonAncestor(node->right,p,q);
 
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        lca(root,p,q);
-        return ans;
+        if(left==nullptr && right==nullptr) return nullptr ;
+        else if(left!=nullptr && right!=nullptr) return node;
+        else if(left!=nullptr) return left;
+        else if(right!=nullptr) return right;
+        
+        return nullptr;   
     }
 };
