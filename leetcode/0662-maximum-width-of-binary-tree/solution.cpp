@@ -9,37 +9,46 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+#define ll long long
 class Solution {
 public:
-    int widthOfBinaryTree(TreeNode* root) {
-        if(!root) return 0;
-
-        queue<pair<long long,TreeNode*>>q;
-        q.push({0,root});
-
-        long long ans = 0;
+    void traverse(queue<pair<ll,TreeNode*>> &q, ll &mx){
+        if(q.front().second==nullptr) return;
 
         while(!q.empty()){
-            int sz = q.size();
-            long long base,mx;
+            vector<pair<ll,TreeNode*>>track;
 
-            for(int i=0;i<sz;i++){
-                auto [ind,node] = q.front();
+            while(!q.empty()){
+                track.push_back(q.front());
                 q.pop();
-                if(i==0){
-                    base = ind;
-                }
-                if(i==sz-1){
-                    mx = ind;
-                }
-
-                if(node->left) q.push({2*(ind-base)+1,node->left});
-                if(node->right) q.push({2*(ind-base)+2,node->right});
             }
 
-            ans = max(mx-base+1,ans);
-        }
+            ll l=-1,r;
 
-        return ans;
+            ll base = track[0].first;
+
+            for(auto ele:track){
+                if(l==-1){
+                    l=ele.first;
+                    r=l;
+                }else{
+                    r=ele.first;
+                }
+                if(ele.second->left!=nullptr) q.push({2*(ele.first-base),ele.second->left});
+                if(ele.second->right!=nullptr) q.push({2*(ele.first-base)+1,ele.second->right});
+            }
+
+            mx = max(mx,r-l+1);
+        }
+    }
+
+    int widthOfBinaryTree(TreeNode* root) {
+        queue<pair<ll,TreeNode*>>q;
+        q.push({0,root});
+        ll mx=0;
+        traverse(q,mx);
+
+        return mx;
     }
 };
