@@ -10,85 +10,96 @@
 class Codec {
 public:
 
-    // Encodes a tree to a single string.
-    string serialize(TreeNode* root) {
-        string s = "";
-
-        if(!root) return "";
+    string traverse(TreeNode* root){
+        if(root==nullptr) return "";
 
         queue<TreeNode*>q;
         q.push(root);
-
+        string s ="";
         while(!q.empty()){
-            int sz = q.size();
+            vector<TreeNode*>temp;
 
-            for(int i=0;i<sz;i++){
-                TreeNode* t = q.front();
+            while(!q.empty()){
+                temp.push_back(q.front());
                 q.pop();
+            }
 
-                if(!t){
-                    s+='#';
+            for(auto ele:temp){
+                if(ele==nullptr){
+                    s.push_back('#');
                 }else{
-                    s+=to_string(t->val);
-                    q.push(t->left);
-                    q.push(t->right);
-                }
+                    q.push(ele->left);
+                    q.push(ele->right);
 
-                s+=',';
+                    string t = to_string(ele->val);
+                    for(auto ele:t){
+                        s.push_back(ele);
+                    }
+                }
+                s.push_back('|');
             }
         }
-        s.pop_back();
+        // cout<<s<<"\n";
         return s;
     }
 
-    // Decodes your encoded data to tree.
-
-    pair<string,int> inc(string &s, int itr){
-        int n = s.size();
-        string t = "";
-        while(itr<n && s[itr]!=','){
-            t+=s[itr];
+    TreeNode* attach (string &s, int &itr){
+        string temp = "";
+        while(s[itr]!='|'){
+            if(s[itr]=='#'){
+                itr+=2;
+                return nullptr;
+            }
+            temp.push_back(s[itr]);
             itr++;
         }
-        return {t,itr+1};
+        // cout<<temp<<"\n";
+        int num = stoi(temp);
+        itr++;
+        return new TreeNode(num);
     }
 
-    TreeNode* deserialize(string s) {
-        int n = s.size();
-        if(n==0) return nullptr;
+    TreeNode* negate(string &s){
+        if(s=="") return nullptr;
 
-        int itr = 0;
         queue<TreeNode*>q;
+        int itr=0;
 
-        auto [t,it] = inc(s,itr);
-        TreeNode* root = new TreeNode(stoi(t));
+        TreeNode* root = attach(s,itr);
 
         q.push(root);
-        itr = it;
+        // itr++;
 
+        while(!q.empty() && itr<s.size()){
+            vector<TreeNode*>temp;
 
-        while(!q.empty()){
-            TreeNode* curr = q.front();
-            q.pop();
+            while(!q.empty()){
+                temp.push_back(q.front());
+                q.pop();
+            }
 
-            // left child
-            auto [leftStr,leftItr] = inc(s,itr);
-            TreeNode* left = leftStr!="#"?new TreeNode(stoi(leftStr)):nullptr;
-            if(left) q.push(left);
-            itr = leftItr;
+            for(auto ele:temp){
+                ele->left = attach(s,itr);
+                if(ele->left!=nullptr) q.push(ele->left);
 
-            // rightChild
-            auto [rightStr,rightItr] = inc(s,itr);
-            TreeNode* right = rightStr!="#"?new TreeNode(stoi(rightStr)):nullptr;
-            if(right) q.push(right);
-            itr = rightItr;
-            
-            curr->left = left;
-            curr->right = right;
+                ele->right = attach(s,itr);
+                if(ele->right!=nullptr) q.push(ele->right);
+            }
         }
 
         return root;
+    }
 
+
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        return traverse(root);
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        return negate(data);
     }
 };
 
