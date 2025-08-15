@@ -9,28 +9,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 public:
-    TreeNode* build(vector<int>& postorder, unordered_map<int,int> &mp,int li, int ri, int lp,int rp){
-        if(li>ri) return nullptr;
+    TreeNode* build(unordered_map<int,int> &mp,vector<int>&postorder,int pStart, int pEnd, vector<int>&inorder, int iStart, int iEnd){
+        if(iStart>iEnd){
+            return nullptr;
+        }
+        TreeNode* root = new TreeNode(postorder[pEnd]);
 
-        int ind = mp[postorder[rp]];
+        int idx = mp[postorder[pEnd]];
+        int numleft = idx-iStart;
 
-        TreeNode* newNode = new TreeNode(postorder[rp]);
-        newNode->left = build(postorder,mp,li, ind-1, lp, lp+ind-li-1);
-        newNode->right = build(postorder,mp,ind+1,ri, lp+ind-li,rp-1);
+        root->left = build(mp,postorder,pStart,pStart+numleft-1,inorder,iStart, idx-1);
+        root->right = build(mp,postorder,pStart+numleft,pEnd-1,inorder,idx+1, iEnd);
 
-        return newNode;
+        return root;
     }
 
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        int n = inorder.size();
         unordered_map<int,int>mp;
 
         for(int i=0;i<inorder.size();i++){
-            mp[inorder[i]] = i;
+            mp[inorder[i]]=i;
         }
 
-        return build(postorder,mp,0,n-1,0,n-1);
+        TreeNode* root = build(mp,postorder,0,postorder.size()-1,inorder,0,inorder.size()-1);
+
+        return root;
     }
 };
