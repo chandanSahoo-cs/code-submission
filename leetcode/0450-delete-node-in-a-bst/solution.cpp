@@ -11,35 +11,56 @@
  */
 class Solution {
 public:
-    TreeNode* deleteNode(TreeNode* root, int key) {
-        if(!root) return nullptr;
-        
-        if(root->val>key){
-            root->left = deleteNode(root->left,key);
-        }else if(root->val<key){
-            root->right = deleteNode(root->right,key);
-        }else{
-            if(!(root->left)){
-                TreeNode* temp = root->right;
-                delete root;
-                return temp;
-            }else if(!(root->right)){
-                TreeNode* temp = root->left;
-                delete root;
-                return temp;
+    TreeNode* insert(TreeNode*root,int key){
+        TreeNode* prev = nullptr;
+        TreeNode* curr = root;
+
+        while(curr!=nullptr){
+            if(curr->val == key){
+                break;
+            }else if(curr->val>key){
+                prev=curr;
+                curr=curr->left;
             }else{
-                TreeNode* temp = root->left;
-
-                while(temp->right!=nullptr){
-                    temp = temp->right;
-                }
-
-                root->val = temp->val;
-
-                root->left = deleteNode(root->left,temp->val);
+                prev=curr;
+                curr=curr->right;
             }
         }
 
-        return root;
+        if(curr==nullptr) return root;
+
+        TreeNode* insertNode=nullptr;
+
+        if(curr->right==nullptr){
+            insertNode = curr->left;
+        }else{
+            TreeNode* node = curr->right;
+
+            while(node->left!=nullptr){
+                node=node->left;
+            }
+            node->left=curr->left;
+            insertNode = curr->right;
+
+        }
+
+        TreeNode* ans = root;
+
+        if(prev==nullptr){
+            ans=insertNode;
+        }else{
+            if(prev->left!=nullptr && prev->left->val==key){
+                prev->left=insertNode;
+            }else {
+                prev->right=insertNode;
+            }
+        }
+
+        return ans;
+
+    }
+
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        return insert(root,key);
     }
 };
