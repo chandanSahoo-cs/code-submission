@@ -9,30 +9,25 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-
-#define ll long long
 class Solution {
 public:
-
-    bool dfs(TreeNode* root, ll mn, ll mx){
-        ll vl = root->val;
-
-        if(mn>=vl || vl>=mx) return false;
-
-        bool flag = true;
-
-        if(root->left){
-            flag&=dfs(root->left,mn,vl);
+    bool traverse(TreeNode* node, TreeNode** prev){
+        if(node==nullptr){
+            return true;
         }
-
-        if(root->right){
-            flag&=dfs(root->right,vl,mx);
+        bool left =  traverse(node->left,prev);
+        bool mid=true;
+        if(*prev!=nullptr && (*prev)->val>=node->val){
+            return false;
         }
+        *prev=node;
+        bool right = traverse(node->right,prev);
 
-        return flag;
+        return left && mid && right;
     }
 
     bool isValidBST(TreeNode* root) {
-        return dfs(root,LLONG_MIN,LLONG_MAX);
+        TreeNode*prev=nullptr;
+        return traverse(root,&prev);
     }
 };
