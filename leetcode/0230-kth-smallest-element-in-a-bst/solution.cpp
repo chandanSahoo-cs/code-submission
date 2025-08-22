@@ -11,21 +11,23 @@
  */
 class Solution {
 public:
-    int ans = -1;
-    void dfs(TreeNode* root, int &ind, int k){
-        
-        if(root->left) dfs(root->left,ind,k);
-        ind++;
-        if(ind==k) ans = root->val;
-
-        if(root->right) dfs(root->right,ind,k);
-
-        return; 
+    void traverse(TreeNode* root, int k, int &cnt, int &ans){
+        if(root==nullptr){
+            return;
+        }
+        traverse(root->left,k,cnt,ans);
+        cnt++;
+        if(cnt==k){
+            ans=root->val;
+        }
+        traverse(root->right,k,cnt,ans);
     }
-
+    
     int kthSmallest(TreeNode* root, int k) {
-        int ind = 0;
-        dfs(root,ind,k);
+        int ans=-1;
+        int cnt=0;
+
+        traverse(root,k,cnt,ans);
 
         return ans;
     }
