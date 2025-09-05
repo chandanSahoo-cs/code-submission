@@ -1,14 +1,23 @@
 class Solution {
 public:
-    int climbStairs(int n) {
-        int frstTrm=0;
-        int scndTrm=1;
-        int endTrm;
-        for(int i=0;i<n;i++){
-            endTrm=frstTrm+scndTrm;
-            frstTrm=scndTrm;
-            scndTrm=endTrm;
+    int state[100];
+    int dp(int n, int level){
+        if(level>n) return 0;
+
+        if(level==n) return 1;
+        int ans=0;
+        if(state[level]!=-1) return state[level];
+        for(int i=1;i<=2;i++){
+            if(level+i<=n){
+                ans+=dp(n,level+i);
+            }
         }
-        return scndTrm;
+
+        return state[level]=ans;
+    }
+
+    int climbStairs(int n) {
+        memset(state,-1,sizeof(state));
+        return dp(n,0);    
     }
 };
