@@ -1,29 +1,22 @@
-#include <vector>
-#include <algorithm>
-
 class Solution {
+int dp[105];    
 public:
-    int rob(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> memo(n, -1);
-        return robHelper(nums, n - 1, memo);
+    int rec(int n, vector<int>&a, int i){
+        if(i>=n) return 0;
+        if(i==n-1) return a[i];
+
+        if(dp[i]!=-1) return dp[i];
+        int ans=0;
+        //take
+        ans = max(ans,a[i]+rec(n,a,i+2));
+        // not take
+        ans = max(ans,rec(n,a,i+1));
+
+        return dp[i] = ans;
     }
 
-private:
-    int robHelper(const vector<int>& nums, int i, vector<int>& memo) {
-        if (i < 0) {
-            return 0;
-        }
-
-        if (memo[i] != -1) {
-            return memo[i];
-        }
-
-        int robCurrent = nums[i] + robHelper(nums, i - 2, memo);
-        int skipCurrent = robHelper(nums, i - 1, memo);
-
-        memo[i] = max(robCurrent, skipCurrent);
-        return memo[i];
+    int rob(vector<int>& a) {
+        memset(dp,-1,sizeof(dp));
+        return rec(a.size(),a,0);
     }
 };
-
