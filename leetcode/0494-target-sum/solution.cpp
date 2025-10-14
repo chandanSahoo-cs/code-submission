@@ -1,29 +1,22 @@
 class Solution {
+    int dp[25][4005];
+    int BUFFER = 2005;
 public:
-    int findTargetSumWays(vector<int>& nums, int target) {
-        int n = nums.size();
-        int sum = accumulate(nums.begin(),nums.end(),0);
-        
-        if((sum+target)&1) return 0;
-        int t = (sum+target)>>1;
 
-        if(t<0) return 0;
+    int rec(vector<int>&a, int t, int i){
+        int n = a.size();
 
-        vector<int>curr(t+1),next(t+1);
-        next[0]=1;
+        if(i==n) return t==0;
+        if(dp[i][t+BUFFER]!=-1) return dp[i][t+BUFFER];
 
-        for(int i=n-1;i>=0;i--){
-            for(int j=0;j<=t;j++){
-                int ans = 0;
-                if(j-nums[i]>=0){
-                  ans += next[j-nums[i]];  
-                }
-                ans+=next[j];
-                curr[j] = ans;
-            }
-            next = curr;
-        }  
+        int ans = rec(a,t-a[i],i+1)+rec(a,t+a[i],i+1);
 
-        return next[t];
+        return dp[i][t+BUFFER]=ans;
+    }
+
+    int findTargetSumWays(vector<int>& a, int target) {
+        memset(dp,-1,sizeof(dp));
+
+        return rec(a,target,0);
     }
 };
