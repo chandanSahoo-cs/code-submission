@@ -1,22 +1,49 @@
 class Solution {
 public:
-    int coinChange(vector<int>& coins, int amount) {
-        int n = coins.size();
-        vector<int>curr(amount+1),next(amount+1,1e5);
 
-        for(int i=n-1;i>=0;i--){
-            for(int amt=0;amt<=amount;amt++){
-                if(amt>0){
-                    int p = amt-coins[i]<0?1e5:1+curr[amt-coins[i]];
-                    int np = next[amt];
+    // int rec(vector<int>&a, int amt){
+    //     int n = a.size();
 
-                    curr[amt] = min(p,np);
+
+    //     int ans = INT_MAX;
+    //     bool flag = false;
+
+    //     for(int i=0;i<n;i++){
+    //         if(amt-a[i]<0) continue;
+    //         int temp = rec(a,amt-a[i]);
+    //         if(temp!=-1) {
+    //             flag = true;
+    //             ans = min(temp,ans);
+    //         }
+    //     }
+
+    //     mark[amt]=true;
+    //     if(!flag) return dp[amt] = -1;
+    //     else return dp[amt] = ans+1; 
+    // }
+
+    int coinChange(vector<int>& a, int amount) {
+        int n = a.size();
+        vector<int>dp(amount+1,-1);
+
+        for(int j=0;j<=amount;j++){
+            if(j==0) dp[j]=0;
+            else{
+                int ans = INT_MAX;
+                bool flag = false;
+                for(int i=0;i<n;i++){
+                    if(j-a[i]<0) continue;
+                    int temp = dp[j-a[i]];
+                    if(temp!=-1) {
+                        flag = true;
+                        ans = min(temp,ans);
+                    }
                 }
-            }
 
-            next = curr;
+                if(flag) dp[j] = ans+1;
+            }
         }
 
-        return next[amount]>=1e5?-1:next[amount];
+        return dp[amount];
     }
 };
