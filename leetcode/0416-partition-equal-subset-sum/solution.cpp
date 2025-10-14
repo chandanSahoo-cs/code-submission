@@ -1,22 +1,26 @@
 class Solution {
+int dp[205][20005];
+
 public:
-    bool canPartition(vector<int>& nums) {
-        int sum = accumulate(nums.begin(),nums.end(),0);
-        if(sum&1) return false;
+    int rec(vector<int>&a, int tot, int curr, int i){
+        int n = a.size();
+        if(curr+curr==tot) return 1;
+        if(i==n || curr+curr<tot) return 0;
 
-        vector<bool>curr(sum+1),next(sum+1);
-        next[sum/2]=true;
+        if(dp[i][curr]!=-1) return dp[i][curr];
 
-        int n = nums.size();
+        int ans = rec(a,tot,curr-a[i],i+1) || rec(a,tot,curr,i+1);
 
-        for(int i=n-1;i>=0;i--){
-            for(int j=sum/2;j>=0;j--){
-                curr[j] = next[j] || (j+nums[i]<=sum/2 && next[j+nums[i]]);
-            }
+        return dp[i][curr] = ans;
+    }
 
-            next = curr;
-        }
+    bool canPartition(vector<int>& a) {
+        int sum = accumulate(a.begin(),a.end(),0);
 
-        return next[0];
+        if(sum%2) return 0;
+
+        memset(dp,-1,sizeof(dp));
+
+        return rec(a,sum,sum,0);
     }
 };
