@@ -1,55 +1,64 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size(), m = grid[0].size();
+        int n = grid.size();
+        int m = grid[0].size();
 
-        queue<pair<int,int>>q;
         vector<vector<int>>vis(n,vector<int>(m));
+        queue<vector<int>>q;
 
-        bool flag = false;
+        int time = 0;
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(grid[i][j]==1 || grid[i][j]==2) flag=true;
-                if(grid[i][j]==2){
-                    q.push({i,j});
+                if(grid[i][j]==2){ 
+                    q.push({i,j,0});
                     vis[i][j]=1;
                 }
             }
         }
 
-        if(!flag) return 0;
-
-        int dr[] = {0,0,-1,1};
-        int dc[] = {-1,1,0,0};
-
-        int level = 0;
-
         while(!q.empty()){
-            int sz = q.size();
-            level++;
+            vector<int>ele = q.front();
+            int r = ele[0];
+            int c = ele[1];
+            int t = ele[2];
 
-            for(int i=0;i<sz;i++){
-                auto [r,c] = q.front();
-                q.pop();
+            time = max(time,t);
 
-                for(int k=0;k<4;k++){
-                    int tr = r+dr[k];
-                    int tc = c+dc[k];
+            q.pop();
 
-                    if(tr<0 || tr>=n || tc<0 || tc>=m || !grid[tr][tc] || vis[tr][tc]) continue;
-                    q.push({tr,tc});
-                    vis[tr][tc]=1;
-                }
+            vector<int>dr = {0,1,0,-1};
+            vector<int>dc = {1,0,-1,0};
+
+            for(int k=0;k<4;k++){
+                int nr = r+dr[k];
+                int nc = c+dc[k];
+
+                if(nr>=n || nr<0 || nc>=m || nc<0 || vis[nr][nc] || grid[nr][nc]==0) continue;
+                q.push({nr,nc,t+1});
+                vis[nr][nc]=1;
+                if(grid[nr][nc]==1) grid[nr][nc] = 2;
             }
+
+            for(int i=0;i<n;i++){
+                for(int j=0;j<m;j++){
+                    cout<<grid[i][j]<<" ";
+                }
+                cout<<"\n";
+            }
+            cout<<"\n";
         }
-        
+
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(grid[i][j]==1 && !vis[i][j]) return -1;
+                // cout
+                if(grid[i][j]==1) return -1;
             }
         }
 
-        return level-1;
+
+
+        return time;
     }
 };
