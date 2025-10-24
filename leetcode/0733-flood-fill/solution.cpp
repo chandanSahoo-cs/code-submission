@@ -1,40 +1,40 @@
 class Solution {
 public:
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
-        int n = image.size();
-        int m = image[0].size();
-
         vector<vector<int>>ans = image;
 
-        if(color==image[sr][sc]) return ans;
+        int n = ans.size();
+        int m = ans[0].size();
 
-        queue<pair<int,int>>q;
-
-        q.push({sr,sc});
+        vector<vector<int>>vis(n,vector<int>(m));
+        stack<pair<int,int>>st;
 
         ans[sr][sc]=color;
+        st.push({sr,sc});
 
-        int tr = image[sr][sc];
+        int inColor = image[sr][sc];
 
-        while(!q.empty()){
-            auto [r,c] = q.front();
-            q.pop();
+        while(!st.empty()){
+            pair<int,int>pr = st.top();
+            st.pop();
 
-            int dr[] = {0,0,-1,1};
-            int dc[] = {-1,1,0,0};
+            int r = pr.first;
+            int c =pr.second;
+            vis[r][c] = 1;
+
+            vector<int>dr = {0,0,1,-1};
+            vector<int>dc = {1,-1,0,-0};
 
             for(int k=0;k<4;k++){
-                int row = r+dr[k];
-                int col = c+dc[k];
+                int nr = r+dr[k];
+                int nc = c+dc[k];
 
-                if(row<0 || row>=n || col<0 || col>=m || ans[row][col]!=tr) continue;
-
-                ans[row][col]=color;
-
-                q.push({row,col});
+                if(nr>=n || nr<0 || nc>=m || nc<0 || vis[nr][nc] || ans[nr][nc]!=inColor) continue;
+                ans[nr][nc] = color;
+                st.push({nr,nc});
             }
-        }
 
+        }
         return ans;
     }
 };
