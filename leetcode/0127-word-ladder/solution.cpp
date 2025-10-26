@@ -1,42 +1,53 @@
 class Solution {
 public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        int n = wordList.size();
-        
-        unordered_set<string>st(wordList.begin(),wordList.end());
-        unordered_set<string>vis;
+    bool check(string &s1, string &s2){
+        int n = s1.size();
 
-        queue<string>q;
-        
-        q.push(beginWord);
-        vis.insert(beginWord);
+        int cnt=0;
+        for( int i=0;i<n;i++){
+            cnt+=(s1[i]!=s2[i]);
+            if(cnt>1) return false;
+        }
 
-        int level = 1;
+        return true;
+    }
 
-        while(!q.empty()){
-            int sz = q.size();
-            level++;
+    int ladderLength(string beginWord, string endWord, vector<string>& a) {
+        int n = a.size();
 
-            for(int k=0;k<sz;k++){
-                string u = q.front();
-                q.pop();
+        vector<int>vis(n);
+        queue<vector<int>>q;
 
-                for(int i=0;i<u.size();i++){
-                    char curr = u[i];
-
-                    for(char c='a';c<='z';c++){
-                        u[i]=c;
-                        if(st.count(u) && !vis.count(u)){
-                            if(u==endWord) return level;
-                            q.push(u);
-                            vis.insert(u);
-                        }
-                    }
-                    u[i]=curr;
-                } 
+        for(int i=0;i<n;i++){
+            if(check(a[i],beginWord)){
+                q.push({i,1});
+                vis[i]=1;
             }
         }
 
-        return 0;
+        int ans = INT_MAX;
+
+        while(!q.empty()){
+            vector<int>pr = q.front();
+
+            int ind = pr[0];
+            int level = pr[1];
+
+            if(a[ind]==endWord){
+                ans = min(ans,level);
+            }
+
+            q.pop();
+
+            for(int k=0;k<n;k++){
+                if( level+1<=min(n,ans) && check(a[k],a[ind]) && !vis[k]){
+                    q.push({k,level+1});
+                    vis[k]=1;
+                }
+            }
+        }
+
+        if(ans==INT_MAX) return 0;
+        return ans+1;
     }
 };
