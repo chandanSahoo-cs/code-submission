@@ -1,35 +1,45 @@
 class Solution {
+    const int INF = 1e8;
 public:
-    int minimumEffortPath(vector<vector<int>>& heights) {
-        int n = heights.size(), m = heights[0].size();
+    int minimumEffortPath(vector<vector<int>>& h) {
+        int n = h.size();
+        int m = h[0].size();
 
-        vector<vector<int>>dist(n,vector<int>(m,INT_MAX));
-        priority_queue<tuple<int,int,int>,vector<tuple<int,int,int>>,greater<>>pq;
-        
-        pq.push({0,0,0});
+        vector<vector<int>>dist(n,vector<int>(m,INF));
+
+        set<vector<int>>st;
+        // v[0] = total cost up to now
+        // v[1] = row
+        // v[2] = col
+        st.insert({0,0,0});
         dist[0][0]=0;
 
-        int dr[] = {0,0,-1,1};
-        int dc[] = {-1,1,0,0};
+        while(!st.empty()){
+            vector<int>v = *st.begin();
+            st.erase(v);
 
-        while(!pq.empty()){
-            auto [d,r,c] = pq.top();
-            pq.pop();
+            int currR = v[1];
+            int currC = v[2];
+            int tot = v[0];
 
-            if(dist[r][c]<d) continue;
-            
+            int dr[] = {0,0,-1,1};
+            int dc[] = {-1,1,0,0};
+
             for(int k=0;k<4;k++){
-                int tr = r+dr[k];
-                int tc = c+dc[k];
+                int r = currR+dr[k];
+                int c = currC+dc[k];
 
-                if(tr<0 || tr>=n || tc<0 || tc>=m) continue;
-                int diff = max(d,abs(heights[tr][tc]-heights[r][c]));
+                if(r>=n || c>=m || r<0 || c<0) continue;
 
-                if(diff<dist[tr][tc]){
-                    pq.push({diff,tr,tc});
-                    dist[tr][tc] = diff;
+                int d = dist[r][c];
+                int diff = abs(h[currR][currC]-h[r][c]);
+
+                if(d>max(tot,diff)){
+                    st.erase({d,r,c});
+                    dist[r][c] = max(tot,diff);
+                    st.insert({max(tot,diff),r,c});
                 }
-            }          
+            }
         }
 
         return dist[n-1][m-1];
