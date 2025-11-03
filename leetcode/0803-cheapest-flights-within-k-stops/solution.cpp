@@ -1,5 +1,5 @@
-const int INF = 1e9+7;
 class Solution {
+    const int INF = 1e8;
 public:
     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
         vector<vector<pair<int,int>>>adj(n);
@@ -8,34 +8,30 @@ public:
             adj[ele[0]].push_back({ele[1],ele[2]});
         }
 
-        vector<int>vis(n,INF);
-        queue<pair<int,int>>q;
+        queue<vector<int>>q;
 
-        q.push({src,0});
-        vis[src]=0;
+        vector<int>dist(n,INF);
 
-        int level = 0;
+        q.push({k,0,src});
+        dist[src]=0;
 
         while(!q.empty()){
-            int sz = q.size();
-            if(level-1==k) break;
-            level++;
+            vector<int>v = q.front();
+            q.pop();
 
-            for(int i=0;i<sz;i++){
-                auto [u,c] = q.front();
-                q.pop();
+            int currK = v[0];
+            int cost = v[1];
+            int node = v[2];
 
-                // cout<<u<<" "<<c<<"\n";
-
-                for(auto [v,cst]:adj[u]){
-                    if(vis[v]>c+cst){
-                        vis[v]=c+cst;
-                        q.push({v,vis[v]});
-                    }
+            for(auto ele:adj[node]){
+                if(currK>=0 && dist[ele.first]>ele.second+cost){
+                    dist[ele.first] = ele.second+cost;
+                    q.push({currK-1,ele.second+cost,ele.first});
                 }
             }
         }
 
-        return vis[dst]==INF?-1:vis[dst];
+
+        return dist[dst]==INF?-1:dist[dst];
     }
 };
