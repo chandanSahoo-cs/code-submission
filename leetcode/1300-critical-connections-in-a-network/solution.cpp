@@ -1,43 +1,46 @@
 class Solution {
+    const int INF = 1e6;
 public:
-    int timer = 0;
 
-    void dfs(vector<vector<int>>&adj, vector<int>&vis, vector<int>&tin, vector<int>&low, int u, int par, vector<vector<int>>&ans){
-        vis[u]=1;
-        tin[u]=low[u]=timer++;
-
-        for(auto v:adj[u]){
-            if(v==par) continue;
-
-            if(!vis[v]){
-                dfs(adj,vis,tin,low,v,u,ans);
-                low[u] = min(low[u],low[v]);
-                if(low[v]>tin[u]){
-                    ans.push_back({v,u});
+    int rec(vector<vector<int>>&adj,vector<int>&time,vector<int>&lTime,vector<vector<int>>&ans, int cnt,int node, int parent){
+        time[node]=cnt;
+        lTime[node]=cnt;
+        cnt++;
+        for(auto ele:adj[node]){
+            if(ele!=parent && time[ele]==-1){
+                int t = rec(adj,time,lTime,ans,cnt,ele,node);
+                if(t>lTime[node]){
+                    ans.push_back({ele,node});
                 }
-            }else{
-                low[u] = min(low[u],low[v]);
             }
         }
 
-        return;
+        int mnTime = INF;
+
+        for(auto ele:adj[node]){
+            if(ele!=parent){
+                mnTime = min(mnTime,lTime[ele]);
+            }
+        }
+
+        return lTime[node]=mnTime;
     }
-    
+
     vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
         vector<vector<int>>adj(n);
 
-        for(auto connection:connections){
-            adj[connection[0]].push_back(connection[1]);
-            adj[connection[1]].push_back(connection[0]);
+        for(auto ele:connections){
+            adj[ele[0]].push_back(ele[1]);
+            adj[ele[1]].push_back(ele[0]);
         }
 
-        vector<int>vis(n),low(n),tin(n);
-
         vector<vector<int>>ans;
+        vector<int>time(n,-1);
+        vector<int>lTime(n,-1);
 
         for(int i=0;i<n;i++){
-            if(vis[i]) continue;
-            dfs(adj,vis,tin,low,i,-1,ans);
+            if(time[i]!=-1) continue;
+            rec(adj,time,lTime,ans,0,i,-1);
         }
 
         return ans;
