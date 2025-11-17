@@ -3,31 +3,37 @@ public:
     int swimInWater(vector<vector<int>>& grid) {
         int n = grid.size();
 
-        vector<vector<int>>dist(n,vector<int>(n,INT_MAX));
-        priority_queue<tuple<int,int,int>,vector<tuple<int,int,int>>,greater<>>pq;
+        priority_queue<vector<int>,vector<vector<int>>, greater<vector<int>>>pq;
 
-        pq.push({grid[0][0],0,0});
-        dist[0][0]=grid[0][0];
+        vector<vector<int>>mark(n,vector<int>(n,1e8));
+        mark[0][0]=grid[0][0];
 
-        int dr[] = {0,0,-1,1};
-        int dc[] = {-1,1,0,0};
+        pq.push({0,0,grid[0][0]});
 
         while(!pq.empty()){
-            auto [w,r,c] = pq.top();
+            auto node = pq.top();
             pq.pop();
 
-            if(dist[r][c]<w) continue;
+            int i = node[0];
+            int j = node[1];
+            int lev = node[2];
+
+            int dr[] = {0,0,-1,1};
+            int dc[] = {-1,1,0,0};
 
             for(int k=0;k<4;k++){
-                int tr = r+dr[k];
-                int tc = c+dc[k];
+                int nr = i+dr[k];
+                int nc = j+dc[k];
 
-                if(tr<0 || tr>=n || tc<0 || tc>=n || dist[tr][tc]<=max(w,grid[tr][tc])) continue;
-                dist[tr][tc] = max(w,grid[tr][tc]);
-                pq.push({dist[tr][tc],tr,tc});
+                if(nr<0 || nr>=n || nc<0 || nc>=n) continue;
+
+                if(mark[nr][nc]>lev){
+                    mark[nr][nc]=lev;
+                    pq.push({nr,nc,max(lev,grid[nr][nc])});
+                }
             }
         }
 
-        return dist[n-1][n-1];
+        return max(mark[n-1][n-1],grid[n-1][n-1]);
     }
 };
