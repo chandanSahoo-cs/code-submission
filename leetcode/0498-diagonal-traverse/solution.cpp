@@ -1,58 +1,59 @@
 class Solution {
 public:
     vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
-        int n = mat.size();
-        int m = mat[0].size();
-        bool flag=false;
+        int n = mat.size(), m=mat[0].size();
         vector<int>ans;
+        bool flag=false;
 
         for(int i=0;i<n;i++){
-            
-            int k =i;
-            int j=0;
+
+            int tempi=i;
+            int tempj=0;
 
             vector<int>temp;
-            while(k>=0 && j<m){
-                temp.push_back(mat[k][j]);
-                k--;
-                j++;
+
+            while(tempi>=0 && tempj<m){
+                temp.push_back(mat[tempi][tempj]);
+                tempi--;
+                tempj++;
             }
 
             if(flag){
-                reverse(temp.begin(),temp.end());
+                for(int k=temp.size()-1;k>=0;k--){
+                    ans.push_back(temp[k]);
+                }
+            }else{
+                for(auto ele:temp){
+                    ans.push_back(ele);
+                }
             }
+
             flag=!flag;
-
-
-            for(auto ele:temp){
-                ans.push_back(ele);
-            }
         }
 
         for(int j=1;j<m;j++){
-            
-            int k=j;
-            int i=n-1;
+            int tempi=n-1;
+            int tempj=j;
 
             vector<int>temp;
-            while(k<m && i>=0){
-                temp.push_back(mat[i][k]);
-                k++;
-                i--;
+
+            while(tempi>=0 && tempj<m){
+                temp.push_back(mat[tempi][tempj]);
+                tempi--;
+                tempj++;
             }
 
             if(flag){
-                reverse(temp.begin(),temp.end());
-                for(auto ele:temp){
-                    cout<<ele<<" ";
+                for(int k=temp.size()-1;k>=0;k--){
+                    ans.push_back(temp[k]);
                 }
-                cout<<"\n";
+            }else{
+                for(auto ele:temp){
+                    ans.push_back(ele);
+                }
             }
-            flag=!flag;
 
-            for(auto ele:temp){
-                ans.push_back(ele);
-            }
+            flag=!flag;
         }
 
         return ans;
