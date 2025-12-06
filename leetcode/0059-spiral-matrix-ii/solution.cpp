@@ -1,44 +1,36 @@
 class Solution {
 public:
     vector<vector<int>> generateMatrix(int n) {
-        int rowBegin = 0;
-        int colBegin = 0;
-        int rowEnd = n;
-        int colEnd = n;
-        int value = 1; // Start from 1, as you want to fill the matrix with consecutive numbers
-        vector<vector<int>> output(n, vector<int>(n, 0)); // Initialize the matrix with zeros
+        vector<vector<int>>ans(n,vector<int>(n));
 
-        while (rowBegin < rowEnd && colBegin < colEnd) {
-            // Traverse the top row
-            for (int i = colBegin; i < colEnd; ++i) {
-                output[rowBegin][i] = value++;
+        int i=0,j=0,l=n-1,b=n-1;
+        int num=1;
+        while(i<=b && j<=l){
+            for(int k=j;k<=l;k++){
+                ans[i][k]=num;
+                num++;
             }
-            ++rowBegin;
+            i++;
 
-            // Traverse the rightmost column
-            for (int i = rowBegin; i < rowEnd; ++i) {
-                output[i][colEnd - 1] = value++;
+            for(int k=i;k<=b;k++){
+                ans[k][l]=num;
+                num++;
             }
-            --colEnd;
+            l--;
 
-            // Traverse the bottom row
-            if (rowBegin < rowEnd) {
-                for (int i = colEnd - 1; i >= colBegin; --i) {
-                    output[rowEnd - 1][i] = value++;
-                }
-                --rowEnd;
+            for(int k=l;k>=j;k--){
+                ans[b][k]=num;
+                num++;
             }
+            b--;
 
-            // Traverse the leftmost column
-            if (colBegin < colEnd) {
-                for (int i = rowEnd - 1; i >= rowBegin; --i) {
-                    output[i][colBegin] = value++;
-                }
-                ++colBegin;
+            for(int k=b;k>=i;k--){
+                ans[k][j]=num;
+                num++;
             }
+            j++;
         }
 
-        return output;
+        return ans;
     }
 };
-
