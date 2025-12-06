@@ -1,26 +1,17 @@
 class Solution {
 public:
-    vector<vector<int>> transpose(vector<vector<int>>& matrix) {
-        if (matrix.size() == matrix[0].size()) {
-            for (int i = 0; i < matrix.size(); i++) {
-                for (int j = 0; j < matrix.size(); j++) {
-                    if (j > i) {
-                        swap(matrix[i][j], matrix[j][i]);
-                    }
-                }
+    vector<vector<int>> transpose(vector<vector<int>>& a) {
+        int n = a.size();
+        int m = a[0].size();
+
+        vector<vector<int>>ans(m,vector<int>(n));
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                ans[j][i]=a[i][j];
             }
-        } else {
-            vector<vector<int>> transposed(matrix[0].size(), vector<int>(matrix.size()));
-            for (int i = 0; i < matrix.size(); i++) {
-                for (int j = 0; j < matrix[i].size(); j++) {
-                    transposed[j][i] = matrix[i][j];
-                }
-            }
-            matrix = transposed;
         }
-        
-        return matrix;
+
+        return ans;
     }
 };
-
-
