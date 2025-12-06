@@ -1,30 +1,43 @@
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        vector<int>output;
-        int rowBegin=0,rowEnd=matrix.size()-1,columnBegin=0,columnEnd=matrix[0].size()-1;
-        while(rowBegin<=rowEnd and columnBegin<=columnEnd){
-            for(int i=columnBegin;i<=columnEnd;i++){
-                output.push_back(matrix[rowBegin][i]);
+        int n = matrix.size()-1;
+        int m = matrix[0].size()-1;
+
+
+        int i=0,j=0;
+        vector<int>ans;
+
+        while(i<=n && j<=m){
+            for(int k=j;k<=m;k++){
+                ans.push_back(matrix[i][k]);
             }
-            rowBegin++;
-            for(int i=rowBegin;i<=rowEnd;i++){
-                output.push_back(matrix[i][columnEnd]);
+            i++;
+            cout<<i<<","<<n<<","<<j<<","<<m<<"\n";
+            if(i>n || j>m) break;
+
+            for(int k=i;k<=n;k++){
+                ans.push_back(matrix[k][m]);
             }
-            columnEnd--;
-            if(rowBegin<=rowEnd){
-                for(int i=columnEnd;i>=columnBegin;i-- ){
-                    output.push_back(matrix[rowEnd][i]);
-                }
-                rowEnd--;
+            m--;
+            cout<<i<<","<<n<<","<<j<<","<<m<<"\n";
+            if(i>n || j>m) break;
+
+            for(int k=m;k>=j;k--){
+                ans.push_back(matrix[n][k]);
             }
-            if(columnBegin<=columnEnd){
-                for(int i=rowEnd;i>=rowBegin;i--){
-                    output.push_back(matrix[i][columnBegin]);
-                }
-                columnBegin++;
+            n--;
+            cout<<i<<","<<n<<","<<j<<","<<m<<"\n";
+            if(i>n || j>m) break;
+
+            for(int k=n;k>=i;k--){
+                ans.push_back(matrix[k][j]);
             }
+            j++;
+            cout<<i<<","<<n<<","<<j<<","<<m<<"\n";
+            if(i>n || j>m) break;
         }
-        return output;
+
+        return ans;
     }
 };
