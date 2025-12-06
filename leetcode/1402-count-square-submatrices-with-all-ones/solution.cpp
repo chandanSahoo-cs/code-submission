@@ -1,33 +1,30 @@
 class Solution {
-    int dp[305][305];
-    int cnt=0;
 public:
-   int rec(vector<vector<int>>&a, int i , int j){
-        int n = a.size();
-        int m = a[0].size();
+    int dp[305][305];
+
+    int cnt=0;
+    int rec(vector<vector<int>>& matrix, int i, int j){
+        int n = matrix.size();
+        int m = matrix[0].size();
 
         if(i==n || j==m) return 0;
 
         if(dp[i][j]!=-1) return dp[i][j];
 
-        int ans = 0;
+        int sz=INT_MAX;
 
-        int t1 = rec(a,i+1,j);
-        int t2 = rec(a,i,j+1);
-        int t3 = rec(a,i+1,j+1);
+        sz = min(sz,1+rec(matrix,i+1,j));
+        sz = min(sz,1+rec(matrix,i,j+1));
+        sz = min(sz,1+rec(matrix,i+1,j+1));
 
-        if(a[i][j]){
-            ans = 1+min({t1,t2,t3});
-            cnt+=ans;
-        }
-
-        return dp[i][j] = ans;
+        cnt+=(matrix[i][j]==0?0:sz);
+        return dp[i][j]=(matrix[i][j]==0?0:sz);
     }
-    
-    int countSquares(vector<vector<int>>& a) {
-        memset(dp,-1,sizeof(dp));
-        rec(a,0,0);
 
-        return cnt;
+    int countSquares(vector<vector<int>>& matrix) {
+        memset(dp,-1,sizeof(dp));
+        rec(matrix,0,0);
+
+        return cnt;    
     }
 };
