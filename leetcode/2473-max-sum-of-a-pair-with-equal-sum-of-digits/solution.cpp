@@ -2,9 +2,9 @@ class Solution {
 public:
     int digSum(int n){
         int sum=0;
-        
+
         while(n>0){
-            sum+=(n%10);
+            sum+=n%10;
             n/=10;
         }
 
@@ -12,30 +12,33 @@ public:
     }
 
     int maximumSum(vector<int>& nums) {
+        int n = nums.size();
 
-        map<int,pair<int,int>>mp;
+        unordered_map<int,pair<int,int>>mp;
 
-        for(auto ele:nums){
-            int sum = digSum(ele);
-
-            if(mp.find(sum)==mp.end()){
-                mp[sum] = {-ele-1,ele};
+        for(int i=0;i<n;i++){
+            int dig= digSum(nums[i]);
+            if(mp.find(dig)==mp.end()){
+                mp[dig]={-1,nums[i]};
             }else{
-                if(mp[sum].second<=ele){
-                    mp[sum].first = mp[sum].second;
-                    mp[sum].second = ele;
-                }else if(mp[sum].first<ele){
-                    mp[sum].first=ele;
+                if(nums[i]>=mp[dig].second){
+                    mp[dig].first=mp[dig].second;
+                    mp[dig].second=nums[i];
+                }else if(nums[i]>=mp[dig].first){
+                    mp[dig].first=nums[i];
                 }
             }
         }
 
-        int mx = -1;
+        int mx=-1;
 
         for(auto [key,value]:mp){
+            if(value.first==-1) continue;
             mx = max(mx,value.first+value.second);
         }
 
-        return mx;    
+        return mx;
     }
+
+
 };
