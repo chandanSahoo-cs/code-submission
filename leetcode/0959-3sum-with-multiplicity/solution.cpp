@@ -2,32 +2,35 @@ class Solution {
     const int mod = 1e9+7;
 public:
     int threeSumMulti(vector<int>& arr, int target) {
-        unordered_map<int,int>mp;
+        vector<long long>freq(101);
 
-        for(auto ele:arr) mp[ele]++;
+        for(auto ele:arr){
+            freq[ele]++;
+        }
 
         long long cnt=0;
 
         for(int i=0;i<101;i++){
-            for(int j=0;j<101;j++){
-                long long a = mp[i];
-                long long b = mp[j];
-
+            for(int j=i;j<101;j++){
+                if(freq[i]==0 || freq[j]==0) continue;
                 int tr = target-i-j;
-                if(mp.find(tr)==mp.end()) continue;
-
-                long long c = mp[tr];
+                if(tr<0 || tr>100 || freq[tr]==0) continue;
+                long long fn = freq[tr];
+                long  frst = freq[i];
+                long scnd = freq[j];
 
                 if(i==j && j==tr){
-                    cnt+=(a*(a-1)*(a-2))/6;
+                    cnt+=(frst*(frst-1)*(frst-2))/6;
                 }else if(i==j && j!=tr){
-                    cnt+=((a*(a-1))/2)*c;
-                }else if(j<i && i<tr){
-                    cnt+=a*b*c;
-                } 
+                    cnt+=fn*(frst*(frst-1))/2;
+                }else if(i<j && j<tr){
+                    cnt+=frst*scnd*fn;
+                }
+
+                // cout<<cnt<<"\n";
+
             }
         }
-
-        return cnt%mod;
+        return cnt%(int)mod;
     }
 };
