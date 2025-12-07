@@ -1,64 +1,58 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
+        
         int n = grid.size();
         int m = grid[0].size();
 
-        vector<vector<int>>vis(n,vector<int>(m));
+        vector<int>dr = {0,0,-1,1};
+        vector<int>dc = {-1,1,0,0};
+
         queue<vector<int>>q;
 
-        int time = 0;
+        vector<vector<int>>vis(n,vector<int>(m,-1));
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(grid[i][j]==2){ 
+                if(grid[i][j]==2){
                     q.push({i,j,0});
-                    vis[i][j]=1;
+                }else if(grid[i][j]==0){
+                    vis[i][j]=0;
                 }
             }
         }
+
+        int cnt=0;
 
         while(!q.empty()){
-            vector<int>ele = q.front();
-            int r = ele[0];
-            int c = ele[1];
-            int t = ele[2];
-
-            time = max(time,t);
-
+            auto pr = q.front();
             q.pop();
 
-            vector<int>dr = {0,1,0,-1};
-            vector<int>dc = {1,0,-1,0};
+            int cost = pr[2];
+            int f = pr[0];
+            int s = pr[1];
+            if(vis[f][s]!=-1) continue;
 
-            for(int k=0;k<4;k++){
-                int nr = r+dr[k];
-                int nc = c+dc[k];
+            vis[f][s]=cost;
 
-                if(nr>=n || nr<0 || nc>=m || nc<0 || vis[nr][nc] || grid[nr][nc]==0) continue;
-                q.push({nr,nc,t+1});
-                vis[nr][nc]=1;
-                if(grid[nr][nc]==1) grid[nr][nc] = 2;
+            for(int i=0;i<4;i++){
+                int r = f+dr[i];
+                int c = s+dc[i];
+
+                if(r<0 || r>=n || c<0 || c>=m || vis[r][c]!=-1 || grid[r][c]!=1) continue;
+                q.push({r,c,cost+1});
             }
-
-            for(int i=0;i<n;i++){
-                for(int j=0;j<m;j++){
-                    cout<<grid[i][j]<<" ";
-                }
-                cout<<"\n";
-            }
-            cout<<"\n";
         }
+
+        int mx = 0;
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                // cout
-                if(grid[i][j]==1) return -1;
+                if(vis[i][j]==-1) return -1;
+                mx = max(mx,vis[i][j]);
             }
         }
 
-
-
-        return time;
+        return mx;
     }
 };
