@@ -1,23 +1,26 @@
 class Solution {
 public:
     vector<int> findDiagonalOrder(vector<vector<int>>& nums) {
-        queue<pair<int,int>>q;
-        q.push({0,0});
-        vector<int>ans;
+        
+        queue<pair<int,int>>qp;
+        qp.push({0,0});
 
-        while(!q.empty()){
-            pair<int,int>pr = q.front();
-            q.pop();
-            int r = pr.first;
-            int c = pr.second;
+        vector<int>ans; 
+
+        while(!qp.empty()){
+            pair<int,int>p = qp.front();
+            qp.pop();
+
+            int r = p.first;
+            int c = p.second;
             ans.push_back(nums[r][c]);
 
-            if(c==0 && r+1<nums.size()){
-                q.push({r+1,c});
+            if(r+1<nums.size() && c==0){
+                qp.push({r+1,c});
             }
 
             if(c+1<nums[r].size()){
-                q.push({r,c+1});
+                qp.push({r,c+1});
             }
         }
 
