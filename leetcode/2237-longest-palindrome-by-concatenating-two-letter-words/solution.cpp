@@ -3,64 +3,35 @@ public:
     int longestPalindrome(vector<string>& words) {
         unordered_map<string,int>mp;
 
-        for(auto ele:words){
-            if(mp.find(ele)==mp.end()){
-                mp[ele]=1;
-            }else mp[ele]++;
-        }
+        for(auto ele:words) mp[ele]++;
+
+        int mxOdd=0;
+        int cnt=0;
 
         for(auto [key,value]:mp){
-            cout<<key<<" "<<value<<"\n";
-        }
+            string rKey = key;
+            reverse(rKey.begin(),rKey.end());
 
-        int cnt=0;
-        int odd=0;
+            if(mp.find(rKey)==mp.end()) continue;
 
-        // for(auto [key,value]:words){
-        //     int scnd=0;
+            int mn = min(value,mp[rKey]);
 
-        //     if(tr[0]==tr[1]){
-        //         if(value%2)
-        //     }
-        // }
-
-        for(auto ele:words){
-            if(mp[ele]==0) continue;
-            int frst=mp[ele];
-            int scnd=0;
-            
-            string tr = "";
-            tr.push_back(ele[1]);
-            tr.push_back(ele[0]);
-
-            if(tr==ele){
-                if(frst%2){
-                    if(odd>frst){
-                        scnd=frst-1;
-                        frst--;
-                    }else{
-                        scnd=max(0,odd-1);
-                        odd=frst;
-                        frst=scnd;
+            if(rKey==key){
+                if(mn%2){
+                    if(mxOdd<mn){
+                        swap(mxOdd,mn);
                     }
-                    // odd = max(odd,frst);
-                    // scnd=mn-1;
+                    cnt+=max(0,mn-1);
                 }else{
-                    scnd = frst;
+                    cnt+=mn;
                 }
-                cnt+=min(frst,scnd);
-
             }else{
-                if(mp.find(tr)!=mp.end()){
-                    scnd=mp[tr];
-                }
-                cnt+=2*min(frst,scnd);
+                cnt+=mn;
             }
-            // cout<<frst<<" "<<scnd<<" "<<cnt<<"\n";
-            mp[ele]=0;
-            mp[tr]=0;
+
+            // mp[key]=0;
         }
 
-        return 2*(cnt+odd);
+        return 2*(cnt+mxOdd);
     }
 };
