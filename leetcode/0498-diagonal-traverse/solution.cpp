@@ -1,59 +1,58 @@
 class Solution {
 public:
     vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
-        int n = mat.size(), m=mat[0].size();
-        vector<int>ans;
+        int n = mat.size();
+        int m = mat[0].size();
         bool flag=false;
+        vector<int>ans;
 
         for(int i=0;i<n;i++){
-
-            int tempi=i;
-            int tempj=0;
+            
+            int k =i;
+            int j=0;
 
             vector<int>temp;
-
-            while(tempi>=0 && tempj<m){
-                temp.push_back(mat[tempi][tempj]);
-                tempi--;
-                tempj++;
+            while(k>=0 && j<m){
+                temp.push_back(mat[k][j]);
+                k--;
+                j++;
             }
 
             if(flag){
-                for(int k=temp.size()-1;k>=0;k--){
-                    ans.push_back(temp[k]);
-                }
-            }else{
-                for(auto ele:temp){
-                    ans.push_back(ele);
-                }
+                reverse(temp.begin(),temp.end());
             }
-
             flag=!flag;
+
+
+            for(auto ele:temp){
+                ans.push_back(ele);
+            }
         }
 
         for(int j=1;j<m;j++){
-            int tempi=n-1;
-            int tempj=j;
+            
+            int k=j;
+            int i=n-1;
 
             vector<int>temp;
-
-            while(tempi>=0 && tempj<m){
-                temp.push_back(mat[tempi][tempj]);
-                tempi--;
-                tempj++;
+            while(k<m && i>=0){
+                temp.push_back(mat[i][k]);
+                k++;
+                i--;
             }
 
             if(flag){
-                for(int k=temp.size()-1;k>=0;k--){
-                    ans.push_back(temp[k]);
-                }
-            }else{
+                reverse(temp.begin(),temp.end());
                 for(auto ele:temp){
-                    ans.push_back(ele);
+                    cout<<ele<<" ";
                 }
+                cout<<"\n";
             }
-
             flag=!flag;
+
+            for(auto ele:temp){
+                ans.push_back(ele);
+            }
         }
 
         return ans;
