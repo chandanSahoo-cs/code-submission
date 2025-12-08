@@ -3,24 +3,24 @@ public:
     int largestOverlap(vector<vector<int>>& img1, vector<vector<int>>& img2) {
         int n = img1.size();
 
-        int mx=0;
-        for(int i=-n+1;i<n;i++){
-            for(int j=-n+1;j<n;j++){
+        int mx = 0;
+        for(int h=-n+1;h<n;h++){
+            for(int v=-n+1;v<n;v++){
 
                 int cnt=0;
-                for(int r=0;r<n;r++){
-                    for(int c=0;c<n;c++){
 
-                        int y=r+i;
-                        int x=c+j;
+                for(int i=0;i<n;i++){
+                    for(int j=0;j<n;j++){
+                        int dr = i+h;
+                        int dc = j+v;
 
-                        if(x<0 || x>=n || y<0 || y>=n) continue;
-                        cnt+=(img1[r][c]==img2[y][x] && img2[y][x]==1);
-                    
+                        if(dr<0 || dr>=n || dc<0 || dc>=n) continue;
+
+                        if(img1[i][j]==img2[dr][dc] && img2[dr][dc]==1) cnt++;
                     }
                 }
 
-                mx = max(cnt,mx);
+                mx = max(mx,cnt);
             }
         }
 
