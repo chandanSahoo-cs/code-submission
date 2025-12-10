@@ -1,35 +1,21 @@
 class Solution {
 public:
     void sortColors(vector<int>& nums) {
-        //Bubble Sort
-        // for(int j=0;j<nums.size();j++){
-        //     bool flag=false;
-        //     for(int i=1;i<nums.size();i++){
-        //         if(nums[i]<nums[i-1]){
-        //             swap(nums[i],nums[i-1]);
-        //             flag=true;
-        //         }
-        //     }
-        //     if(!flag) break;
-        // }
+        int n = nums.size();
 
-        //Selection Sort
-        // for(int i=0;i<nums.size();i++){
-        //     auto minEle=min_element(nums.begin()+i,nums.end());
-        //     int minIndex=distance(nums.begin(),minEle);
-        //     swap(nums[i],nums[minIndex]);
-        // }
+        int l=0,mid=0,r=n-1;
 
-        // Insertion Sort
-        for(int i=1;i<nums.size();i++){
-            int value=nums[i];
-            int j=i-1;
-            while(j>=0 && nums[j]>value){
-                nums[j+1]=nums[j];
-                j--;
+        while(mid<=r){
+            if(nums[mid]==0){
+                swap(nums[mid],nums[l]);
+                l++;
+                mid++;
+            }else if(nums[mid]==1){
+                mid++;
+            }else {
+                swap(nums[mid],nums[r]);
+                r--;
             }
-            nums[j+1]=value;
         }
-        return;
     }
 };
