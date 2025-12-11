@@ -1,33 +1,33 @@
 class Solution {
-    #define ll long long
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        ll m=matrix.size();
-        ll n=matrix[0].size();
-        ll s=0,e=m-1;
-        bool flag=false;
-        while(s<e){
-            ll mid=s+(e-s)/2;
-            if(matrix[mid][n-1]==target) {
-                flag=true;
-                break;
-            }
-            if(matrix[mid][n-1]<target) s=mid+1;
-            else e=mid;
-        }
-        if(!flag){
-            ll temp=e;
-            s=0,e=n-1;
-            while(s<=e){
-                ll mid=s+(e-s)/2;
-                if(matrix[temp][mid]==target){
-                    flag=true;
-                    break;
-                }
-                else if(matrix[temp][mid]<target) s=mid+1;
-                else e=mid-1;
+        int n = matrix.size();
+        int m = matrix[0].size();
+
+        int l=0,r=n-1;
+        int ind=l;
+        while(l<=r){
+            int mid = l+(r-l)/2;
+
+            if(target<matrix[mid][0]){
+                r=mid-1;
+            }else{
+                ind=mid;
+                l=mid+1;
             }
         }
-        return flag;
+
+        l=0,r=m-1;
+
+        while(l<=r){
+            int mid = l+(r-l)/2;
+
+            if(target==matrix[ind][mid]) return true;
+            else if(target<matrix[ind][mid]){
+                r=mid-1;
+            }else l=mid+1;
+        }
+
+        return false;
     }
 };
