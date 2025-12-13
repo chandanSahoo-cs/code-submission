@@ -13,35 +13,24 @@ public:
     bool isPalindrome(ListNode* head) {
         ListNode* fast = head;
         ListNode* slow = head;
-        ListNode* prev = NULL;
+        ListNode* prev = nullptr;
+
         while(fast && fast->next){
-            fast=fast->next->next;
+            fast = fast->next->next;
             ListNode* next = slow->next;
             slow->next = prev;
             prev = slow;
-            slow = next;
+            slow=next;
         }
+        
+        if(fast && !fast->next) slow=slow->next;
 
-
-        if(fast!=NULL) slow=slow->next;
         while(slow && prev){
             if(slow->val!=prev->val) return false;
-            slow=slow->next;
-            prev=prev->next;
-            
+            slow = slow->next;
+            prev = prev->next;
         }
-        // while(slow){
-        //     cout<<slow->val<<" ";
-        //     slow=slow->next;
-        // }
-        // cout<<"\n";
 
-        // while(prev){
-        //     cout<<prev->val<<" ";
-        //     prev=prev->next;
-        // }
-        // cout<<"\n";
-
-        return true;
+        return true;;
     }
 };
