@@ -1,27 +1,24 @@
 class Solution {
-    int dp[1005][1005];
 public:
-
-    int rec(string &s1, string &s2, int i, int j){
+    int longestCommonSubsequence(string s1, string s2) {
         int n = s1.size();
         int m = s2.size();
 
-        if(i>=n || j>=m) return 0;
-        if(dp[i][j]!=-1) return dp[i][j];
+        vector<int>curr(m+1,0),prev(m+1,0);
 
-        int ans=0;
-        if(s1[i]==s2[j]){
-            ans = 1+rec(s1,s2,i+1,j+1);
+        for(int i=n-1;i>=0;i--){
+            for(int j=m-1;j>=0;j--){
+
+                if(s1[i]==s2[j]){
+                    curr[j] = max(curr[j],1+prev[j+1]);
+                }
+                curr[j] = max(curr[j],prev[j]);
+                curr[j] = max(curr[j],curr[j+1]);
+            }
+            prev = curr;
+            curr.resize(m+1,0);
         }
 
-        ans = max({ans,rec(s1,s2,i+1,j),rec(s1,s2,i,j+1)});
-
-        return dp[i][j]=ans;
-    }
-
-    int longestCommonSubsequence(string s1, string s2) {
-        memset(dp,-1,sizeof(dp));
-
-        return rec(s1,s2,0,0);    
+        return prev[0];
     }
 };
