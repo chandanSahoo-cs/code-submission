@@ -9,32 +9,30 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-
- // iterative
 class Solution {
 public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        if(root==nullptr) return {};
+        stack<TreeNode*>st;
+        stack<int>hold;
 
-    void iterativePostorder(stack<TreeNode*>&st, vector<int>&ans){
-        if(st.empty()) return ;
+        st.push(root);
 
         while(!st.empty()){
-            TreeNode* temp = st.top();
+            TreeNode* node = st.top();
             st.pop();
-            ans.push_back(temp->val);
-            if(temp->left!=nullptr) st.push(temp->left);
-            if(temp->right!=nullptr) st.push(temp->right);
-        }
-    }
 
-    vector<int> postorderTraversal(TreeNode* root) {
+            hold.push(node->val);
+            if(node->left) st.push(node->left);
+            if(node->right) st.push(node->right);
+        }
+
         vector<int>ans;
-        stack<TreeNode*>st;   
-        if(root!=nullptr){
-            st.push(root);
-        }
-        iterativePostorder(st,ans);
 
-        reverse(ans.begin(),ans.end());
+        while(!hold.empty()){
+            ans.push_back(hold.top());
+            hold.pop();
+        }
 
         return ans;
     }
