@@ -1,56 +1,46 @@
 class MyQueue {
 public:
+    stack<int>in,out;
     MyQueue() {
         
     }
-
-    stack<int>*st1 = new stack<int>(), *st2 = new stack<int>();
-
     
     void push(int x) {
-        st1->push(x);  
-        // cout<<st1->top()<<" ";      
+        in.push(x);
     }
     
     int pop() {
-        cout<<st1->top()<<" ";
-        int ele = -1;
-        while(st1->size()>1){
-            ele = st1->top();
-            st1->pop();
-            st2->push(ele);
-            // cout<<ele<<" ";
-        }
-        ele = st1->top();
-        st1->pop();
+        
+        if(empty()) return -1;
 
-        while(st2->size()>0){
-            st1->push(st2->top());
-            st2->pop();
+        if(out.empty()){
+            while(!in.empty()){
+                out.push(in.top());
+                in.pop();
+            }
         }
+
+        int ele = out.top();
+        out.pop();
 
         return ele;
     }
     
     int peek() {
-        int ele=-1;
+        if(empty()) return -1;
 
-        while(st1->size()>0){
-            ele=st1->top();
-            st1->pop();
-            st2->push(ele);
+        if(out.empty()){
+            while(!in.empty()){
+                out.push(in.top());
+                in.pop();
+            }
         }
 
-        while(st2->size()>0){
-            st1->push(st2->top());
-            st2->pop();
-        }
-
-        return ele;
+        return out.top();        
     }
     
     bool empty() {
-        return st1->size()==0;
+        return out.empty() && in.empty();
     }
 };
 
