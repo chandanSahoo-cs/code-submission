@@ -1,46 +1,47 @@
 class Solution {
 public:
-    vector<vector<string>>ans;
-
-    bool isPalindrome(string s){
-        int n = s.size();
-        int l=0,r=n-1;
-
-        while(l<r){
-            if(s[l++]!=s[r--]) return false;
+    vector<vector<string>> ans;
+    int dp[16][16];
+    
+    int checkPalindrome(string&s, int l, int r){
+        if(r-l==0) return 1;
+        if(r-l==1){
+            if(s[l]==s[r]) return 1;
+            else return 0;
         }
 
-        return true;
+        if(dp[l][r]!=-1) return dp[l][r];
+        return dp[l][r] = s[l]==s[r] && checkPalindrome(s,l+1,r-1);
     }
 
-    void fill(string &s, vector<string> &c, string store, int i){
-        if(s.size()==i){
-            if(isPalindrome(store) && !store.empty()){
-                c.push_back(store);
-                ans.push_back(c);
-                c.pop_back();
+    void rec(string s, int l, int i, vector<string> &tv){
+        int n = s.size();
+
+        if(i==n-1){
+            if(checkPalindrome(s,l,i)){
+                tv.push_back(s.substr(l));
+                ans.push_back(tv);
+                tv.pop_back();
             }
             return;
         }
+        rec(s,l,i+1,tv);
 
-        if(isPalindrome(store)){
-            if(!store.empty()){
-                c.push_back(store);
-                fill(s,c,string(1,s[i]),i+1);
-                c.pop_back();
-            }
+        if(checkPalindrome(s,l,i)){
+            tv.push_back(s.substr(l,i-l+1));
+            rec(s,i+1,i+1,tv);
+            tv.pop_back();
         }
 
-        fill(s,c,store+s[i],i+1);
 
-        return;
+        return ;
     }
-    
-    vector<vector<string>> partition(string s) {
-        vector<string> c;
-        string store ="";
 
-        fill(s,c,store,0);
+    vector<vector<string>> partition(string s) {
+        memset(dp,-1,sizeof(dp));
+        vector<string> tv;
+        rec(s,0,0,tv);
+
         return ans;
     }
 };
