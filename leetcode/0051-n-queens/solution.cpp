@@ -1,55 +1,48 @@
 class Solution {
 public:
-    int queen[10];
     vector<vector<string>>ans;
+    vector<int>col;
+    vector<int>di1;
+    vector<int>di2;
 
-    bool check(int row, int col){
-        for(int i=0;i<row;i++){
-            int pRow = i;
-            int pCol = queen[i];
+    void toggle(int n, int i, int j){
+        col[j]=!col[j];
+        di1[i+j]=!di1[i+j];
+        di2[n-i+j]=!di2[n-i+j];
 
-            if(col==pCol || abs(pRow-row)==abs(pCol-col)) return false;
-        }
-        return true;
+        return ;
     }
 
-    void rec(int n, int row, int col, vector<string>&s){
-        
-        if(row==n){
-            for(int i=0;i<n;i++){
-                s[i][queen[i]]='Q';
-            }
-            ans.push_back(s);
-            for(int i=0;i<n;i++){
-                s[i][queen[i]]='.';
-            }
+    void rec(int n, vector<string> &board, int i ){
+        if(i==n){
+            ans.push_back(board);
             return;
         }
 
-        if(col==n) return;
-
-        if(check(row, col)){
-            queen[row]=col;
-            rec(n,row+1,0,s);
-            queen[row]=-1;
+        for(int j=0;j<n;j++){
+            if(!col[j] && !di1[i+j] && !di2[n-i+j]){
+                toggle(n,i,j);
+                board[i][j]='Q';
+                rec(n,board,i+1);
+                board[i][j]='.';
+                toggle(n,i,j);
+            }
         }
-        rec(n,row,col+1,s);
     }
 
     vector<vector<string>> solveNQueens(int n) {
-        memset(queen,-1,sizeof(queen));
-        vector<string>s;
+        col.resize(n);
+        di1.resize(2*n);
+        di2.resize(2*n);
 
-        string temp = "";
+        vector<string>board;
 
         for(int i=0;i<n;i++){
-            temp.push_back('.');
-        }    
-        for(int i=0;i<n;i++){
-            s.push_back(temp);
+            string s(n,'.');
+            board.push_back(s);
         }
 
-        rec(n,0,0,s);
+        rec(n,board,0);
 
         return ans;
     }
