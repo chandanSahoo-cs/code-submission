@@ -1,20 +1,20 @@
 class Solution {
 public:
-    long long maxMatrixSum(vector<vector<int>>& m) {
-        int n = m.size();
-        int negCnt=0;
-        long long ans=0;
+    long long maxMatrixSum(vector<vector<int>>& matrix) {
+        int negCnt = 0;
+        long long sum = 0;
         int mn = INT_MAX;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                if(m[i][j]<0) negCnt++;
-                ans+=abs(m[i][j]);
-                mn=min(mn,abs(m[i][j]));
+
+        for(auto row:matrix){
+            for(auto ele:row){
+                if(ele<0) negCnt++;
+
+                sum+=1LL*abs(ele);
+                mn = min(mn,abs(ele));
             }
         }
-        if(negCnt%2){
-            ans-=2*mn;
-        }
-        return ans;
+
+        if(negCnt%2) return sum-2*mn;
+        else return sum;
     }
 };
