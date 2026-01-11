@@ -1,55 +1,58 @@
 class Solution {
 public:
-
-    vector<int>left(int n, vector<int>&a){
+    int maxArea(vector<int>& keep){
+        int n = keep.size();
 
         stack<int>st;
-        vector<int>ans(n,0);
+
+        vector<int>next(n,n-1),prev(n,0);
 
         for(int i=0;i<n;i++){
-            while(!st.empty() && a[st.top()]>=a[i]) st.pop();
-            if(!st.empty()) ans[i]=st.top()+1;
+            while(!st.empty() && keep[st.top()]>=keep[i]){
+                st.pop();   
+            }
+
+            if(!st.empty()) prev[i] = st.top()+1;
             st.push(i);
         }
 
-        return ans;
-    }
+        st = stack<int>();
 
-    vector<int> right(int n, vector<int>&a){
-        stack<int>st;
-        vector<int>ans(n,n-1);
         for(int i=n-1;i>=0;i--){
-            while(!st.empty() && a[st.top()]>=a[i]) st.pop();
-            if(!st.empty()) ans[i]=st.top()-1;
+            while(!st.empty() && keep[st.top()]>=keep[i]){
+                st.pop();
+            }
+            if(!st.empty()) next[i] = st.top()-1;
             st.push(i);
         }
 
-        return ans;
-    }
-
-    int mx(int n, vector<int>&a){
-
-        vector<int>l = left(n,a);
-        vector<int>r = right(n,a);
-
-        int ans=-1;
+        int ans = 0;
 
         for(int i=0;i<n;i++){
-            ans = max(ans,a[i]*(i-l[i]+r[i]-i+1));
+            int l = prev[i]==-1?i:prev[i];
+            int r = next[i]==-1?i:next[i];
+
+            ans=max(ans,(r-l+1)*keep[i]);
         }
+
         return ans;
     }
 
     int maximalRectangle(vector<vector<char>>& matrix) {
-        int n = matrix.size(), m = matrix[0].size();
-        vector<int>sum(m,0);
-        int ans=-1;   
+        int n = matrix.size();
+        int m = matrix[0].size();
+
+        int ans = 0;
+        vector<int>keep(m);
+
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(matrix[i][j]=='0') sum[j]=0;
-                else sum[j]+=(matrix[i][j]-'0');
+                if(matrix[i][j]=='1'){
+                    keep[j]+=1;
+                }else keep[j]=0;
             }
-            ans=max(ans,mx(m,sum));
+
+            ans = max(ans,maxArea(keep));
         }
 
         return ans;
