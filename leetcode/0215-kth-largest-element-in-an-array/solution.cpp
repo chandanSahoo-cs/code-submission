@@ -1,45 +1,32 @@
 class Solution {
 public:
+    int quickSelect(vector<int>&nums,int l, int r, int k){
+        if(l==r) return nums[l];
 
-    int quickselect(vector<int>& nums,int left,int right,int k){
-        if(left == right){
-            return nums[left];
-        }
+        int p = l+(r-l)/2;
+        int pivot = nums[p];
 
-        int pi = left + (right - left) / 2;
-        int pv = nums[pi];
+        int i = l;
+        int j = r;
 
-        int i = left;
-        int j = right;
+        while(i<=j){
+            while(nums[i]<pivot) i++;
+            while(nums[j]>pivot) j--;
 
-        while(i <= j){
-            while(nums[i] < pv){
-                i++;
-            }
-            while(nums[j] > pv){
-                j--;
-            }
-
-            if(i <= j){
+            if(i<=j){
                 swap(nums[i],nums[j]);
                 i++;
                 j--;
             }
         }
 
-        if(k <= j){
-            return quickselect(nums,left,j,k);
-        }
-        else if( k >= i){
-            return quickselect(nums,i,right,k);
-        }
-        else{
-            return nums[k];
-        }
+        if(k>=i) return quickSelect(nums,i,r,k);
+        else if(k<=j) return quickSelect(nums,l,j,k);
+        else return nums[k];
     }
 
     int findKthLargest(vector<int>& nums, int k) {
         int n = nums.size();
-        return quickselect(nums,0,n-1,n-k);
+        return quickSelect(nums,0,n-1,n-k);
     }
 };
