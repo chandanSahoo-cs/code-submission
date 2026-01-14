@@ -1,43 +1,50 @@
 class Solution {
 public:
     double separateSquares(vector<vector<int>>& squares) {
-        double l=1e9, r=0;
-        double totalArea=0;
+        int n = squares.size();
+        
+        vector<pair<double,double>>vp;
+
+        double totSum=0;
 
         for(auto &ele:squares){
-            double y = ele[1];
-            double side = ele[2];
-            l = min(y,l);
-            r = max(y+side,r);
-            totalArea+=side*side;
+            int x = ele[0];
+            int y = ele[1];
+            int l = ele[2];
+
+            totSum+=l*1LL*l;
+
+            vp.push_back({ele[1],l});
+            vp.push_back({ele[1]+ele[2],-l});
         }
 
-        double target = totalArea/2.0;
-        double ans = r;
+        sort(vp.begin(),vp.end());
 
-        for(int i=0;i<50;i++){
-            double m = l+(r-l)/2;
+        double reqSum = totSum/(double)2;
+        double currSum = 0;
 
-            double upper=0;
+        int sz = vp.size();
+        int i=0;
+        double x = 0;
 
-            for(auto &ele:squares){
-                double y=ele[1],side=ele[2];
+        while(i<sz-1){
+            auto [y1,l] = vp[i];
 
-                double h2 = side+y-m;
-
-                if(h2>0){
-                    if(side<h2) h2=side;
-                    upper+=side*h2;
-                }
+            while(i<sz-1 && y1==vp[i].first){
+                x+=vp[i].second;
+                i++;
             }
+            
+            double y2 = vp[i].first;
 
-            if(upper<=target){
-                ans = min(ans,m);
-                r=m;
-            }
-            else l=m;
+            double tempSum = (y2-y1)*x;
+
+            if(currSum+tempSum>=reqSum){
+                double tr = reqSum-currSum;
+                return y1+tr/x;
+            }else currSum+=tempSum;
         }
 
-        return ans;
+        return 0;
     }
 };
