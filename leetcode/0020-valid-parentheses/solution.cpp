@@ -3,18 +3,19 @@ public:
     bool isValid(string s) {
         stack<char>st;
 
-        for(auto ele:s){
-            if(st.empty() && (ele!=')' || ele!='}' || ele!=']')) st.push(ele);
-            else if(ele=='(' || ele=='{' || ele=='['){
-                st.push(ele);
-            }else{
-                if(st.top()=='(' && ele==')') st.pop();
-                else if(st.top()=='{' && ele=='}') st.pop();
-                else if(st.top()=='[' && ele==']') st.pop();
-                else break;    
-            }
+        for(auto &c:s){
+            if(c==')'){
+                if(!st.empty() && st.top()=='(') st.pop();
+                else st.push(c);
+            }else if(c=='}'){
+                if(!st.empty() && st.top()=='{') st.pop();
+                else st.push(c);
+            }else if(c==']'){
+                if(!st.empty() && st.top()=='[') st.pop();
+                else st.push(c);
+            }else st.push(c);
         }
 
-        return st.size()==0;
+        return st.empty();
     }
 };
