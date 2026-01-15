@@ -1,62 +1,68 @@
+struct Node{
+    int key;
+    int value;
+    Node* next;
+    Node* prev;
+
+    Node(int key, int value): key(key), value(value), next(nullptr), prev(nullptr){};
+};
+
 class LRUCache {
 public:
-    struct Node {
-        int key,value;
-        Node*next=nullptr;
-        Node*prev=nullptr;
-        Node(int k,int v) : key(k),value(v),next(nullptr),prev(nullptr){};
-    };
-
-    Node* head = new Node(-1,-1);
-    Node* tail = new Node(-1,-1);
-
-    int k;
-
+    int sz;
+    Node* tail;
+    Node* dummy;
 
     unordered_map<int,Node*>mp;
 
     LRUCache(int capacity) {
-        this->k=capacity;
-        head->next=tail;
-        tail->prev=head;
+        sz=capacity;
+        tail = new Node(-1,-1);
+        dummy = tail;
     }
 
-    void moveToTail(Node* node){
-        node->prev->next=node->next;
-        node->next->prev=node->prev;
+    void update(int key,int value){
+        Node* temp = mp[key];
 
-        node->prev=tail->prev;
-        tail->prev->next=node;
-        node->next=tail;
-        tail->prev=node;
+        if(temp!=dummy){
+            temp->prev->next = temp->next;
+            temp->next->prev = temp->prev;
+
+            dummy->next = temp;
+            temp->next = nullptr;
+            temp->prev = dummy;
+            dummy = dummy->next;
+        }
+
+        temp->value = value;
     }
     
     int get(int key) {
         if(mp.find(key)!=mp.end()){
-            moveToTail(mp[key]);
+            update(key,mp[key]->value);
             return mp[key]->value;
         }
-        else return -1;
+        return -1;
     }
     
     void put(int key, int value) {
+        if(mp.size()==sz && mp.find(key)==mp.end()){
+            tail=tail->next;
+            mp.erase(tail->key);
+        }
+
         if(mp.find(key)!=mp.end()){
-            mp[key]->value = value;
-            moveToTail(mp[key]);
-        }
-        else{
-            if(mp.size()==k){
-                mp.extract(head->next->key);
-                head->next->next->prev = head;
-                head->next= head->next->next;
-            }
+            update(key,value);
+        }else{
             Node* newNode = new Node(key,value);
-            mp[key] = newNode;
-            newNode->prev = tail->prev;
-            newNode->next = tail;
-            tail->prev->next=newNode;
-            tail->prev=newNode;
+
+            dummy->next = newNode;
+            newNode->prev = dummy;
+            dummy = dummy->next;
+
+            mp[key]=newNode;
         }
+
     }
 };
 
