@@ -1,45 +1,51 @@
 class Solution {
-public:
-    vector<int>left(vector<int>&a){
+public: 
+    vector<int> giveNext(vector<int>& a){
         int n = a.size();
+
         stack<int>st;
-        vector<int>ans(n,n-1);
+        vector<int>next(n,n);
 
         for(int i=n-1;i>=0;i--){
             while(!st.empty() && a[st.top()]>=a[i]){
                 st.pop();
             }
-            if(!st.empty()) ans[i]=st.top()-1;
+            if(!st.empty()) next[i]=st.top();
             st.push(i);
         }
 
-        return ans;
+        return next;
     }
 
-    vector<int>right(vector<int>&a){
+    vector<int> givePrev(vector<int>& a){
         int n = a.size();
+
         stack<int>st;
-        vector<int>ans(n,0);
-        
+        vector<int>prev(n,-1);
+
         for(int i=0;i<n;i++){
             while(!st.empty() && a[st.top()]>=a[i]){
                 st.pop();
             }
-            if(!st.empty()) ans[i]=st.top()+1;
+            if(!st.empty()) prev[i]=st.top();
             st.push(i);
         }
 
-        return ans;
+        return prev;
     }
 
     int largestRectangleArea(vector<int>& heights) {
-        vector<int>l = left(heights);
-        vector<int>r = right(heights);
-        int mx = -1;
         int n = heights.size();
+        
+        vector<int>next = giveNext(heights);
+        vector<int>prev = givePrev(heights);
+
+        int mx=0;
+
         for(int i=0;i<n;i++){
-            mx = max(mx,heights[i]*(i-r[i]+l[i]-i+1));
+            mx = max(mx,heights[i]*(next[i]-prev[i]-1));
         }
+
         return mx;
     }
 };
