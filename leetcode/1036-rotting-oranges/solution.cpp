@@ -1,23 +1,17 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        
         int n = grid.size();
         int m = grid[0].size();
 
-        vector<int>dr = {0,0,-1,1};
-        vector<int>dc = {-1,1,0,0};
-
-        queue<vector<int>>q;
-
-        vector<vector<int>>vis(n,vector<int>(m,-1));
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        queue<pair<int,int>>q;
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(grid[i][j]==2){
-                    q.push({i,j,0});
-                }else if(grid[i][j]==0){
-                    vis[i][j]=0;
+                if(grid[i][j]==2 || grid[i][j]==0){
+                    q.push({i,j});
+                    vis[i][j]=1;
                 }
             }
         }
@@ -25,34 +19,37 @@ public:
         int cnt=0;
 
         while(!q.empty()){
-            auto pr = q.front();
-            q.pop();
 
-            int cost = pr[2];
-            int f = pr[0];
-            int s = pr[1];
-            if(vis[f][s]!=-1) continue;
+            int sz = q.size();
+            cnt++;
 
-            vis[f][s]=cost;
+            while(sz--){
+                auto [i,j] = q.front();
+                q.pop();
 
-            for(int i=0;i<4;i++){
-                int r = f+dr[i];
-                int c = s+dc[i];
+                if(grid[i][j]==0) continue;
 
-                if(r<0 || r>=n || c<0 || c>=m || vis[r][c]!=-1 || grid[r][c]!=1) continue;
-                q.push({r,c,cost+1});
+                int dr[] = {0,0,-1,1};
+                int dc[] = {-1,1,0,0};
+
+                for(int k=0;k<4;k++){
+                    int r = i+dr[k];
+                    int c = j+dc[k];
+
+                    if(r<0 || r>=n || c<0 || c>=m || vis[r][c] || grid[r][c]==0) continue;
+                    vis[r][c]=1;
+                    q.push({r,c});
+
+                }
             }
         }
-
-        int mx = 0;
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(vis[i][j]==-1) return -1;
-                mx = max(mx,vis[i][j]);
+                if(grid[i][j]==1 && vis[i][j]==0) return -1;
             }
         }
 
-        return mx;
+        return cnt-1;
     }
 };
