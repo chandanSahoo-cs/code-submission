@@ -1,44 +1,42 @@
-#define ll long long
-
 class Solution {
 public:
+    int myAtoi(string s) {
+        int n = s.size();
+        bool digit = false;
+        bool sign = true;
 
-    ll num(string &s, ll i, ll sign , bool digit, ll ans, ll signF, ll mx,ll mn){
-        if(i==s.size()) return ans*sign;
-        if(!digit && !signF){
-            if(!isdigit(s[i]) && s[i]!='-' && s[i]!='+' && s[i]!=' ') return ans*sign;
-        }
-        else{
-            if(!isdigit(s[i])) return ans*sign;
-        }
+        long long num = 0;
+        long long place = 1;
 
-        if(!isdigit(s[i])){
-            if(s[i]=='-'){
-                sign = -1;
-                signF = true;
+        for(int i=0;i<n;i++){
+            if(!isdigit(s[i])){
+                if(digit) break;
+                else if(s[i]=='+' || s[i]=='-'){
+                    sign = s[i]=='+';
+                    digit = true;
+                }else if(s[i]==' ') continue;
+                else break;
+            }else{
+                digit=true;
+                num*=10;
+
+                num+=s[i]-'0';
+
             }
-            else if(s[i]=='+'){
-                signF=true;
-            }
-        }
-        else{
-            digit = true;
-            ans*=10;
-            ans+=s[i]-'0';
+
+            if(num>=1e11) break;
         }
 
-        if(ans*sign>mx) return mx;
-        else if(ans*sign<mn) return mn;
+        num = sign?num:-num;
 
-        return num(s,++i,sign,digit,ans,signF,mx,mn);
-    }
+        if(num>(1LL<<31)-1){
+            num = (1LL<<31)-1;
+        }
+        if(num<-(1LL<<31)){
+            num = (1LL<<31);
+        }
 
-    int  myAtoi(string s) {
-        string s1 = s;
-        ll mx = pow(2,31);
-        ll mn = -mx;
-        mx-=1;
-        ll ans = num(s1,0,1,false,0,false,mx,mn);
-        return ans;
+        return num;
+
     }
 };
