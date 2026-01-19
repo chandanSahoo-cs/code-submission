@@ -1,35 +1,40 @@
 class Solution {
 public:
-    string longestPalindrome(string s) {
+    pair<int,int> givePalindrome(string &s, int l, int r){
         int n = s.size();
-        string ans(1,s[0]);
-        for(int i=0;i<n-1;i++){
-            //For even
-            int l = i;
-            int r = i+1;
-            while(l>=0 && r<n && s[l]==s[r]){
-                l--;
-                r++;
-            }
-            l++;
-            r--;
-            if(l>=0 && r<n && ans.size()<r-l+1){
-                ans = s.substr(l,r-l+1);
+
+        while(l>=0 && r<n && s[l]==s[r]){
+            l--;
+            r++;
+        }
+        l++;
+        r--;
+
+        return {l,r};
+    }
+
+    string longestPalindrome(string s) {
+       int n = s.size();
+
+       int l=0,r=0;
+       int mx = 1;
+
+       for(int i=0;i<n;i++){
+            auto [l1,r1] = givePalindrome(s,i,i);
+            if(r1-l1+1>mx){
+                mx = max(mx,r1-l1+1);
+                l=l1,r=r1;
             }
 
-            //For odd
-            l=i-1;
-            r=i+1;
-            while(l>=0 && r<n && s[l]==s[r]){
-                l--;
-                r++;
+            if(i!=0){
+                auto [l2,r2] = givePalindrome(s,i,i-1);
+                if(r2-l2+1>mx){
+                    mx = max(mx,r2-l2+1);
+                    l=l2,r=r2;
+                }
             }
-            l++;
-            r--;
-            if(l>=0 && r<n && ans.size()<r-l+1){
-                ans=s.substr(l,r-l+1);
-            }
-        }
-        return ans;
+       }
+
+       return s.substr(l,r-l+1); 
     }
 };
