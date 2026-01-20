@@ -18,7 +18,7 @@ public:
         for(int i=n-1;i>=0;i--){
             for(int j=0;j<n;j++){
                 if(i+1>=j){
-                    if(i+1!=j && i!=j) dp[i][j]=0;
+                    // if(i+1!=j && i!=j) dp[i][j]=0;
                     continue; 
                 }
                 dp[i][j] = (s[i]==s[j] && dp[i+1][j-1]);
