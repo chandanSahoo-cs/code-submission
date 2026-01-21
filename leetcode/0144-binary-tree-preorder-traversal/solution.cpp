@@ -11,21 +11,55 @@
  */
 class Solution {
 public:
-    vector<int> preorderTraversal(TreeNode* root) {
-        if(root==nullptr) return {};
+    void preorder(TreeNode* root, vector<int>&ans){
 
-        stack<TreeNode*>st;
-        vector<int>ans;
-        st.push(root);
+        /*
+        case 1 : left is null
+            add the curr->val
+            curr = curr->right
+        case 2 : left is not null;
+            - find the rightmost node of the left subtree , incase of single node, that node is the rightmost node
+            - case 2a : if this rightmode node has thread to curr node,
+                - break the thread
+                - curr = curr->right
+            - case 2b : if this rightmode node doesn't has thread to curr node
+                - make a thread from this node to curr node;
+                - add the curr->val
+                - curr = curr->left
+        */
 
-        while(!st.empty()){
-            TreeNode* node = st.top();
-            st.pop();
-            ans.push_back(node->val);
-            if(node->right) st.push(node->right);
-            if(node->left) st.push(node->left);
+        TreeNode* curr = root;
+
+        while(curr!=nullptr){
+            if(curr->left==nullptr){
+                ans.push_back(curr->val);
+                curr = curr->right;
+            }else{
+                TreeNode* temp = curr->left;
+
+                while(temp->right && temp->right!=curr){
+                    temp = temp->right;
+                }
+
+                if(temp->right==nullptr){
+                    temp->right = curr;
+                    ans.push_back(curr->val);
+                    curr = curr->left;
+                }else{
+                    temp->right = nullptr;
+                    curr = curr->right;
+                }
+            }
         }
 
-        return ans;
+        return;
+    }
+
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int>ans;
+
+        preorder(root,ans);
+
+        return ans;    
     }
 };
