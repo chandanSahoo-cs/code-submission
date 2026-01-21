@@ -11,19 +11,25 @@
  */
 class Solution {
 public:
-    void traverse(TreeNode* node, int &mx,int cnt){
-        if(node==nullptr){
-            mx=max(mx,cnt);
-            return;
-        }
-        cnt++;
-        traverse(node->left,mx,cnt);
-        traverse(node->right,mx,cnt);
-    }
     int maxDepth(TreeNode* root) {
-        int mx=0; 
-        traverse(root,mx,0);
+        if(!root) return 0;
+        int cnt=0;
 
-        return mx;
+        queue<TreeNode*>q;
+        q.push(root);
+
+        while(!q.empty()){
+            int sz = q.size();
+            cnt++;
+            for(int i=0;i<sz;i++){
+                TreeNode* temp = q.front();
+                q.pop();
+
+                if(temp->left) q.push(temp->left);
+                if(temp->right) q.push(temp->right);
+            }
+        }
+
+        return cnt;
     }
 };
