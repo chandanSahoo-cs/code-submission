@@ -11,31 +11,40 @@
  */
 class Solution {
 public:
-    void traverse(TreeNode* node, map<int,vector<pair<int,int>>> &store,int row, int col){
-        if(node==nullptr){
-            return;
-        }
-        store[col].push_back({row,node->val});
-        traverse(node->left,store,row+1,col-1);
-        traverse(node->right,store,row+1,col+1);
-    }
-
     vector<vector<int>> verticalTraversal(TreeNode* root) {
-        map<int,vector<pair<int,int>>> store;
-        traverse(root,store,0,0);
+        if(root==nullptr) return {};
+
+        vector<vector<int>>vp;
+        queue<pair<pair<int,int>,TreeNode*>>q;
+
+        q.push({{0,0},root});
+
+        while(!q.empty()){
+            auto [c,r] = q.front().first;
+            TreeNode* node = q.front().second;
+            q.pop();
+
+            vp.push_back({c,r,node->val});
+
+            if(node->left) q.push({{c-1,r+1},node->left});
+            if(node->right) q.push({{c+1,r+1},node->right});
+        }
+
+        sort(vp.begin(),vp.end());
 
         vector<vector<int>>ans;
 
-        for(auto ele:store){
-            stable_sort(ele.second.begin(),ele.second.end());
+        for(int i=0;i<vp.size();){
+            auto v = vp[i];
+            int currPtr = v[0];
 
-            vector<int>temp;
-
-            for(auto e:ele.second){
-                temp.push_back(e.second);
+            vector<int>keep;
+            while(i<vp.size() && currPtr==vp[i][0]){
+                keep.push_back(vp[i][2]);
+                i++;
             }
 
-            ans.push_back(temp);
+            ans.push_back(keep);
         }
 
         return ans;
