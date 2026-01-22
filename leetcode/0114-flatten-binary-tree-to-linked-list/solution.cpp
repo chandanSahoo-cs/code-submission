@@ -11,19 +11,37 @@
  */
 class Solution {
 public:
-    void traverse(TreeNode* node, TreeNode** prev){
-        if(node == nullptr) return;
-
-        traverse(node->right,prev);
-        traverse(node->left,prev);
-
-        node->right = *prev;
-        node->left = nullptr;
-        *prev = node;
-    }
 
     void flatten(TreeNode* root) {
-        TreeNode* prev = nullptr;
-        traverse(root,&prev);
+        if(!root) return ;
+
+        TreeNode* curr = root;
+
+        while(curr){
+            if(!curr->left){
+                curr = curr->right;
+            }else{
+                TreeNode* temp = curr->left;
+
+                while(temp->right!=nullptr && temp->right!=curr){
+                    temp = temp->right;
+                }
+
+                temp->right = curr->right;
+                curr->right = curr->left;
+                curr->left = nullptr;
+                curr = curr->right;
+
+                // if(temp->right==nullptr){
+                //     temp->right = curr;
+                //     curr = curr->left;
+                // }else{
+                // }
+            }
+        }
+
+
+
+        return ;    
     }
 };
