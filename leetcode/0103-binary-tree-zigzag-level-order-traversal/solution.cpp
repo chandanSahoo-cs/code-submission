@@ -11,43 +11,33 @@
  */
 class Solution {
 public:
-    void traverse(vector<vector<int>>&ans,queue<TreeNode*>&q){
-        if(q.front()==nullptr) return;
-
-        bool flag=true;
-        
-        while(!q.empty()){
-            vector<TreeNode*>temp;
-            vector<int>val;
-
-            while(!q.empty()){
-                temp.push_back(q.front());
-                q.pop();
-            }
-
-            for(auto ele:temp){
-                if(ele->left!=nullptr) q.push(ele->left);
-                if(ele->right!=nullptr) q.push(ele->right);
-                val.push_back(ele->val);
-            }
-
-            if(flag){
-                ans.push_back(val);
-            }else{
-                reverse(val.begin(),val.end());
-                ans.push_back(val);
-            }
-
-            flag=!flag;
-        }
-    }
-
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        if(!root) return {};
         vector<vector<int>>ans;
+        bool toggle = false;
+
         queue<TreeNode*>q;
         q.push(root);
 
-        traverse(ans,q);
+        while(!q.empty()){
+            int sz = q.size();
+            vector<int>keep;
+            
+            for(int i=0;i<sz;i++){
+                TreeNode* temp = q.front();
+                q.pop();
+
+                keep.push_back(temp->val);
+                if(temp->left) q.push(temp->left);
+                if(temp->right) q.push(temp->right);
+            }
+
+            if(toggle){
+                reverse(keep.begin(),keep.end());
+            }
+            ans.push_back(keep);
+            toggle = !toggle;
+        }
 
         return ans;
     }
