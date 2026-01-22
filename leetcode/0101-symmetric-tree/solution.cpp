@@ -11,12 +11,28 @@
  */
 class Solution {
 public:
-    bool traverse(TreeNode* node1, TreeNode* node2){
-        if(node1==nullptr || node2==nullptr) return node1==node2;
-        return node1->val==node2->val && traverse(node1->left,node2->right) && traverse(node1->right , node2->left);
-    }
 
     bool isSymmetric(TreeNode* root) {
-        return traverse(root->left,root->right);
+        if(!root) return true;
+
+        queue<pair<TreeNode*,TreeNode*>>q;
+        q.push({root->left,root->right});
+
+        while(!q.empty()){
+            auto [node1, node2] = q.front();
+            q.pop();
+
+            if(!node1 || !node2){
+                if(node1 || node2) return false;
+            }else{
+                if(node1->val!=node2->val) return false;
+                q.push({node1->left, node2->right});
+                q.push({node1->right,node2->left});
+            }
+
+        }
+
+        return true;
+
     }
 };
