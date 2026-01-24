@@ -12,20 +12,18 @@
 class Solution {
 public:
     int sum = 0;
-    tuple<int,int,int>search(TreeNode* root){
-        if(root==nullptr){
-            return {0,INT_MIN,INT_MAX};
-        }
+    tuple<int,int,int> search(TreeNode* root){
+        if(root==nullptr) return {0,INT_MIN,INT_MAX};
 
-        auto [sumL, largestL,smallestL] = search(root->left);
-        auto [sumR, largestR, smallestR] = search(root->right);
+        auto [ sumL, largestL, smallestL] = search(root->left);
+        auto [ sumR, largestR, smallestR] = search(root->right);
 
         if(root->val>largestL && root->val<smallestR){
-            sum = max(sum,root->val+sumL+sumR);
-            return {root->val+sumL+sumR,max(root->val,largestR),min(root->val,smallestL)};
+            sum = max(sum,sumL+sumR+root->val);
+            return {sumL+sumR+root->val,max(root->val,largestR),min(root->val,smallestL)};
         }
 
-        return {-1,INT_MAX,INT_MIN};
+        return {0,INT_MAX,INT_MIN};
     }
 
     int maxSumBST(TreeNode* root) {
