@@ -9,25 +9,26 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+#define ll long long
 class Solution {
 public:
-    bool traverse(TreeNode* node, TreeNode** prev){
-        if(node==nullptr){
-            return true;
-        }
-        bool left =  traverse(node->left,prev);
-        bool mid=true;
-        if(*prev!=nullptr && (*prev)->val>=node->val){
-            return false;
-        }
-        *prev=node;
-        bool right = traverse(node->right,prev);
+    bool flag = true;
+    pair<ll,ll> search(TreeNode* root){
+        if(root==nullptr) return {LLONG_MIN,LLONG_MAX};
 
-        return left && mid && right;
+        auto [ largestL, smallestL] = search(root->left);
+        auto [ largestR, smallestR] = search(root->right);
+
+        if(root->val>largestL && root->val<smallestR){
+            return {max((ll)root->val,largestR),min((ll)root->val,smallestL)};
+        }
+        flag = false;
+
+        return {LLONG_MAX,LLONG_MIN};
     }
 
     bool isValidBST(TreeNode* root) {
-        TreeNode*prev=nullptr;
-        return traverse(root,&prev);
+        search(root);
+        return flag;  
     }
 };
