@@ -11,42 +11,34 @@
  */
 class Solution {
 public:
+    bool findK(TreeNode* root, int val){
+        if(root==nullptr) return false;
+        if(root->val==val) return true;
+
+        if(root->val>val) return findK(root->left,val);
+        
+        return findK(root->right,val);
+    }
+
+    int findMx(TreeNode* root){
+        if(root->right==nullptr) return root->val;
+
+        return findMx(root->right);
+    }
+
+    int findMn(TreeNode* root){
+        if(root->left==nullptr) return root->val;
+
+        return findMn(root->left);
+    }
+
     bool findTarget(TreeNode* root, int k) {
-        stack<TreeNode*>start,end;
+        int mn = findMn(root);
+        int mx = findMx(root);
 
-        TreeNode* s = root;
-        TreeNode* e = root;
-
-        while(s!=nullptr){
-            start.push(s);
-            s=s->left;
-        }
-
-        while(e!=nullptr){
-            end.push(e);
-            e=e->right;
-        }
-
-        while(start.top()!= end.top()){
-            int sum = start.top()->val+end.top()->val;
-            if(sum==k) return true;
-            else if(sum<k){
-                TreeNode*top=start.top();
-                start.pop();
-                TreeNode*node=top->right;
-                while(node!=nullptr){
-                    start.push(node);
-                    node=node->left;
-                }
-            }else{
-                TreeNode*top=end.top();
-                end.pop();
-                TreeNode* node=top->left;
-                while(node!=nullptr){
-                    end.push(node);
-                    node=node->right;
-                }
-            }
+        for(int i=mn;i<=mx;i++){
+            if(i==k-i) continue;
+            if(findK(root,i) && findK(root,k-i)) return true;
         }
 
         return false;
