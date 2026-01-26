@@ -4,40 +4,33 @@ public:
         int n = mat.size();
         int m = mat[0].size();
 
-        vector<vector<int>>vis(n,vector<int>(m));
-        queue<vector<int>>q;
-
-        int level=0;
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        queue<tuple<int,int,int>>q;
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(mat[i][j]==0){
                     q.push({i,j,0});
-                    vis[i][j]=1;
+                    vis[i][j] = 1;
                 }
             }
         }
 
+        int dr[] = {0,0,-1,1};
+        int dc[] = {-1,1,0,0};
+
         while(!q.empty()){
-            vector<int>pr = q.front();
+            auto [r,c,l] = q.front();
             q.pop();
 
-            int f = pr[0];
-            int s = pr[1];
-            int l = pr[2];
-
-            vector<int>dr = {0,0,-1,1};
-            vector<int>dc = {-1,1,0,0};
-
             for(int k=0;k<4;k++){
-                int nr = f+dr[k];
-                int nc = s+dc[k];
+                int row = r+dr[k];
+                int col = c+dc[k];
 
-                if(nr>=n || nr<0 || nc>=m || nc<0 || vis[nr][nc]) continue;
-
-                mat[nr][nc] = l+1;
-                q.push({nr,nc,l+1});
-                vis[nr][nc]=1;
+                if(row<0 || row>=n || col<0 || col>=m || vis[row][col]) continue;
+                vis[row][col] = 1;
+                q.push({row,col,l+1});
+                mat[row][col] = l+1;
             }
         }
 
