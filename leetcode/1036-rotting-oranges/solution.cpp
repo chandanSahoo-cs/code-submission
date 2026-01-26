@@ -4,52 +4,49 @@ public:
         int n = grid.size();
         int m = grid[0].size();
 
-        vector<vector<int>>vis(n,vector<int>(m,0));
+        vector<vector<int>>mark(n,vector<int>(m));
+
         queue<pair<int,int>>q;
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(grid[i][j]==2 || grid[i][j]==0){
                     q.push({i,j});
-                    vis[i][j]=1;
+                    mark[i][j]=1;
                 }
             }
         }
 
-        int cnt=0;
+        int level = 0;
 
         while(!q.empty()){
-
             int sz = q.size();
-            cnt++;
-
-            while(sz--){
-                auto [i,j] = q.front();
+            level++;
+            for(int i=0;i<sz;i++){
+                auto [r,c] = q.front();
                 q.pop();
+                if(grid[r][c]==0) continue;
 
-                if(grid[i][j]==0) continue;
-
-                int dr[] = {0,0,-1,1};
+                int dr[] = {0,0,1,-1};
                 int dc[] = {-1,1,0,0};
 
                 for(int k=0;k<4;k++){
-                    int r = i+dr[k];
-                    int c = j+dc[k];
+                    int row = r+dr[k];
+                    int col = c+dc[k];
 
-                    if(r<0 || r>=n || c<0 || c>=m || vis[r][c] || grid[r][c]==0) continue;
-                    vis[r][c]=1;
-                    q.push({r,c});
-
-                }
+                    if(row<0 || row>=n || col<0 || col>=m || grid[row][col]==0 || mark[row][col]) continue;
+                    mark[row][col] = 1;
+                    q.push({row,col});
+                } 
             }
         }
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(grid[i][j]==1 && vis[i][j]==0) return -1;
+                if(grid[i][j]==1 && !mark[i][j]) return -1;
             }
         }
 
-        return cnt-1;
+        return level-1;
     }
 };
