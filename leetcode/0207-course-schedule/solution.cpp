@@ -1,31 +1,38 @@
 class Solution {
 public:
-    bool canFinish(int n, vector<vector<int>>& preq) {
-        vector<vector<int>>adj(n);
-        vector<int>in(n);
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>>adj(numCourses);
+        vector<int>indegree(numCourses);
 
-        for(auto ele:preq){
-            adj[ele[0]].push_back(ele[1]);
-            in[ele[1]]++;
+        for(auto ele:prerequisites){
+            adj[ele[1]].push_back(ele[0]);
+
+            indegree[ele[0]]++;
         }
 
         queue<int>q;
 
-        for(int i=0;i<n;i++){
-            if(in[i]==0) q.push(i);
-        }
-
-        while(!q.empty()){
-            int ele = q.front();
-            q.pop();
-            for(auto e:adj[ele]){
-                in[e]--;
-                if(in[e]==0) q.push(e);
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i]==0){
+                q.push(i);
             }
         }
 
-        for(auto ele:in){
-            if(ele!=0) return false;
+        while(!q.empty()){
+            int curr = q.front();
+            q.pop();
+
+            for(auto ele:adj[curr]){
+                indegree[ele]--;
+
+                if(indegree[ele]==0){
+                    q.push(ele);
+                }
+            }
+        }
+
+        for(auto ele:indegree){
+            if(ele>0) return false;
         }
 
         return true;
