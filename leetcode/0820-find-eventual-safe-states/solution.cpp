@@ -1,48 +1,43 @@
+/*Personal note: Meine yeh mark krdiya ki yeh node visited hai, but sath hi sath meine yeh unmark kridya ki woh cycle ka part nhi (agar hai toh)*/
 class Solution {
 public:
-    vector<int> eventualSafeNodes(vector<vector<int>>& g) {
-        int n = g.size();
+    bool dfs(vector<vector<int>>&adj, vector<int>&vis, vector<int>&pathVis, vector<int>&ans, int curr){
+        if(pathVis[curr]) return true;
+        if(vis[curr]) return false;
 
-        vector<vector<int>>graph(n);
+        vis[curr]=1;
+        pathVis[curr]=1;
 
-        for(int i=0;i<n;i++){
-            for(auto ele:g[i]){
-                graph[ele].push_back(i);
-            }
+        bool flag = false;
+        for(auto ele:adj[curr]){
+            flag |= dfs(adj,vis,pathVis,ans,ele);
+            if(flag) break;
         }
         
-        vector<int>in(n);
-        queue<int>q;
-
-        for(int i=0;i<n;i++){
-            for(int j=0;j<graph[i].size();j++){
-                in[graph[i][j]]++;
-            }
+        if(!flag){
+            ans.push_back(curr);
+            pathVis[curr]=0;
         }
 
-        for(int i=0;i<n;i++){
-            if(in[i]==0){
-                q.push(i);
-            }
-        }
 
-        while(!q.empty()){
-            int ele = q.front();
-            q.pop();
+        return flag;
+    }
 
-            for(auto e:graph[ele]){
-                in[e]--;
-                if(in[e]==0){
-                    q.push(e);
-                }
-            }
-        }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+
+        vector<int>vis(n);
+        vector<int>pathVis(n);
 
         vector<int>ans;
 
         for(int i=0;i<n;i++){
-            if(in[i]==0) ans.push_back(i);
+            if(vis[i]) continue;
+            dfs(graph,vis,pathVis,ans,i);
         }
+
+        sort(ans.begin(),ans.end());
+
 
         return ans;
     }
