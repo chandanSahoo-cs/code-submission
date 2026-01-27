@@ -2,37 +2,43 @@ class Solution {
 public:
     vector<int> findOrder(int n, vector<vector<int>>& preq) {
         vector<vector<int>>adj(n);
-        vector<int>in(n);
+        vector<int>indegree(n);
 
         for(auto ele:preq){
             adj[ele[1]].push_back(ele[0]);
-            in[ele[0]]++;
+
+            indegree[ele[0]]++;
         }
 
         queue<int>q;
 
+        for(int i=0;i<n;i++){
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+
         vector<int>ans;
 
-        for(int i=0;i<n;i++){
-            if(in[i]==0){
-                q.push(i);
-                ans.push_back(i);
-            }
-        }
-
         while(!q.empty()){
-            int ele = q.front();
+            int curr = q.front();
             q.pop();
 
-            for(auto e:adj[ele]){
-                in[e]--;
-                if(in[e]==0){
-                    q.push(e);
-                    ans.push_back(e);
+            for(auto ele:adj[curr]){
+                indegree[ele]--;
+
+                if(indegree[ele]==0){
+                    q.push(ele);
                 }
             }
+
+            ans.push_back(curr);
         }
 
-        return ans.size()==n ? ans: decltype(ans)();
+        if(ans.size()<n){
+            return {};
+        }
+
+        return ans;
     }
 };
