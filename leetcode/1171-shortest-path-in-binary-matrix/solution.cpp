@@ -1,37 +1,39 @@
+const int INF = 1e9+7;
+
 class Solution {
-    const int INF=1e5;
 public:
     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
         int n = grid.size();
-        if(grid[0][0]) return -1;
 
-        set<vector<int>>st;
-        st.insert({1,0,0});
         vector<vector<int>>dist(n,vector<int>(n,INF));
+
+        queue<tuple<int,int,int>>q;
+        
+        if(grid[0][0]==1){
+            return -1;
+        }
+        q.push({1,0,0});
         dist[0][0]=1;
 
-        while(!st.empty()){
-            vector<int>v = *st.begin();
-            st.extract(v);
+        while(!q.empty()){
+            auto [cost,i,j] = q.front();
+            q.pop();
 
-            for(int rk=-1;rk<=1;rk++){
-                for(int ck=-1;ck<=1;ck++){
-                    if(rk==0 && ck==0) continue;
-                    int r = v[1]+rk;
-                    int c = v[2]+ck;
+            for(int r=-1;r<=1;r++){
+                for(int c=-1;c<=1;c++){
+                    int row = i+r;
+                    int col = j+c;
 
-                    if(r>=n || c>=n || r<0 || c<0 || grid[r][c]) continue;
+                    if(row<0 || row>=n || col<0 || col>=n || grid[row][col]==1) continue;
 
-                    if(dist[r][c]>v[0]+1){
-                        st.extract({dist[r][c],r,c});
-                        dist[r][c]=v[0]+1;
-                        st.insert({v[0]+1,r,c});
+                    if(dist[row][col]>1+cost){
+                        dist[row][col] = 1+cost;
+                        q.push({1+cost,row,col});
                     }
                 }
             }
         }
 
-
-        return dist[n-1][n-1]==1e5?-1:dist[n-1][n-1];
+        return dist[n-1][n-1]==INF?-1:dist[n-1][n-1];
     }
 };
