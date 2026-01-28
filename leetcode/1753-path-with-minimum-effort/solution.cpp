@@ -1,43 +1,38 @@
+const int INF = 1e9+7;
+
 class Solution {
-    const int INF = 1e8;
 public:
-    int minimumEffortPath(vector<vector<int>>& h) {
-        int n = h.size();
-        int m = h[0].size();
+    int minimumEffortPath(vector<vector<int>>& heights) {
+
+        int n = heights.size(),m = heights[0].size();
 
         vector<vector<int>>dist(n,vector<int>(m,INF));
 
-        set<vector<int>>st;
-        // v[0] = total cost up to now
-        // v[1] = row
-        // v[2] = col
+        set<tuple<int,int,int>>st;
+
         st.insert({0,0,0});
         dist[0][0]=0;
 
+        int dr[] = {0,0,-1,1};
+        int dc[] = {-1,1,0,0};
+
         while(!st.empty()){
-            vector<int>v = *st.begin();
-            st.erase(v);
-
-            int currR = v[1];
-            int currC = v[2];
-            int tot = v[0];
-
-            int dr[] = {0,0,-1,1};
-            int dc[] = {-1,1,0,0};
+            auto [cost,i,j] = *st.begin();
+            st.erase(st.begin());
 
             for(int k=0;k<4;k++){
-                int r = currR+dr[k];
-                int c = currC+dc[k];
+                int r = i+dr[k];
+                int c = j+dc[k];
 
-                if(r>=n || c>=m || r<0 || c<0) continue;
+                if(r<0 || r>=n || c<0 || c>=m) continue;
 
-                int d = dist[r][c];
-                int diff = abs(h[currR][currC]-h[r][c]);
+                int h = max(cost,abs(heights[r][c]-heights[i][j]));
 
-                if(d>max(tot,diff)){
-                    st.erase({d,r,c});
-                    dist[r][c] = max(tot,diff);
-                    st.insert({max(tot,diff),r,c});
+                if(h<dist[r][c]){
+                    st.erase({dist[r][c],r,c});
+                    dist[r][c] = h;
+
+                    st.insert({h,r,c});
                 }
             }
         }
