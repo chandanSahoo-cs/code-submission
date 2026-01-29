@@ -1,47 +1,43 @@
+#define ll long long
+const long long INF = LLONG_MAX;
+const int mod = 1e9+7;
 
 class Solution {
-    const int MOD=1e9+7;
-    const long long INF=1e12;
 public:
     int countPaths(int n, vector<vector<int>>& roads) {
-        if(n==1) return 1;
-        vector<vector<pair<int,int>>> adj(n);
+        vector<vector<pair<ll,ll>>>adj(n);
 
         for(auto ele:roads){
             adj[ele[0]].push_back({ele[1],ele[2]});
-            adj[ele[1]].push_back({ele[0],ele[2]});          
+            adj[ele[1]].push_back({ele[0],ele[2]});
         }
 
-        priority_queue<vector<long long>,vector<vector<long long>>,greater<vector<long long>>>pq;
-        vector<long long>dist(n,INF);
-        vector<long long>ways(n,0);
+        vector<pair<ll,ll>>vis(n,{INF,0});
+        set<pair<ll,ll>>st;
 
-        pq.push({0,0});
-        dist[0]=0;
-        ways[0]=1;
+        st.insert({0,0});
+        vis[0]={0,1};
 
-        while(!pq.empty()){
-            auto node = pq.top();
-            long long d = node[0];
-            int u = node[1];
-            pq.pop();
+        while(!st.empty()){
+            auto [cost,u] = *st.begin();
+            st.erase(st.begin());
 
-            if(d>dist[u]) continue;
+            if(vis[u].first<cost) continue;
 
-            for(auto ele:adj[u]){
-                int v = ele.first;
-                int cost = ele.second;
-
-                if(cost+d==dist[v]){
-                    ways[v]=(ways[v]+ways[u])%MOD;
-                }else if(cost+d<dist[v]){
-                    dist[v]=cost+d;
-                    ways[v]=ways[u];
-                    pq.push({dist[v],v});
+            for(auto [v,c]:adj[u]){
+                if(vis[v].first>=c+cost){
+                    st.erase({vis[v].first,v});
+                    if(vis[v].first==c+cost){
+                        vis[v].second = (vis[v].second+vis[u].second)%mod;
+                        st.insert({c+cost,v});
+                    }else{
+                        st.insert({c+cost,v});
+                        vis[v] = {c+cost,vis[u].second};
+                    }
                 }
             }
         }
-
-        return ways[n-1];
+        cout<<vis[n-1].first;
+        return vis[n-1].second;
     }
 };
