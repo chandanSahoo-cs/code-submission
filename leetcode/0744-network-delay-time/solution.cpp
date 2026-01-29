@@ -1,5 +1,5 @@
+const int INF = 1e9+7;
 class Solution {
-    const int INF = 1e8;
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
         vector<vector<pair<int,int>>>adj(n+1);
@@ -8,32 +8,32 @@ public:
             adj[ele[0]].push_back({ele[1],ele[2]});
         }
 
-        set<vector<int>>st;
+        set<pair<int,int>>st;
+        vector<int>vis(n+1,INF);
 
-        st.insert({0,k});
-
-        vector<int>dist(n+1,INF);
-        dist[k]=0;
+        st.insert({k,0});
+        vis[k]=0;
 
         while(!st.empty()){
-            auto node = *st.begin();
-            st.erase(node);
+            auto [u,cost] = *st.begin();
+            st.erase(st.begin());
 
-            for(auto &ele:adj[node[1]]){
-                int v = ele.first;
-                int cost = ele.second;
-                if(node[0]+cost<dist[v]){
-                    st.erase({dist[v],v});
-                    dist[v]=node[0]+cost;
-                    st.insert({dist[v],v});
+            if(vis[u]<cost) continue;
+
+            for(auto [v,c]:adj[u]){
+                if(vis[v]>c+cost){
+                    st.erase({v,vis[v]});
+                    vis[v]=c+cost;
+                    st.insert({v,c+cost});
                 }
             }
         }
 
-        int mx = *max_element(dist.begin()+1,dist.end());
+        int mx = 0;
+        for(int i=1;i<=n;i++){
+            mx = max(mx,vis[i]);
+        }
 
-        if(mx==INF) return -1;
-        else return mx;
-
+        return mx==INF?-1:mx;
     }
 };
