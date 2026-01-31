@@ -1,73 +1,80 @@
-const int sz = 1e4+1;
+const int mx = 1e4+1;
+class DSU{
 
-class DisjointSet{
-    vector<int>sze,parent;
+    vector<int>sz,parent;
     public:
-    DisjointSet(){
-        sze.resize(2*sz);
-        parent.resize(2*sz);
+    DSU(){
+        sz.resize(2*mx,1);
+        parent.resize(2*mx);
 
-        for(int i=0;i<2*sz;i++){
+        for(int i=0;i<2*mx;i++){
             parent[i]=i;
         }
     }
 
     int findParent(int u){
         if(parent[u]==u) return u;
-        return parent[u] = findParent(parent[u]);
+
+        return parent[u]=findParent(parent[u]);
     }
 
-    void Union(int u, int v){
+    void unionBySz(int u, int v){
         int ult_u = findParent(u);
         int ult_v = findParent(v);
 
         if(ult_u==ult_v) return;
 
-        if(sze[ult_u]>sze[ult_v]){
+        if(sz[ult_u]>sz[ult_v]){
             parent[ult_v]=ult_u;
-            sze[ult_u]+=sze[ult_v];
+            sz[ult_u]+=sz[ult_v];
         }else{
             parent[ult_u]=ult_v;
-            sze[ult_v]+=sze[ult_u];
+            sz[ult_v]+=sz[ult_u];
         }
+
+        return;
+    }
+
+    int totSets(){
+        int cnt=0;
+
+        for(int i=0;i<parent.size();i++){
+            if(i==parent[i]) cnt++;
+        }
+
+        return cnt;
     }
 };
 
 class Solution {
 public:
     int removeStones(vector<vector<int>>& stones) {
-        int n=stones.size();
+        int n = stones.size();
 
-        DisjointSet ds;
+        DSU ds;
 
         for(auto ele:stones){
             int u = ele[0];
-            int v = ele[1]+sz;
+            int v = ele[1]+mx;
 
-            int ult_u = ds.findParent(u);
-            int ult_v = ds.findParent(v);
-
-            if(ult_u==ult_v){
-                continue;
-            }
-
-            ds.Union(ult_u,ult_v);
+            ds.unionBySz(u,v);
         }
 
-        set<int>st;
+        unordered_set<int>st;
 
         for(auto ele:stones){
             int u = ele[0];
-            int v = ele[1]+sz;
+            int v = ele[1]+mx;
 
-            int ult_u = ds.findParent(u);
-            // int ult_v = ds.findParent(v);
+            if(ds.findParent(u)==u){
+                st.insert(u);
+            }
 
-            st.insert(ult_u);
-            // st.insert(ult_v);
+            if(ds.findParent(v)==v){
+                st.insert(v);
+            }
         }
 
         return n-st.size();
-
     }
 };
