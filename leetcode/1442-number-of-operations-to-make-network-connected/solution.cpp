@@ -1,8 +1,9 @@
-class DisjointSet {
-    vector<int>sze,parent;
+class DSU{
+    vector<int>sz,parent;
+
     public:
-    DisjointSet(int n){
-        sze.resize(n);
+    DSU(int n){
+        sz.resize(n,1);
         parent.resize(n);
 
         for(int i=0;i<n;i++){
@@ -12,47 +13,56 @@ class DisjointSet {
 
     int findParent(int u){
         if(parent[u]==u) return u;
+
         return parent[u]=findParent(parent[u]);
     }
 
-    void Union(int u, int v){
+    void unionBySz(int u, int v){
         int ult_u = findParent(u);
         int ult_v = findParent(v);
 
-        if(ult_u==ult_v) return ;
+        if(ult_u==ult_v) return;
 
-        if(sze[ult_u]>sze[ult_v]){
+        if(sz[ult_u]>sz[ult_v]){
             parent[ult_v]=ult_u;
-            sze[ult_u]+=sze[ult_v];
+            sz[ult_u]+=sz[ult_v];
         }else{
             parent[ult_u]=ult_v;
-            sze[ult_v]+=sze[ult_u];
+            sz[ult_v]+=sz[ult_u];
         }
+
+        return;
+    }
+
+    int totSets(){
+        int cnt=0;
+
+        for(int i=0;i<parent.size();i++){
+            if(i==parent[i]) cnt++;
+        }
+
+        return cnt;
     }
 };
 
 class Solution {
 public:
     int makeConnected(int n, vector<vector<int>>& connections) {
-        DisjointSet ds(n);
-
-        int cnt=0;
+        DSU ds(n);
+        int extra=0;
 
         for(auto ele:connections){
-            int ult_u = ds.findParent(ele[0]);
-            int ult_v = ds.findParent(ele[1]);
-
-            if(ult_u==ult_v){
-                cnt++;
-                continue;
+            int u = ele[0], v = ele[1];
+            if(ds.findParent(u)==ds.findParent(v)){
+                extra++;
+            }else{
+                ds.unionBySz(u,v);
             }
-
-            ds.Union(ele[0],ele[1]);
         }
 
-        int totUsed = connections.size()-cnt;
+        int required = ds.totSets()-1;
 
-        if(n-1-totUsed>cnt) return -1;
-        else return n-1-totUsed;
+        if(extra<required) return -1;
+        return required;
     }
 };
