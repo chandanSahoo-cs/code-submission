@@ -1,34 +1,34 @@
 class Solution {
 public:
-    int dfs(vector<int>& edges, vector<int>&vis, vector<int>&pathVis, int curr, int prevLen){
-        if(pathVis[curr]!=-1) return prevLen-pathVis[curr];
-        if(vis[curr]) return -1;
-
-        pathVis[curr] = prevLen;
-        vis[curr]=1;
-
-        int v = edges[curr];
-        int ans = -1;
-
-        if(v!=-1){
-            ans = dfs(edges,vis,pathVis,v,prevLen+1);
-        }
-
-        pathVis[curr] = -1;
-
-        return ans;
-    }
 
     int longestCycle(vector<int>& edges) {
         int n = edges.size();
 
-        vector<int>vis(n,0);
-        vector<int>pathVis(n,-1);
+        vector<int>vis(n);
 
         int mx = -1;
 
         for(int i=0;i<n;i++){
-            mx = max(mx,dfs(edges,vis,pathVis,i,0));
+            if(vis[i] || edges[i]==-1) continue;
+
+            unordered_map<int,int>pathVis;
+
+            int node = i;
+            int curr = 1;
+
+            while(node!=-1 && !vis[node]){
+                vis[node]=1;
+                pathVis[node] = curr++;
+
+                int ele = edges[node];
+
+                if(ele!=-1 && pathVis.find(ele)!=pathVis.end()){
+                    mx = max(mx,curr-pathVis[ele]);
+                    break;
+                }else{
+                    node = ele;
+                }
+            }
         }
 
         return mx;
