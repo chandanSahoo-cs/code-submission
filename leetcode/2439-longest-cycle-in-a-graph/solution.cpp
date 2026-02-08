@@ -1,36 +1,30 @@
 class Solution {
 public:
-
     int longestCycle(vector<int>& edges) {
         int n = edges.size();
-
-        vector<int>vis(n);
-
+        vector<int> vis(n, 0);      // global visited
+        vector<int> time(n, 0);     // time within traversal
         int mx = -1;
+        int timer = 1;
 
-        for(int i=0;i<n;i++){
-            if(vis[i] || edges[i]==-1) continue;
-
-            unordered_map<int,int>pathVis;
+        for (int i = 0; i < n; i++) {
+            if (vis[i]) continue;
 
             int node = i;
-            int curr = 1;
+            int startTime = timer;
 
-            while(node!=-1 && !vis[node]){
-                vis[node]=1;
-                pathVis[node] = curr++;
+            while (node != -1 && !vis[node]) {
+                vis[node] = 1;
+                time[node] = timer++;
+                node = edges[node];
+            }
 
-                int ele = edges[node];
-
-                if(ele!=-1 && pathVis.find(ele)!=pathVis.end()){
-                    mx = max(mx,curr-pathVis[ele]);
-                    break;
-                }else{
-                    node = ele;
-                }
+            // If we found a cycle in THIS traversal
+            if (node != -1 && time[node] >= startTime) {
+                mx = max(mx, timer - time[node]);
             }
         }
-
         return mx;
     }
 };
+
