@@ -11,20 +11,20 @@
  */
 class Solution {
 public:
-    bool flag = true;
-
-    int dfs(TreeNode* root){
+    int dfs(TreeNode* root, bool &flag){
         if(root==nullptr) return 0;
 
-        int l = dfs(root->left),r = dfs(root->right);
+        int l = dfs(root->left,flag);
+        int r = dfs(root->right,flag);
 
-        if(abs(l-r)>1) flag = false;
+        if(abs(r-l)>1) flag=false;
 
         return max(l,r)+1;
     }
 
     bool isBalanced(TreeNode* root) {
-        dfs(root);
+        bool flag=true;
+        dfs(root,flag);
 
         return flag;
     }
