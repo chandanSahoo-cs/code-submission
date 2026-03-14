@@ -1,34 +1,28 @@
 class Solution {
 public:
-    string getHappyString(int n, int k) {
-        int total = 3*(1<<(n-1));
-        if(k>total) return "";
-
-        string s = "";
-        char prev = '#';
-
-        for(int i=0;i<n;i++){
-            for(char c='a';c<='c';c++){
-                if(prev==c) continue;
-
-                int cnt = 1<<(n-1-i);
-
-                if(k>cnt){
-                    k-=cnt;
-                }else{
-                    s+=c;
-                    prev=c;
-                    break;
-                }
-            }
+    void rec(string &s, int i, char skip, vector<string>&store){
+        if(i==0){
+            store.push_back(s);
+            return;
         }
 
-        /*
-            k-8
-            k=2
+        for(char c='a';c!='d';c++){
+            if(c==skip) continue;
+            s+=c;
+            rec(s,i-1,c,store);
+            s.pop_back();
+        }
 
-        */
+        return;
+    }
 
-        return s;
+    string getHappyString(int n, int k) {
+        string s = "";
+        vector<string>store;
+        rec(s,n,'#',store);
+
+        if(store.size()<k) return "";
+
+        return store[k-1];
     }
 };
