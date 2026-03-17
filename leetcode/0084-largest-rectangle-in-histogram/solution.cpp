@@ -4,13 +4,13 @@ public:
         int n = a.size();
 
         stack<int>st;
-        vector<int>next(n,n);
+        vector<int>next(n,n-1);
 
         for(int i=n-1;i>=0;i--){
             while(!st.empty() && a[st.top()]>=a[i]){
                 st.pop();
             }
-            if(!st.empty()) next[i]=st.top();
+            if(!st.empty()) next[i]=st.top()-1;
             st.push(i);
         }
 
@@ -21,13 +21,13 @@ public:
         int n = a.size();
 
         stack<int>st;
-        vector<int>prev(n,-1);
+        vector<int>prev(n,0);
 
         for(int i=0;i<n;i++){
             while(!st.empty() && a[st.top()]>=a[i]){
                 st.pop();
             }
-            if(!st.empty()) prev[i]=st.top();
+            if(!st.empty()) prev[i]=st.top()+1;
             st.push(i);
         }
 
@@ -43,7 +43,7 @@ public:
         int mx=0;
 
         for(int i=0;i<n;i++){
-            mx = max(mx,heights[i]*(next[i]-prev[i]-1));
+            mx = max(mx,heights[i]*(next[i]-prev[i]+1));
         }
 
         return mx;
