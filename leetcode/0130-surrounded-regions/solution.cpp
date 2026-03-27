@@ -1,16 +1,14 @@
 class Solution {
 public:
     void solve(vector<vector<char>>& board) {
-        int n = board.size();
-        int m = board[0].size();
+        int n = board.size(), m = board[0].size();
 
-        vector<vector<int>> vis(n,vector<int>(m,0));
-
+        vector<vector<int>>vis(n,vector<int>(m));
         queue<pair<int,int>>q;
 
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(board[i][j]=='O' && (i==0 || i==n-1 || j==0 || j==m-1)){
+                if((i==0 || j==0 || i==n-1 || j==m-1) && board[i][j]=='O'){
                     q.push({i,j});
                     vis[i][j]=1;
                 }
@@ -25,12 +23,12 @@ public:
             q.pop();
 
             for(int k=0;k<4;k++){
-                int row = r+dr[k];
-                int col = c+dc[k];
+                int tr = r+dr[k];
+                int tc = c+dc[k];
 
-                if(row<0 || row>=n || col<0 || col>=m || vis[row][col] || board[row][col]=='X') continue;
-                vis[row][col]=1;
-                q.push({row,col});
+                if(tr<0 || tr>=n || tc<0 || tc>=m || board[tr][tc]!='O' || vis[tr][tc]) continue;
+                vis[tr][tc]=1;
+                q.push({tr,tc});
             }
         }
 
@@ -42,6 +40,6 @@ public:
             }
         }
 
-        return ;
+        return;
     }
 };
