@@ -22,31 +22,36 @@ public:
 class Solution {
 public:
     Node* cloneGraph(Node* node) {
-        if(node==nullptr) return nullptr;
-        queue<pair<Node*,Node*>>q;
+        if(!node) return nullptr;
+
         unordered_map<Node*,Node*>mp;
-        
+
+        queue<Node*>q;
+
         Node* root = new Node(node->val);
-        mp[node] = root;
-        q.push({node,root});
+        mp[node]=root;
+        q.push(node);
 
         while(!q.empty()){
-            auto [curr,copy] = q.front();
+            Node* tp = q.front();
+            Node* ntp = mp[tp];
             q.pop();
 
-            for(auto ele:curr->neighbors){
-                if(mp.find(ele)!=mp.end()){
-                    copy->neighbors.push_back(mp[ele]);
+            for(auto ele:tp->neighbors){
+                Node* temp;
+
+                if(mp.count(ele)){
+                    temp = mp[ele];
                 }else{
-                    Node* temp = new Node(ele->val);
-                    mp[ele] = temp;
-                    q.push({ele,temp});
-                    copy->neighbors.push_back(mp[ele]); 
+                    temp = new Node(ele->val);
+                    mp[ele]=temp;
+                    q.push(ele);
                 }
+
+                ntp->neighbors.push_back(temp);
             }
         }
 
         return root;
-
     }
 };
