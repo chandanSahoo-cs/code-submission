@@ -1,43 +1,41 @@
 class Solution {
 public:
+    double dfs(unordered_map<string,vector<pair<string,double>>>&adj, unordered_set<string>&vis, string u, string tr){
+        if(u==tr) return 1.0;
+        if(vis.count(u)) return -1.0;
 
-    double dfs(unordered_map<string,vector<pair<double,string>>> &adj,unordered_set<string>&st, string curr, string tr){
-        if(curr==tr) return 1.0;
-        if(st.count(curr)) return -1;
-        st.insert(curr);
+        vis.insert(u);
 
-        for(auto &[val,str]:adj[curr]){
-            double hold = dfs(adj,st,str,tr);
-            if(hold!=-1){
+        for(auto &[v,val]:adj[u]){
+            double hold = dfs(adj,vis,v,tr);
+            if(hold!=-1.0){
                 return val*hold;
             }
         }
 
-        return -1;
+        return -1.0;
     }
 
-    vector<double> calcEquation(vector<vector<string>>& eq, vector<double>& values, vector<vector<string>>& queries) {
-        int n = values.size();
-        unordered_map<string,vector<pair<double,string>>>adj;
+    vector<double> calcEquation(vector<vector<string>>& eq, vector<double>& values, vector<vector<string>>& q) {
+        unordered_map<string,vector<pair<string,double>>>adj;
+        int n = eq.size();
 
         for(int i=0;i<n;i++){
-            adj[eq[i][0]].push_back({values[i],eq[i][1]});
-            adj[eq[i][1]].push_back({(double)1/values[i],eq[i][0]});
+            string u = eq[i][0], v = eq[i][1]; 
+            double val = values[i];
+
+            adj[u].push_back({v,val});
+            adj[v].push_back({u,1.0/val});
         }
 
         vector<double>ans;
-        
-        for(auto &ele:queries){
-            if(adj.find(ele[0])!=adj.end() && adj.find(ele[1])!=adj.end()){
-                if(ele[1]==ele[0]){
-                    ans.push_back(1);
-                }else{
-                    unordered_set<string>st;
-                    ans.push_back(dfs(adj,st,ele[0],ele[1]));
-                }
-            }else{
-                ans.push_back(-1.0);
-            }
+
+        for(auto &ele:q){
+            unordered_set<string>vis;
+            string u = ele[0], v = ele[1];
+
+            if(adj.find(u)==adj.end() || adj.find(v)==adj.end()) ans.push_back(-1.0);
+            else ans.push_back(dfs(adj,vis,u,v));
         }
 
         return ans;
