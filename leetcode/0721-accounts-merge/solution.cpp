@@ -1,66 +1,56 @@
 class DSU{
-    vector<int>sz,parent;
+    private : 
+    vector<int>parent,sz;
 
-    public:
+    public : 
     DSU(int n){
-        sz.resize(n,1);
         parent.resize(n);
+        sz.resize(n);
 
         for(int i=0;i<n;i++){
             parent[i]=i;
+            sz[i]=1;
         }
     }
 
     int findParent(int u){
         if(parent[u]==u) return u;
-
-        return parent[u]=findParent(parent[u]);
+        return parent[u] = findParent(parent[u]);
     }
 
-    void unionBySz(int u, int v){
+    void unite(int u, int v){
         int ult_u = findParent(u);
         int ult_v = findParent(v);
 
         if(ult_u==ult_v) return;
 
         if(sz[ult_u]>sz[ult_v]){
-            parent[ult_v]=ult_u;
+            parent[ult_v] = ult_u;
             sz[ult_u]+=sz[ult_v];
         }else{
-            parent[ult_u]=ult_v;
+            parent[ult_u] = ult_v;
             sz[ult_v]+=sz[ult_u];
         }
 
         return;
     }
-
-    int totSets(){
-        int cnt=0;
-
-        for(int i=0;i<parent.size();i++){
-            if(i==parent[i]) cnt++;
-        }
-
-        return cnt;
-    }
 };
-
 
 class Solution {
 public:
-    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
-        int n = accounts.size();
+    vector<vector<string>> accountsMerge(vector<vector<string>>& a) {
+        int n = a.size();
+
+        map<string,int>strPr;
 
         DSU ds(n);
 
-        map<string,int>mp;
-
         for(int i=0;i<n;i++){
-            for(int j=1;j<accounts[i].size();j++){
-                if(mp.find(accounts[i][j])!=mp.end()){
-                    ds.unionBySz(mp[accounts[i][j]],i);
+            for(int j=1;j<a[i].size();j++){
+                if(strPr.find(a[i][j])!=strPr.end()){
+                    ds.unite(strPr[a[i][j]],i);
                 }else{
-                    mp[accounts[i][j]]=i;
+                    strPr[a[i][j]]=i;
                 }
             }
         }
@@ -68,10 +58,10 @@ public:
         vector<vector<string>>store(n);
 
         for(int i=0;i<n;i++){
-            store[i].push_back(accounts[i][0]);
+            store[i].push_back(a[i][0]);
         }
 
-        for(auto [key,value]:mp){
+        for(auto [key,value]:strPr){
             int ind = ds.findParent(value);
             store[ind].push_back(key);
         }
