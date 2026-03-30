@@ -1,40 +1,35 @@
-const int INF = 1e9+7;
-
 class Solution {
 public:
     int minimumEffortPath(vector<vector<int>>& heights) {
+        int n = heights.size(), m = heights[0].size();
 
-        int n = heights.size(),m = heights[0].size();
-
-        vector<vector<int>>dist(n,vector<int>(m,INF));
-
-        set<tuple<int,int,int>>st;
-
-        st.insert({0,0,0});
+        vector<vector<int>>dist(n,vector<int>(m,INT_MAX));
+        priority_queue<tuple<int,int,int>,vector<tuple<int,int,int>>,greater<>>pq;
+        
+        pq.push({0,0,0});
         dist[0][0]=0;
 
         int dr[] = {0,0,-1,1};
         int dc[] = {-1,1,0,0};
 
-        while(!st.empty()){
-            auto [cost,i,j] = *st.begin();
-            st.erase(st.begin());
+        while(!pq.empty()){
+            auto [d,r,c] = pq.top();
+            pq.pop();
 
+            if(dist[r][c]<d) continue;
+            
             for(int k=0;k<4;k++){
-                int r = i+dr[k];
-                int c = j+dc[k];
+                int tr = r+dr[k];
+                int tc = c+dc[k];
 
-                if(r<0 || r>=n || c<0 || c>=m) continue;
+                if(tr<0 || tr>=n || tc<0 || tc>=m) continue;
+                int diff = max(d,abs(heights[tr][tc]-heights[r][c]));
 
-                int h = max(cost,abs(heights[r][c]-heights[i][j]));
-
-                if(h<dist[r][c]){
-                    st.erase({dist[r][c],r,c});
-                    dist[r][c] = h;
-
-                    st.insert({h,r,c});
+                if(diff<dist[tr][tc]){
+                    pq.push({diff,tr,tc});
+                    dist[tr][tc] = diff;
                 }
-            }
+            }          
         }
 
         return dist[n-1][m-1];
