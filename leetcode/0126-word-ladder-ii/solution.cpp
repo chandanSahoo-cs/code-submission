@@ -1,67 +1,79 @@
 class Solution {
-    vector<vector<string>>ans;
 public:
-    void dfs(string &word, unordered_map<string,int>&mark, string &beginWord, vector<string>&partAns){
-
-        int bn = word.size();
-
-        if(mark.find(word)==mark.end()) return;
-
-        if(word==beginWord){
-            vector<string>part;
-            for(int i=partAns.size()-1;i>=0;i--){
-                part.push_back(partAns[i]);
+    vector<vector<string>>ans;
+    void dfs(unordered_map<string,int>&vis, vector<string>&part, string &u, string &tr ){
+        // string u = part.back();
+        if(u==tr){
+            vector<string>res;
+            for(int i=part.size()-1;i>=0;i--){
+                res.push_back(part[i]);
             }
-            ans.push_back(part);
+            ans.push_back(res);
             return;
         }
 
-        for(int i=0;i<bn;i++){
-            string temp = word;
+        string temp = u;
+        for(int i=0;i<u.size();i++){
+            char curr = temp[i];
             for(char c='a';c<='z';c++){
-                temp[i] = c;
-                if(mark.find(temp)!=mark.end() && mark[temp]+1==mark[word]){
-                    partAns.push_back(temp);
-                    dfs(temp,mark,beginWord,partAns);
-                    partAns.pop_back();
+                temp[i]=c;
+                if(vis.count(temp) && vis[temp]+1==vis[u]){
+                    part.push_back(temp);
+                    dfs(vis,part,temp,tr);
+                    part.pop_back();
                 }
             }
+            temp[i]=curr;
         }
 
-        return ;
+        return;
     }
 
     vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
-        int n = wordList.size();
-        int bn = beginWord.size();
-        unordered_map<string,int>mark;
+        
         unordered_set<string>st(wordList.begin(),wordList.end());
+        unordered_map<string,int>vis;
 
         queue<string>q;
 
         q.push(beginWord);
-        mark[beginWord] = 0;
+        vis[beginWord]=1;
+
+        int level = 1;
 
         while(!q.empty()){
-            string ele = q.front();
-            q.pop();
 
-            for(int i=0;i<bn;i++){
-                string temp = ele;
-                for(char c='a';c<='z';c++){
-                    temp[i]=c;
-                    if(st.count(temp) && mark.find(temp)==mark.end()){
-                        q.push(temp);
-                        mark[temp]=mark[ele]+1;
+            int sz = q.size();
+            level++;
+
+            for(int k=0;k<sz;k++){
+                string u = q.front();
+                q.pop();
+
+                for(int i=0;i<u.size();i++){
+                    char curr = u[i];
+                    for(char c='a';c<='z';c++){
+                        u[i]=c;
+
+                        if(st.count(u) && !vis.count(u)){
+                            q.push(u);
+                            vis[u]=level;
+
+                            if(u==endWord){
+                                vector<string>part = {endWord};
+
+                                dfs(vis,part,endWord,beginWord);
+
+                                return ans;
+                            }
+
+                        }
                     }
-                }
+                    u[i]=curr;
+                } 
             }
         }
 
-        vector<string>partAns = {endWord};
-
-        dfs(endWord,mark,beginWord,partAns);
-        return ans;
-
+        return {};
     }
 };
