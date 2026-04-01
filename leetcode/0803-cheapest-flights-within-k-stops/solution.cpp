@@ -9,22 +9,29 @@ public:
         }
 
         vector<int>vis(n,INF);
-        queue<tuple<int,int,int>>q;
+        queue<pair<int,int>>q;
 
-        q.push({0,0,src});
-        vis[src] = 0;
+        q.push({src,0});
+        vis[src]=0;
+
+        int level = 0;
 
         while(!q.empty()){
-            auto [currK,price,from] = q.front();
-            q.pop();
+            int sz = q.size();
+            if(level-1==k) break;
+            level++;
 
-            if(currK>k) continue;
+            for(int i=0;i<sz;i++){
+                auto [u,c] = q.front();
+                q.pop();
 
+                cout<<u<<" "<<c<<"\n";
 
-            for(auto [v,p]:adj[from]){
-                if(vis[v]>p+price){
-                    q.push({currK+1,p+price,v});
-                    vis[v]=p+price;
+                for(auto [v,cst]:adj[u]){
+                    if(vis[v]>c+cst){
+                        vis[v]=c+cst;
+                        q.push({v,vis[v]});
+                    }
                 }
             }
         }
