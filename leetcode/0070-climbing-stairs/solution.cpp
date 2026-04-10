@@ -1,19 +1,27 @@
 class Solution {
-    int dp[50];
-    int frst=0,scnd=0;
-    
 public:
+    // int dp[50];
+
+    // int rec(int n, int i){
+        
+    //     if(i>n) return 0;
+    //     if(i==n) return 1;
+
+    //     if(dp[i]!=-1) return dp[i];
+
+    //     int ans = rec(n,i+1)+rec(n,i+2);
+
+    //     return dp[i] = ans;
+    // }
+
     int climbStairs(int n) {
-        for(int i=n;i>=0;i--){
-            if(i==n){
-                frst=1;
-            }else{
-                int temp = frst;
-                frst+=scnd;
-                scnd=temp;
-            }
+        vector<int>dp(n+2);
+        dp[n]=1;
+
+        for(int i=n-1;i>=0;i--){
+            dp[i] = dp[i+1]+dp[i+2];
         }
 
-        return frst;
+        return dp[0];
     }
 };
