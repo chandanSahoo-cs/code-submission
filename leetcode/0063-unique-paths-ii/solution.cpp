@@ -1,22 +1,21 @@
 class Solution {
-    int dp[105][105];
 public:
-    int rec(vector<vector<int>>&a, int i, int j){
-        int n = a.size();
-        int m = a[0].size();
+    int uniquePathsWithObstacles(vector<vector<int>>& og) {
+        int n = og.size(), m = og[0].size();
 
-        if(dp[i][j]!=-1) return dp[i][j];
+        vector<vector<long long>>dp(n+1,vector<long long>(m+1));
 
-        if(i==n || j==m || a[i][j]) return 0;
-        if(i==n-1 && j==m-1) return 1;
+        if(!og[n-1][m-1]){
+            dp[n-1][m-1]=1;
+        }
 
-        int ans = rec(a,i+1,j)+rec(a,i,j+1);
+        for(int i=n-1;i>=0;i--){
+            for(int j=m-1;j>=0;j--){
+                if((i==n-1 && j==m-1) || og[i][j]) continue;
+                dp[i][j] = dp[i+1][j]+dp[i][j+1];
+            }
+        }
 
-        return dp[i][j] = ans;
-    }
-
-    int uniquePathsWithObstacles(vector<vector<int>>& a) {
-        memset(dp,-1,sizeof(dp));
-        return rec(a,0,0);    
+        return dp[0][0];
     }
 };
