@@ -1,24 +1,26 @@
 class Solution {
 public:
-    int longestCommonSubsequence(string s1, string s2) {
-        int n = s1.size();
-        int m = s2.size();
+    int longestCommonSubsequence(string text1, string text2) {
+        int n = text1.size(), m = text2.size();
 
-        vector<int>curr(m+1,0),prev(m+1,0);
+        vector<int>next(m+1);
+        vector<int>curr(m+1);
+
+
 
         for(int i=n-1;i>=0;i--){
             for(int j=m-1;j>=0;j--){
 
-                if(s1[i]==s2[j]){
-                    curr[j] = max(curr[j],1+prev[j+1]);
+                if(text1[i]==text2[j]){
+                    curr[j] = 1+next[j+1];
+                }else{
+                    curr[j] = max(next[j],curr[j+1]);
                 }
-                curr[j] = max(curr[j],prev[j]);
-                curr[j] = max(curr[j],curr[j+1]);
             }
-            prev = curr;
-            curr.resize(m+1,0);
+
+            next = curr;
         }
 
-        return prev[0];
+        return next[0];
     }
 };
