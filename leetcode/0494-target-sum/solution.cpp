@@ -1,22 +1,23 @@
 class Solution {
-    int dp[25][4005];
-    int BUFFER = 2005;
 public:
+    int dp[25][4005];
+    int buffer = 2000;
 
-    int rec(vector<int>&a, int t, int i){
-        int n = a.size();
+    int rec(vector<int>& nums, int target, int i){
+        int n = nums.size();
 
-        if(i==n) return t==0;
-        if(dp[i][t+BUFFER]!=-1) return dp[i][t+BUFFER];
+        if(i==n){
+            if(target==0) return 1;
+            return 0;
+        }
 
-        int ans = rec(a,t-a[i],i+1)+rec(a,t+a[i],i+1);
+        if(dp[i][target+buffer]!=-1) return dp[i][target+buffer];
 
-        return dp[i][t+BUFFER]=ans;
+        return dp[i][target+buffer] = rec(nums,target-nums[i],i+1)+rec(nums,target+nums[i],i+1);
     }
 
-    int findTargetSumWays(vector<int>& a, int target) {
+    int findTargetSumWays(vector<int>& nums, int target) {
         memset(dp,-1,sizeof(dp));
-
-        return rec(a,target,0);
+        return rec(nums,target,0);    
     }
 };
