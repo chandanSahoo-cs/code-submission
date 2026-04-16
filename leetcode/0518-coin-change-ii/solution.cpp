@@ -1,39 +1,18 @@
 class Solution {
-    // int dp[3005][5005];
-    int mod = 1e9+7;
 public:
-    // int rec(vector<int>&a, int amt, int i){
-    //     int n = a.size();
-    //     if(i==n) return amt==0;
-    //     if(dp[i][amt]!=-1) return dp[i][amt];
+    int change(int amount, vector<int>& coins) {
+        int n = coins.size();
+        vector<unsigned int>curr(amount+1),next(amount+1);
 
-    //     int ans = 0;
-    //     ans+=rec(a,amt,i+1);
+        next[0]=curr[0]=1;
 
-    //     if(amt-a[i]>=0){
-    //         ans+=rec(a,amt-a[i],i);
-    //     }
-
-    //     return dp[i][amt] = ans;
-    // }
-    
-
-    int change(int amt, vector<int>& a) {
-        int n = a.size();
-
-        vector<vector<unsigned int>>dp(n+1,vector<unsigned int>(amt+1,0));
-
-        dp[n][0] = 1;
         for(int i=n-1;i>=0;i--){
-            for(int j=0;j<=amt;j++){
-                dp[i][j] += dp[i+1][j];
-                if(j-a[i]>=0){
-                    dp[i][j] +=dp[i][j-a[i]];
-                }
+            for(int j=1;j<=amount;j++){
+                curr[j] = (j-coins[i]>=0?curr[j-coins[i]]:0)+next[j];
             }
+            next = curr;
         }
 
-        return dp[0][amt];
+        return next[amount];
     }
 };
-
