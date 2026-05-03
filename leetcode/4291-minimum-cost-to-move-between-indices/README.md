@@ -1,6 +1,6 @@
 <p>You are given an integer array <code>nums</code> where <code>nums</code> is <strong><span data-keyword="strictly-increasing-array">strictly increasing</span></strong>.</p>
 
-<p>For each index <code>x</code>, let <code>closest(x)</code> be the <strong>adjacent</strong> index such that <code>abs(nums[x] - nums[y])</code> is <strong>minimized</strong>. If both <strong>adjacent</strong> indices exist and give the same difference, choose the <strong>smaller</strong> index.</p>
+<p>For each index <code>x</code>, let <code>closest(x)</code> be the <strong>adjacent</strong> index <code>y</code> such that <code>abs(nums[x] - nums[y])</code> is <strong>minimized</strong>. If both <strong>adjacent</strong> indices exist and give the same difference, choose the <strong>smaller</strong> index.</p>
 
 <p>From any index <code>x</code>, you can move in two ways:</p>
 
