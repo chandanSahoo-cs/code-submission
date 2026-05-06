@@ -1,24 +1,24 @@
 class Solution {
-#define ll long long
-
 public:
-    vector<vector<char>> rotateTheBox(vector<vector<char>>& a) {
-        int n = a.size();
-        int m = a[0].size();
+    vector<vector<char>> rotateTheBox(vector<vector<char>>& boxGrid) {
+        int n = boxGrid.size();
+        int m = boxGrid[0].size();
+
         vector<vector<char>>ans(m,vector<char>(n,'.'));
+
         for(int i=n-1;i>=0;i--){
-            int pt=m-1;
+            int k = m-1;
             for(int j=m-1;j>=0;j--){
-                if(a[i][j]=='#'){
-                    ans[pt][n-1-i]='#';
-                    pt--;
-                }
-                else if(a[i][j]=='*'){
+                if(boxGrid[i][j]=='*'){
                     ans[j][n-1-i]='*';
-                    pt=j-1;
+                    k=j-1;
+                }else if(boxGrid[i][j]=='#'){
+                    ans[k][n-1-i]='#';
+                    k--;
                 }
             }
         }
+
         return ans;
     }
 };
