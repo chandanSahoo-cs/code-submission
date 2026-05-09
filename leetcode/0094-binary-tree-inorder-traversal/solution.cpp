@@ -11,23 +11,10 @@
  */
 class Solution {
 public:
-    void inorder(TreeNode* root,vector<int>&ans){
+    vector<int> inorderTraversal(TreeNode* root) {
         TreeNode* curr = root;
 
-        /*
-        case 1 : left is null
-            add the curr->val
-            curr = curr->right
-        case 2 : left is not null;
-            - find the rightmost node of the left subtree , incase of single node, that node is the rightmost node
-            - case 2a : if this rightmode node has thread to curr node,
-                - break the thread
-                - add the curr->val
-                - curr = curr->right
-            - case 2b : if this rightmode node doesn't has thread to curr node
-                - make a thread from this node to curr node;
-                - curr = curr->left
-        */
+        vector<int>ans;
 
         while(curr!=nullptr){
             if(curr->left==nullptr){
@@ -35,7 +22,8 @@ public:
                 curr = curr->right;
             }else{
                 TreeNode* temp = curr->left;
-                while(temp->right!=nullptr && temp->right!=curr){
+
+                while(temp->right && temp->right!=curr){
                     temp = temp->right;
                 }
 
@@ -49,13 +37,7 @@ public:
                 }
             }
         }
-        return ;
-    }
 
-    vector<int> inorderTraversal(TreeNode* root) {
-        vector<int>ans;
-        inorder(root,ans);
-
-        return ans;    
+        return ans;
     }
 };
