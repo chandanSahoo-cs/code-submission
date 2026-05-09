@@ -13,20 +13,20 @@ class Solution {
 public:
     int mx = 0;
 
-    int dfs(TreeNode* root){
+    int diameter(TreeNode* root){
+        
+        int left = 0, right = 0;
 
-        int l=0,r=0;
+        if(root->left) left = diameter(root->left);
+        if(root->right) right = diameter(root->right);
 
-        if(root->left) l = 1+dfs(root->left);
-        if(root->right) r = 1+dfs(root->right);
+        mx = max(mx,left+right);
 
-        mx = max(mx,l+r);
-
-        return max(l,r);
+        return 1+max(left,right);
     }
-    
+
     int diameterOfBinaryTree(TreeNode* root) {
-        dfs(root);
+        diameter(root);
 
         return mx;
     }
