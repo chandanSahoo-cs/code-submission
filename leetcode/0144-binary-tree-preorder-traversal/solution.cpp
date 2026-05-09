@@ -11,24 +11,10 @@
  */
 class Solution {
 public:
-    void preorder(TreeNode* root, vector<int>&ans){
-
-        /*
-        case 1 : left is null
-            add the curr->val
-            curr = curr->right
-        case 2 : left is not null;
-            - find the rightmost node of the left subtree , incase of single node, that node is the rightmost node
-            - case 2a : if this rightmode node has thread to curr node,
-                - break the thread
-                - curr = curr->right
-            - case 2b : if this rightmode node doesn't has thread to curr node
-                - make a thread from this node to curr node;
-                - add the curr->val
-                - curr = curr->left
-        */
-
+    vector<int> preorderTraversal(TreeNode* root) {
         TreeNode* curr = root;
+
+        vector<int>ans;
 
         while(curr!=nullptr){
             if(curr->left==nullptr){
@@ -41,25 +27,17 @@ public:
                     temp = temp->right;
                 }
 
-                if(temp->right==nullptr){
+                if(temp->right){
+                    temp->right = nullptr;
+                    curr = curr->right;
+                }else{
                     temp->right = curr;
                     ans.push_back(curr->val);
                     curr = curr->left;
-                }else{
-                    temp->right = nullptr;
-                    curr = curr->right;
                 }
             }
         }
 
-        return;
-    }
-
-    vector<int> preorderTraversal(TreeNode* root) {
-        vector<int>ans;
-
-        preorder(root,ans);
-
-        return ans;    
+        return ans;
     }
 };
