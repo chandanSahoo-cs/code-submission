@@ -9,26 +9,30 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 #define ll long long
 class Solution {
 public:
-    bool flag = true;
-    pair<ll,ll> search(TreeNode* root){
-        if(root==nullptr) return {LLONG_MIN,LLONG_MAX};
 
-        auto [ largestL, smallestL] = search(root->left);
-        auto [ largestR, smallestR] = search(root->right);
+    bool dfs(TreeNode* root, ll mn, ll mx){
+        ll vl = root->val;
 
-        if(root->val>largestL && root->val<smallestR){
-            return {max((ll)root->val,largestR),min((ll)root->val,smallestL)};
+        if(mn>=vl || vl>=mx) return false;
+
+        bool flag = true;
+
+        if(root->left){
+            flag&=dfs(root->left,mn,vl);
         }
-        flag = false;
 
-        return {LLONG_MAX,LLONG_MIN};
+        if(root->right){
+            flag&=dfs(root->right,vl,mx);
+        }
+
+        return flag;
     }
 
     bool isValidBST(TreeNode* root) {
-        search(root);
-        return flag;  
+        return dfs(root,LLONG_MIN,LLONG_MAX);
     }
 };
