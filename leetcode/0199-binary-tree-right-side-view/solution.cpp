@@ -11,22 +11,26 @@
  */
 class Solution {
 public:
-    void traverse(TreeNode* node,int row, int col, map<int ,pair<int,int>>&mp){
-        if(node==nullptr) return;
-        if(mp.find(row)==mp.end()) mp[row]={node->val,col};
-        // else if(mp[row].second<col) mp[row]={node->val,col};
-        traverse(node->right,row+1,col+1,mp);
-        traverse(node->left,row+1,col-1,mp);
-    }
-
     vector<int> rightSideView(TreeNode* root) {
-        map<int,pair<int,int>>mp;
-        traverse(root,0,0,mp);
-
         vector<int>ans;
 
-        for(auto ele:mp){
-            ans.push_back(ele.second.first);
+        queue<TreeNode*>q;
+        if(root) q.push(root);
+
+        while(!q.empty()){
+            int sz = q.size();
+
+            for(int k=0;k<sz;k++){
+                TreeNode* t = q.front();
+                q.pop();
+
+                if(k==sz-1){
+                    ans.push_back(t->val);
+                }
+
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
         }
 
         return ans;
