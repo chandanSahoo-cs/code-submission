@@ -12,24 +12,20 @@
 class Solution {
 public:
     int ans = -1;
-
-    void search(TreeNode* root, int k, int &ind){
-        if(root==nullptr) return;
-
-        search(root->left,k,ind);
+    void dfs(TreeNode* root, int &ind, int k){
+        
+        if(root->left) dfs(root->left,ind,k);
         ind++;
-        if(ind==k){
-            ans = root->val;
-        }
+        if(ind==k) ans = root->val;
 
-        search(root->right,k,ind);
+        if(root->right) dfs(root->right,ind,k);
 
-        return;
+        return; 
     }
 
     int kthSmallest(TreeNode* root, int k) {
         int ind = 0;
-        search(root,k,ind);
+        dfs(root,ind,k);
 
         return ans;
     }
