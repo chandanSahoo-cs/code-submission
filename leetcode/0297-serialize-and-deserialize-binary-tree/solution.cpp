@@ -12,86 +12,83 @@ public:
 
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        if(root==nullptr) return "";
         string s = "";
+
+        if(!root) return "";
 
         queue<TreeNode*>q;
         q.push(root);
 
         while(!q.empty()){
-            TreeNode* temp = q.front();
-            q.pop();
-
-            if(temp==nullptr){
-                s+='#';
-            }else{
-                s+=to_string(temp->val);
-                q.push(temp->left);
-                q.push(temp->right);
-            }
-            s+='|';
-
-        }
-
-
-        return s;
-    }
-
-    TreeNode* giveNum(string &s, int &ind){
-        int strt = ind;
-
-        while(ind<s.size() && s[ind]!='|'){
-            ind++;
-        }
-        ind++;
-
-        if(ind-strt-1==1 && s[strt]=='#') return nullptr;
-
-        bool sign = true;
-        int val = 0;
-
-        while(strt<ind-1){
-            if(s[strt]=='-') sign = false;
-            else{
-                val*=10;
-                val+=s[strt]-'0';
-            }
-            strt++;
-        }
-
-        val = sign?val:-val;
-
-        TreeNode* root = new TreeNode(val);
-
-        return root;
-    }
-
-    // Decodes your encoded data to tree.
-    TreeNode* deserialize(string data) {
-        if(data=="") return nullptr;
-
-        int ind=0;
-
-        TreeNode* root = giveNum(data,ind);
-
-        queue<TreeNode*>q;
-        q.push(root);
-
-        while(ind<data.size()){
             int sz = q.size();
 
             for(int i=0;i<sz;i++){
-                TreeNode* curr = q.front();
+                TreeNode* t = q.front();
                 q.pop();
 
-                curr->left = giveNum(data,ind);
-                curr->right = giveNum(data,ind);
-                if(curr->left) q.push(curr->left);
-                if(curr->right) q.push(curr->right);
+                if(!t){
+                    s+='#';
+                }else{
+                    s+=to_string(t->val);
+                    q.push(t->left);
+                    q.push(t->right);
+                }
+
+                s+=',';
             }
+        }
+        s.pop_back();
+        return s;
+    }
+
+    // Decodes your encoded data to tree.
+
+    pair<string,int> inc(string &s, int itr){
+        int n = s.size();
+        string t = "";
+        while(itr<n && s[itr]!=','){
+            t+=s[itr];
+            itr++;
+        }
+        return {t,itr+1};
+    }
+
+    TreeNode* deserialize(string s) {
+        int n = s.size();
+        if(n==0) return nullptr;
+
+        int itr = 0;
+        queue<TreeNode*>q;
+
+        auto [t,it] = inc(s,itr);
+        TreeNode* root = new TreeNode(stoi(t));
+
+        q.push(root);
+        itr = it;
+
+
+        while(!q.empty()){
+            TreeNode* curr = q.front();
+            q.pop();
+
+            // left child
+            auto [leftStr,leftItr] = inc(s,itr);
+            TreeNode* left = leftStr!="#"?new TreeNode(stoi(leftStr)):nullptr;
+            if(left) q.push(left);
+            itr = leftItr;
+
+            // rightChild
+            auto [rightStr,rightItr] = inc(s,itr);
+            TreeNode* right = rightStr!="#"?new TreeNode(stoi(rightStr)):nullptr;
+            if(right) q.push(right);
+            itr = rightItr;
+            
+            curr->left = left;
+            curr->right = right;
         }
 
         return root;
+
     }
 };
 
