@@ -13,20 +13,20 @@ class Solution {
 public:
     int mx = INT_MIN;
 
-    int traverse(TreeNode* root){
-        if(root==nullptr) return 0;
+    int rec(TreeNode* root){
+        if(!root) return 0;
 
-        int l = max(0,traverse(root->left));
-        int r = max(0,traverse(root->right));
+        int left = rec(root->left);
+        int right = rec(root->right);
 
-        mx = max(mx,root->val+l+r);
+        mx = max(mx,left+root->val+right);
 
-        return max(l,r)+root->val;
+        return max(0,root->val+max(left,right));
     }
 
     int maxPathSum(TreeNode* root) {
-        
-        traverse(root);
+        rec(root);
+
         return mx;
     }
 };
