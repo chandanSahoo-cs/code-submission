@@ -1,17 +1,22 @@
 class Solution {
-    #define ll long long
 public:
     int findMin(vector<int>& nums) {
-        ll s=0,e=nums.size()-1;
-        if(nums[s]>nums[e]){
-            while(s<=e){
-                ll m=s+(e-s)/2;
-                if(nums[m]>=nums[s] && nums[m]>=nums[e] && nums[m]>nums[m+1]) return nums[m+1];
-                else if(nums[m]<nums[s]) e=m-1;
-                else s=m+1;
+        int n = nums.size();
+        int l = 0, r = n-1;
+
+        int ans = r;
+        while(l<=r){
+            int m = l+(r-l)/2;
+
+            if(nums[m]>nums[r]) l=m+1;
+            else{
+                if(nums[m]<nums[ans]){
+                    ans = m;
+                }
+                r = m-1;
             }
         }
-        else return nums[0];
-        return -1;
+
+        return nums[ans];
     }
 };
