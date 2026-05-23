@@ -1,16 +1,14 @@
 class Solution {
-    #define ll long long
 public:
     bool check(vector<int>& nums) {
-        int n=nums.size();
-        ll cnt=0;
-        for(ll i=1;i<=n;i++){
-            if(nums[i%(n)]<nums[(i-1)%(n)]){
-                cnt++;
-            }
-            if(cnt==2) break;
+        int n = nums.size();
+
+        int cnt = 0;
+        for(int i=0;i<n;i++){
+            if(nums[i%n]>nums[(i+1)%n]) cnt++;
+            if(cnt==2) return false;
         }
-        if(cnt<2) return 1;
-        else return 0;
+
+        return true;
     }
 };
