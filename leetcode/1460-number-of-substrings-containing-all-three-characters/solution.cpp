@@ -1,24 +1,31 @@
 class Solution {
 public:
-    int give(int n, string &s, int k){
-        int l=0,r=0,ans=0;
-        vector<int>ch(3,0);
+    int compute(string &s, int k){
+        int n = s.size();
+        int l = 0, r = 0;
 
+        vector<int>alpha(3);
+
+        int cnt = 0;
+        
         while(r<n){
-            ch[s[r]-'a']++;
-            while(ch[0]>0 && ch[1]>0 && ch[2]>0){
-                ch[s[l]-'a']--;
+            alpha[s[r]-'a']++;
+
+            while((alpha[0]>0)+(alpha[1]>0)+(alpha[2]>0)>k){
+                alpha[s[l]-'a']--;
                 l++;
-                ans+=n-r;
             }
+            
+            cnt+=r-l+1;
+
             r++;
         }
 
-        return ans;
+        return cnt;
     }
 
     int numberOfSubstrings(string s) {
         int n = s.size();
-        return give(n,s,3);
+        return (n*1LL*(n+1))/2-compute(s,2);
     }
 };
