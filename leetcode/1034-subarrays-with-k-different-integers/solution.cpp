@@ -1,31 +1,31 @@
 class Solution {
 public:
-    int give(int n, vector<int>&nums, int k){
-        if(k<0) return 0;
+    int compute(vector<int>&nums, int k){
+        int n = nums.size();
+
         unordered_map<int,int>mp;
-        int l=0,r=0,ans=0;
+
+        int l = 0, r = 0;
+        int ans = 0;
+
         while(r<n){
-            // if(mp.find(nums[r])==mp.end()){
-            // }
             mp[nums[r]]++;
-            // else mp[nums[r]]++;
 
             while(mp.size()>k){
                 mp[nums[l]]--;
-                if(!mp[nums[l]]){
-                    mp.erase(nums[l]);
-                }
+                if(mp[nums[l]]==0) mp.erase(nums[l]);
+
                 l++;
             }
             ans+=r-l+1;
-            cout<<ans<<" ";
             r++;
         }
 
         return ans;
     }
+
     int subarraysWithKDistinct(vector<int>& nums, int k) {
-        int n = nums.size();
-        return give(n,nums,k)-give(n,nums,k-1);
+
+        return compute(nums,k)-compute(nums,k-1);
     }
 };
