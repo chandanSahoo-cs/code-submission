@@ -46,19 +46,12 @@ public:
             int val = s[i]-'0';
             if(val==0){
                 suff[i] = suff[i+1];
-                pwr[i] = pwr[i+1];
+                pwr[i] = p;
             }else {
                 suff[i] = (suff[i+1]+(val*1LL*pow10[p])%mod)%mod;
                 pwr[i] = p;
                 p++;
             }
-        }
-
-        int curr = 0;
-        for(int i=0;i<n;i++){
-            if(s[i]!='0'){
-                curr = pwr[i];
-            }else pwr[i]=curr;
         }
 
         vector<int>ans;
