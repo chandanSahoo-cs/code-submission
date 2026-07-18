@@ -25,7 +25,7 @@ public:
                 auto [u,c] = q.front();
                 q.pop();
 
-                cout<<u<<" "<<c<<"\n";
+                // cout<<u<<" "<<c<<"\n";
 
                 for(auto [v,cst]:adj[u]){
                     if(vis[v]>c+cst){
