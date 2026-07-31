@@ -1,18 +1,22 @@
 class Solution {
 public:
-    bool canFinish(int n, vector<vector<int>>& pre) {
-        vector<int>in(n);
-        vector<vector<int>>adj(n);
+    bool canFinish(int n, vector<vector<int>>& p) {
 
-        for(auto ele:pre){
+        vector<vector<int>>adj(n);
+        vector<int>indegree(n);
+        for(auto &ele:p){
             adj[ele[1]].push_back(ele[0]);
-            in[ele[0]]++;
+            indegree[ele[0]]++;
         }
 
         queue<int>q;
+        int tot = n;
 
         for(int i=0;i<n;i++){
-            if(!in[i]) q.push(i);
+            if(indegree[i]==0){
+                q.push(i);
+                tot--;
+            }
         }
 
         while(!q.empty()){
@@ -20,17 +24,15 @@ public:
             q.pop();
 
             for(auto v:adj[u]){
-                in[v]--;
-                if(in[v]==0){
+                indegree[v]--;
+                if(indegree[v]==0){
                     q.push(v);
+                    tot--;
                 }
             }
         }
 
-        for(int i=0;i<n;i++){
-            if(in[i]) return false;
-        }
 
-        return true;
+        return tot==0;
     }
 };
