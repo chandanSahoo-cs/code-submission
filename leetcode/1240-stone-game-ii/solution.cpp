@@ -1,30 +1,35 @@
 class Solution {
 public:
+    int dp[105][105];
+    int rec(vector<int>&pref, int i, int m){
+        int n = pref.size();
+        
+        if(i>=n) return 0;
+        if(dp[i][m]!=-1) return dp[i][m];
+
+        int mx = 0;
+        for(int j = 1;j<=2*m && i+j-1<n;j++){
+            int curr = pref[i+j-1]-(i-1<0?0:pref[i-1]);
+            int p = rec(pref,i+j,max(j,m));
+
+            mx = max(mx,curr+pref[n-1]-pref[i+j-1]-p);
+        }
+
+        return dp[i][m] = mx;
+    }
+
     int stoneGameII(vector<int>& piles) {
         int n = piles.size();
+        vector<int>pref(n);
 
-        vector<int>pref = piles;
+        pref[0] = piles[0];
 
         for(int i=1;i<n;i++){
-            pref[i]+=pref[i-1];
+            pref[i] = pref[i-1]+piles[i];
         }
 
-        vector<vector<int>>dp(n+1,vector<int>(n+1));
+        memset(dp,-1,sizeof(dp));
 
-        for(int i=n-1;i>=0;i--){
-            for(int m=n;m>=1;m--){
-                int mx = 0;
-                for(int j=1;j<=2*m && i+j-1<n;j++){
-                    int curr = pref[i+j-1]-(i>0?pref[i-1]:0);
-                    int s = dp[i+j][max(m,j)];
-
-                    mx = max(mx,curr+pref[n-1]-pref[i+j-1]-s);
-
-                    dp[i][m] = mx;
-                }
-            }
-        }
-
-        return dp[0][1];
+        return rec(pref,0,1); 
     }
 };
