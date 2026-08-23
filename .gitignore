@@ -1,0 +1,4 @@
+cf_session/
+cf_sync.log
+cf_sync.py
+.sync_meta
