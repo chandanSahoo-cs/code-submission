@@ -1,3 +1,3 @@
-# Leetcode Submissions
+# Problems Submissions
 
-This repository contains submissions for the LeetCode questions I have solved so far :) 
+This repository contains submissions for the LeetCode and Codeforces problems I have solved so far :) 
