@@ -19,22 +19,34 @@ const int mod = 1e9+7;
  
 void realmsDomain(){
   ll a,b,k; cin>>a>>b>>k;
-  vector<ll>boys(k),girls(k);
-  map<ll,ll>mpb, mpg;
  
-  for(auto &ele:boys) cin>>ele;
-  for(auto &ele:girls) cin>>ele;
+  map<ll,ll>mpb,mpg;
  
+  vector<pair<ll,ll>>pairs(k);
  
   for(ll i=0;i<k;i++){
-    mpb[boys[i]]++;
-    mpg[girls[i]]++;
+    cin>>pairs[i].first;
+  }    
+ 
+  for(ll i=0;i<k;i++){
+    cin>>pairs[i].second;
+  }
+ 
+  vector<vector<ll>>boys(a+1);
+ 
+  for(ll i=0;i<k;i++){
+    mpb[pairs[i].first]++;
+    mpg[pairs[i].second]++;
+ 
+    boys[pairs[i].first].push_back(pairs[i].second);
   }
  
   ll cnt = 0;
  
-  for(ll i=0;i<k;i++){
-    cnt+=k-(mpb[boys[i]]+mpg[girls[i]]-1);
+  for(ll i=1;i<=a;i++){
+    for(auto ele:boys[i]){
+      cnt+=k-mpb[i]-mpg[ele]+1;
+    }
   }
  
   cout<<cnt/2<<"\n";
