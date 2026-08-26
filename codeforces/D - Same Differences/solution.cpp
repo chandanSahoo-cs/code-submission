@@ -1,4 +1,4 @@
-/*It is not the matter of if, it is the matter of when*/
+/*It is happening, right here and now*/
         
 #include "bits/stdc++.h"
 using namespace std;
@@ -17,37 +17,24 @@ const int mod = 1e9+7;
 #define deb(x...)
 #endif
  
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
  
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
  
 void realmsDomain(){
   ll n; cin>>n;
-  vector<ll>a(n);
-  unordered_map<ll,ll>mp;
  
-  for(ll i=0;i<n;i++){
-    cin>>a[i];
-    mp[a[i]-i-1]++;
+  map<ll,ll>mp;
+ 
+  for(ll i=1;i<=n;i++){
+    ll ele; cin>>ele;
+    mp[ele-i]++;
   }
  
-  ll cnt=0;
+  ll cnt = 0;
+  for(auto &[_,value]:mp){
+    cnt+=(value*(value-1))/2;
+  }
  
-  for(auto ele:mp){
-    cnt+=ele.second*(ele.second-1);
-  }  
- 
-  cout<<cnt/2<<"\n";
+  cout<<cnt<<"\n";  
 }
  
 int main() {
