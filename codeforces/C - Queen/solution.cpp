@@ -16,46 +16,50 @@ const int mod = 1e9+7;
 #else
 #define deb(x...)
 #endif
+vector<ll>ans;  
  
-bool dfs(int n,vector<vector<int>>&adj , vector<int>&compliance, int u,vector<int>&ans){
-    int nonComp = compliance[u];
+ll dfs(vector<vector<ll>>&adj,vector<ll>&res,ll u){
+    ll cnt = adj[u].size();
  
-    // if(!nonComp) return nonComp;
- 
-    for(auto &v:adj[u]){
-        nonComp &= dfs(n,adj,compliance,v,ans);
+    for(auto v:adj[u]){
+        cnt-=dfs(adj,res,v);
     }
  
-    if(nonComp) ans.push_back(u);
+    if(!cnt && res[u]){
+        ans.push_back(u);
+    }
  
-    return compliance[u];
+    return res[u];
 }
  
 void realmsDomain(){
-    int n; cin>>n;
-    vector<int>compliance(n);
-    vector<vector<int>>adj(n);
+    ll n; cin>>n;
+    vector<vector<ll>>adj(n+1);
+    vector<ll>res(n+1);
  
-    int root = -1;
-    for(int i=0;i<n;i++){
-        int p,c; cin>>p>>c;
-        if(p==-1) root = i;
-        else adj[p-1].push_back(i);
+    ll root = -1;
  
-        compliance[i] = c;
+    for(ll i=1;i<=n;i++){
+        ll par, c; cin>>par>>c;
+        if(par==-1){
+            root = i;
+        }else adj[par].push_back(i);
+        res[i] = c;
     }
  
-    vector<int>ans;
+    deb(adj,res,root);
  
-    dfs(n,adj,compliance,root,ans);
-    sort(ans.begin(),ans.end());
+    ans.clear();
+ 
+    dfs(adj,res,root);
+    sort(all(ans));
  
     if(ans.size()==0){
-        cout<<-1<<"\n";
+        cout<<"-1\n";
         return;
     }
-    
-    for(auto &ele:ans) cout<<ele+1<<" ";
+ 
+    for(auto ele:ans) cout<<ele<<" ";
     cout<<"\n";
 }
  
