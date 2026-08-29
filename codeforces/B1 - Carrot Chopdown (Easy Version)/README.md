@@ -1,0 +1,11 @@
+# [B1. Carrot Chopdown (Easy Version)](https://codeforces.com/contest/2258/problem/B1)
+
+---
+This is the easy version of the problem. The difference between the versions is that in this version, you only need to solve the problem for k=1. You can hack only if you solved all versions of this problem.Alp loves carrots. Since he hasn't eaten lunch yet, he wants to buy a carrot salad to eat outside. However, he has a weird obsession: all the carrots must be the exact same length; otherwise, the salad doesn't look aesthetically pleasing to him. Since he is in the middle of the street and doesn't have a knife, he can't cut the carrots himself. You need to divide all the carrots using your machine and sell them to Alp.You are given n delicious carrots with sizes a1,a2,…,an. You are also given a cutting machine, which works as follows.  For each operation, you choose a set of carrots (you can choose chopped carrots again) and a positive integer x (not necessarily the same for each operation).  After that, consider every chosen carrot, let its length be l. If l≤x, this carrot is unaffected; otherwise, it is divided into two carrots of sizes x and l−x. We'll sell some of the final carrots to an interesting guy who wants them all to be the same length. We are asking you to determine the maximum number of carrots we can sell after using this machine exactly k times. Solve the problem for only k=1.
+
+### Input
+InputEach test contains multiple test cases. The first line contains the number of test cases t (1≤t≤104). The description of the test cases follows.The first line of each test case contains n and m (1≤n,m≤2⋅105), denoting the number of carrots and the maximum possible length of a carrot. The second line of each test case contains n integers a1,a2,…,an (1≤ai≤m), denoting the initial carrot sizes. It is guaranteed that the sum of n over all test cases does not exceed 2⋅105 and the sum of m over all test cases does not exceed 2⋅105.
+
+### Output
+OutputFor each test case, output a single integer — the answer for k=1.
+NoteIn the first test case, the given carrots are [1,2,3,4,4].For k=1, it is best to choose x=2 with the set [2,3,4,4]. After the operation, we'll get [1,2,2,1,2,2,2,2]. We can sell 6 carrots of length 2.
