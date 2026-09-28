@@ -11,7 +11,7 @@ public:
             else if(s[i]==')'){
                 st.pop();
             }
-            ans = (ans>st.size()?ans:st.size());
+            ans = max(ans,(int)st.size());
         }
 
         return ans;
