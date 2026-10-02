@@ -1,30 +1,32 @@
 class Solution {
 public:
-    void giveAns(int n, vector<string> &a, string s, int open, int close){
-        if(s.size()==2*n && open==close){
-            a.push_back(s);
+
+    vector<string>ans;
+
+    void generate(int n, string &s, int o, int c){
+        if(o+c==2*n){
+            ans.push_back(s);
             return;
         }
 
-        if(open==close){
-            giveAns(n,a,s+'(',open+1,close);
+        if(o<n){
+            s+='(';
+            generate(n,s,o+1,c);
+            s.pop_back();
         }
-        else{
-            if(open<n){
-                giveAns(n,a,s+'(',open+1,close);
-            }
-            if(close<n){
-                giveAns(n,a,s+')',open,close+1);
-            }
+        if(c<o){
+            s+=')';
+            generate(n,s,o,c+1);
+            s.pop_back();
         }
+
         return;
     }
 
     vector<string> generateParenthesis(int n) {
-        string s;
-        vector<string>a;
-        giveAns(n,a,s,0,0);
+        string s = "";
+        generate(n,s,0,0);
 
-        return a;
+        return ans;
     }
 };
