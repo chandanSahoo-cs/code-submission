@@ -1,27 +1,25 @@
-#define ll long long
 class Solution {
 public:
     string removeOuterParentheses(string s) {
-        ll n = s.size();
-        stack<char>st;
+        int n = s.size();
+
         string ans = "";
-        for(ll i=0;i<n;i++){
-            if(!st.size()){
-                st.push('(');
-            }
-            else if(st.top()=='('){
-                if(s[i]=='('){
-                    ans+='(';
-                    st.push('(');
-                }
-                else{
-                    if(st.size()!=1){
-                        ans+=')';
-                    }
-                    st.pop();
+        int cnt = 0;
+
+        int l = 0, r = 0;
+
+        while(r<n){
+            cnt+=s[r]=='('?1:-1;
+            if(cnt>=1){
+                if(cnt>1){
+                    ans+=s[r];
+                }else{
+                    if(s[r]==')') ans+=s[r];
                 }
             }
+            r++;
         }
+
         return ans;
     }
 };
