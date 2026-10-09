@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 """
-Interactive Codeforces Sync with Playwright + backdated Git history.
+Interactive Codeforces Sync with Playwright (attached to your own Chrome)
++ backdated Git history.
 
 Features:
-1. Opens browser and lets you log in.
-2. Saves the browser session for future runs.
+1. Attaches to a Chrome you started yourself (remote debugging port),
+   so Cloudflare's bot check sees a normal browser.
+2. Reuses your logged-in session from that Chrome.
 3. Traverses Codeforces submission pages.
 4. Finds accepted submissions.
 5. Constructs both the problem URL and the submission URL directly
-   from their components (contest/gym id + problem index), instead
-   of depending on the scraped href as a fallback.
+   from their components (contest/gym id + problem index).
 6. Downloads the exact submitted code.
 7. Downloads the problem statement.
 8. Commits each problem individually to git.
 9. Uses the actual Codeforces judged/submission time as the git commit date.
 10. Optionally pushes to GitHub.
+11. Pauses and waits for you if a Cloudflare challenge appears.
 """
 
 import os
@@ -135,6 +137,7 @@ def sanitize_filename(name: str) -> str:
 
 META_FILENAME = ".sync_meta"
 
+DEFAULT_CDP_URL = "http://localhost:9222"
 
 # ------------------------------------------------------------
 # Minimum submission ID.
@@ -321,6 +324,50 @@ def setup_logging(log_file: str, debug: bool = False):
 
 
 # ============================================================
+# Cloudflare challenge handling
+# ============================================================
+
+
+def is_challenge(page) -> bool:
+    """
+    Return True if the page currently shows a Cloudflare challenge.
+    """
+    try:
+        title = (page.title() or "").lower()
+        if "just a moment" in title or "attention required" in title:
+            return True
+        content = page.content().lower()
+        return "verify you are human" in content or "cf-challenge" in content
+    except Exception:
+        # Page is mid-navigation; treat as not (yet) a challenge.
+        return False
+
+
+def wait_for_human_if_challenged(page, logger=None, timeout_s: int = 300):
+    """
+    If a Cloudflare challenge is showing, wait for the person to
+    solve it in the browser window.
+    """
+    if not is_challenge(page):
+        return
+    if logger:
+        logger.info(
+            "[!] Cloudflare challenge detected. "
+            "Solve it in the Chrome window (waiting up to "
+            f"{timeout_s // 60} min)..."
+        )
+    for _ in range(timeout_s):
+        time.sleep(1)
+        if not is_challenge(page):
+            if logger:
+                logger.info("[+] Challenge cleared, continuing.")
+            time.sleep(1.5)
+            return
+    if logger:
+        logger.info("[!] Challenge was not cleared in time; continuing anyway.")
+
+
+# ============================================================
 # Navigation
 # ============================================================
 
@@ -336,12 +383,14 @@ def safe_goto(
     description="",
 ):
     """
-    Navigate to a URL with retries.
+    Navigate to a URL with retries. Pauses if a Cloudflare
+    challenge appears so you can solve it by hand.
     """
     label = description or url
     for attempt in range(1, retries + 1):
         try:
             page.goto(url, timeout=60000)
+            wait_for_human_if_challenged(page, logger)
             if wait_selector:
                 page.wait_for_selector(wait_selector, timeout=wait_timeout)
             return True
@@ -387,8 +436,7 @@ def check_logged_in(page) -> bool:
 def build_problem_url(prob_href: str):
     """
     Construct the Codeforces problem URL DIRECTLY from its
-    contest/gym id and problem index, instead of just
-    prepending the domain to whatever href was scraped.
+    contest/gym id and problem index.
 
     Examples:
 
@@ -601,23 +649,24 @@ def main():
         help="Override git author/committer email",
     )
     parser.add_argument(
-        "--headless",
-        action="store_true",
+        "--cdp-url",
+        type=str,
+        default=DEFAULT_CDP_URL,
         help=(
-            "Run without a visible browser window. "
-            "Requires an existing saved login session."
+            "Remote-debugging URL of the Chrome you started manually "
+            f"(default: {DEFAULT_CDP_URL})"
         ),
     )
     parser.add_argument(
         "--min-delay",
         type=float,
-        default=1.0,
+        default=2.0,
         help="Minimum seconds to wait between problems",
     )
     parser.add_argument(
         "--max-delay",
         type=float,
-        default=2.5,
+        default=4.5,
         help="Maximum seconds to wait between problems",
     )
     parser.add_argument("--retries", type=int, default=3, help="Retries per page load")
@@ -673,40 +722,44 @@ def main():
         if args.push:
             log.info("[!] --push ignored because this isn't a git repo.")
     # ========================================================
-    # Login session
+    # Attach to the manually started Chrome
     # ========================================================
-    session_dir = Path("./cf_session").resolve()
     with sync_playwright() as p:
-        log.info(
-            f"[*] Starting browser session "
-            f"(stored in {session_dir.name}, "
-            f"headless={args.headless})..."
-        )
-        context = p.chromium.launch_persistent_context(
-            user_data_dir=str(session_dir),
-            headless=args.headless,
-            args=["--disable-blink-features=AutomationControlled"],
-        )
+        log.info(f"[*] Connecting to your Chrome at {args.cdp_url} ...")
+        try:
+            browser = p.chromium.connect_over_cdp(args.cdp_url)
+        except Exception as e:
+            log.info(f"[!] Could not connect to Chrome: {e}")
+            log.info("    Start Chrome first with --remote-debugging-port=9222")
+            log.info("    (see the steps in the instructions), then re-run.")
+            sys.exit(1)
+        if browser.contexts:
+            context = browser.contexts[0]
+        else:
+            context = browser.new_context()
         page = context.new_page()
         # ====================================================
-        # Step 1: Login
+        # Step 1: Login check
         # ====================================================
         log.info("[*] Opening Codeforces...")
         page.goto("https://codeforces.com/", timeout=60000)
-        page.wait_for_load_state("networkidle")
+        wait_for_human_if_challenged(page, log)
+        try:
+            page.wait_for_load_state("networkidle", timeout=20000)
+        except Exception:
+            pass
         is_logged_in = check_logged_in(page)
-        if not is_logged_in and args.headless:
-            log.info("[!] Not logged in and --headless was passed.")
-            log.info("    Run once WITHOUT --headless first.")
-            context.close()
-            sys.exit(1)
         if not is_logged_in:
             print("\n" + "=" * 60)
-            print(">>> PLEASE LOG IN TO CODEFORCES " "IN THE OPENED BROWSER <<<")
+            print(">>> PLEASE LOG IN TO CODEFORCES " "IN YOUR CHROME WINDOW <<<")
             print("=" * 60)
             input("Press [ENTER] after logging in...")
             page.reload()
-            page.wait_for_load_state("networkidle")
+            wait_for_human_if_challenged(page, log)
+            try:
+                page.wait_for_load_state("networkidle", timeout=20000)
+            except Exception:
+                pass
             log.info("[+] Continuing...\n")
         else:
             log.info("[+] Already logged in!")
@@ -817,8 +870,7 @@ def main():
                     continue
                 # =================================================
                 # Build problem URL directly from its components
-                # (contest/gym id + problem index), instead of
-                # falling back to the scraped href as-is.
+                # (contest/gym id + problem index).
                 # =================================================
                 prob_url, contest_id = build_problem_url(prob_href)
                 if prob_url is None:
@@ -835,28 +887,8 @@ def main():
                     skipped_group_count += 1
                     continue
                 # =================================================
-                # IMPORTANT:
-                #
-                # We DO NOT search for an anchor to the submission.
-                #
-                # The URL is always constructed directly from:
-                #
-                #     problem href
-                #     +
-                #     submission ID
-                #
-                # Example:
-                #
-                # /contest/1692/problem/A
-                #
-                # +
-                #
-                # 387938753
-                #
-                # =
-                #
-                # https://codeforces.com/
-                # contest/1692/submission/387938753
+                # The submission URL is always constructed directly
+                # from the problem href + submission ID.
                 # =================================================
                 sub_url, detected_id, source_type = build_submission_url(
                     prob_href, sub_id
@@ -1141,9 +1173,12 @@ def main():
             # ====================================================
             time.sleep(random.uniform(args.min_delay, args.max_delay))
         # ========================================================
-        # Close browser
+        # Close only our tab; leave YOUR Chrome running
         # ========================================================
-        context.close()
+        try:
+            page.close()
+        except Exception:
+            pass
     # ============================================================
     # Final summary
     # ============================================================
